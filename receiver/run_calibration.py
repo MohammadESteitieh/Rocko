@@ -29,6 +29,7 @@ import time
 
 SESSION_SECONDS = 872.0
 SESSION_GRACE_SECONDS = 120.0
+REMOTE_CONTACT_GRACE_SECONDS = 60.0
 SUBPROCESS_TIMEOUT_SECONDS = 30.0
 CAPTURE_LEAD_SECONDS = 3.0
 POLL_SECONDS = 10.0
@@ -159,6 +160,11 @@ def unchecked_run(command: list[str], **kwargs) -> subprocess.CompletedProcess |
         return subprocess.run(command, check=False, text=True, **kwargs)
     except (OSError, subprocess.TimeoutExpired):
         return None
+
+
+def remote_contact_expired(last_contact: float, now: float) -> bool:
+    """Allow transient SSH loss while retaining a bounded safety deadline."""
+    return now - last_contact > REMOTE_CONTACT_GRACE_SECONDS
 
 
 def parse_args():
@@ -327,6 +333,7 @@ def main() -> int:
         print(f"Calibration running on QNX as PID {remote_pid}", flush=True)
 
         deadline = remote_started_monotonic + SESSION_SECONDS + SESSION_GRACE_SECONDS
+        last_remote_contact = remote_started_monotonic
         while True:
             if time.monotonic() > deadline:
                 raise RuntimeError(
@@ -341,9 +348,25 @@ def main() -> int:
                 f"elif kill -0 {remote_pid} 2>/dev/null; then echo RUNNING; "
                 "else echo FAILED; fi"
             )
-            status = checked_run(
-                ssh + [status_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-            ).stdout.strip()
+            try:
+                status = checked_run(
+                    ssh + [status_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                ).stdout.strip()
+                last_remote_contact = time.monotonic()
+            except (
+                OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired
+            ) as exc:
+                now = time.monotonic()
+                if remote_contact_expired(last_remote_contact, now):
+                    raise RuntimeError(
+                        "QNX status remained unreachable beyond the contact grace period"
+                    ) from exc
+                print(
+                    f"{utc_stamp()} WARNING transient QNX status failure; retrying",
+                    flush=True,
+                )
+                time.sleep(args.poll)
+                continue
             if status == "COMPLETE":
                 outcome = "COMPLETE"
                 break

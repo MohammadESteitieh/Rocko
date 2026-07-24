@@ -85,6 +85,11 @@ class CalibrationRunnerTests(unittest.TestCase):
             runner.checked_run(command, timeout=0.01)
         self.assertIsNone(runner.unchecked_run(command, timeout=0.01))
 
+    def test_transient_remote_contact_loss_has_bounded_grace(self):
+        grace = runner.REMOTE_CONTACT_GRACE_SECONDS
+        self.assertFalse(runner.remote_contact_expired(100.0, 100.0 + grace))
+        self.assertTrue(runner.remote_contact_expired(100.0, 100.0 + grace + 0.001))
+
     def test_sha256_is_computed_without_mutating_artifact(self):
         with tempfile.TemporaryDirectory() as directory:
             artifact = Path(directory) / "capture.csv"
