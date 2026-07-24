@@ -149,6 +149,27 @@ def append_metadata(path: Path, **values) -> None:
         os.fsync(output.fileno())
 
 
+def capture_command(
+    repo: Path,
+    python: str,
+    port: str,
+    baud: int,
+    raw_path: Path,
+    *,
+    live_dashboard: bool,
+) -> list[str]:
+    if live_dashboard:
+        return [
+            python, str(repo / "receiver" / "rocko_receiver.py"),
+            "--port", port, "--baud", str(baud), "--output", str(raw_path),
+            "--plot-seconds", "90",
+        ]
+    return [
+        python, str(repo / "receiver" / "capture.py"),
+        "--port", port, "--baud", str(baud), "--out", str(raw_path),
+    ]
+
+
 def checked_run(command: list[str], **kwargs) -> subprocess.CompletedProcess:
     kwargs.setdefault("timeout", SUBPROCESS_TIMEOUT_SECONDS)
     return subprocess.run(command, check=True, text=True, **kwargs)
@@ -180,6 +201,10 @@ def parse_args():
     parser.add_argument("--remote-dir", default=DEFAULT_REMOTE_DIR)
     parser.add_argument("--data-root", type=Path, default=DEFAULT_DATA_ROOT)
     parser.add_argument("--poll", type=float, default=POLL_SECONDS)
+    parser.add_argument(
+        "--live-dashboard", action="store_true",
+        help="use the visible Rocko live decoder as the sole serial/capture owner",
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -270,6 +295,7 @@ def main() -> int:
         remote_dir=args.remote_dir,
         expected_session_s=SESSION_SECONDS,
         raw_path=raw_path,
+        capture_owner="rocko-live-decoder" if args.live_dashboard else "capture.py",
     )
 
     try:
@@ -293,10 +319,11 @@ def main() -> int:
 
         capture_output = capture_log.open("w", encoding="utf-8")
         capture = subprocess.Popen(
-            [
-                sys.executable, str(repo / "receiver" / "capture.py"),
-                "--port", port, "--baud", str(args.baud), "--out", str(raw_path),
-            ],
+            capture_command(
+                repo, sys.executable, port, args.baud, raw_path,
+                live_dashboard=args.live_dashboard,
+            ),
+            cwd=repo,
             stdout=capture_output,
             stderr=subprocess.STDOUT,
             text=True,

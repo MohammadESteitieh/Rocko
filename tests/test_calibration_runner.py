@@ -79,6 +79,23 @@ class CalibrationRunnerTests(unittest.TestCase):
         )
         self.assertIn("--allow-six-volts", command)
 
+    def test_visible_dashboard_can_be_the_single_capture_owner(self):
+        repo = Path("/repo")
+        raw = Path("/data/run.csv")
+        visible = runner.capture_command(
+            repo, "/venv/python", "/dev/cu.usbmodem1201", 115200, raw,
+            live_dashboard=True,
+        )
+        headless = runner.capture_command(
+            repo, "/venv/python", "/dev/cu.usbmodem1201", 115200, raw,
+            live_dashboard=False,
+        )
+        self.assertIn("/repo/receiver/rocko_receiver.py", visible)
+        self.assertIn("--output", visible)
+        self.assertNotIn("/repo/receiver/capture.py", visible)
+        self.assertIn("/repo/receiver/capture.py", headless)
+        self.assertIn("--out", headless)
+
     def test_subprocess_helpers_enforce_timeout_without_hanging_cleanup(self):
         command = [sys.executable, "-c", "import time; time.sleep(1)"]
         with self.assertRaises(subprocess.TimeoutExpired):
