@@ -1,0 +1,100 @@
+"""Tests for the macOS calibration-session orchestrator helpers."""
+
+from datetime import datetime
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+ROOT = Path(__file__).parents[1]
+sys.path.insert(0, str(ROOT / "receiver"))
+
+import run_calibration as runner  # noqa: E402
+
+
+class CalibrationRunnerTests(unittest.TestCase):
+    def test_run_name_is_stable_and_filesystem_safe(self):
+        when = datetime(2026, 7, 25, 12, 34, 56)
+        self.assertEqual(
+            runner.run_name(10, when), "calibration_10V_20260725_123456"
+        )
+        self.assertEqual(
+            runner.run_name(7.5, when), "calibration_7p5V_20260725_123456"
+        )
+
+    def test_hardware_note_must_be_nonempty_single_line(self):
+        self.assertEqual(runner.validate_note(" bench-v1 "), "bench-v1")
+        for note in ("", "  ", "line1\nline2", "line1\rline2"):
+            with self.subTest(note=note), self.assertRaises(ValueError):
+                runner.validate_note(note)
+
+    def test_remote_directory_uses_conservative_absolute_qnx_path(self):
+        valid = "/data/home/qnxuser/calibration-runner"
+        self.assertEqual(runner.validate_remote_dir(valid), valid)
+        for value in ("relative", "/data/with space", "/data/../tmp", "/data/$HOME"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                runner.validate_remote_dir(value)
+
+    def test_serial_selection_accepts_one_or_requires_explicit_choice(self):
+        self.assertEqual(
+            runner.select_serial_port(None, ["/dev/cu.usbmodem1201"]),
+            "/dev/cu.usbmodem1201",
+        )
+        for candidates in ([], ["one", "two"]):
+            with self.subTest(candidates=candidates), self.assertRaises(ValueError):
+                runner.select_serial_port(None, candidates)
+        with tempfile.TemporaryDirectory() as directory:
+            port = Path(directory) / "port"
+            port.touch()
+            self.assertEqual(runner.select_serial_port(str(port), []), str(port))
+
+    def test_remote_command_has_safe_start_and_no_embedded_password(self):
+        command = runner.transmitter_command(
+            remote_dir="/data/home/qnxuser/calibration-runner",
+            manifest_name="run.transmitter.csv",
+            log_name="run.transmitter.log",
+            voltage=11,
+            distance_m=1.25,
+            hardware_note="bench configuration A",
+            allow_six_volts=False,
+        )
+        self.assertIn(runner.SAFE_GPIO_COMMAND, command)
+        self.assertIn("./calibration_sweep.py", command)
+        self.assertIn("--voltage 11", command)
+        self.assertIn("'bench configuration A'", command)
+        self.assertIn("nohup", command)
+        self.assertNotIn("SSHPASS", command)
+        self.assertNotIn("sshpass", command)
+
+    def test_six_volt_remote_command_includes_explicit_opt_in(self):
+        command = runner.transmitter_command(
+            remote_dir="/remote",
+            manifest_name="manifest.csv",
+            log_name="run.log",
+            voltage=6,
+            distance_m=1,
+            hardware_note="logic documented",
+            allow_six_volts=True,
+        )
+        self.assertIn("--allow-six-volts", command)
+
+    def test_subprocess_helpers_enforce_timeout_without_hanging_cleanup(self):
+        command = [sys.executable, "-c", "import time; time.sleep(1)"]
+        with self.assertRaises(subprocess.TimeoutExpired):
+            runner.checked_run(command, timeout=0.01)
+        self.assertIsNone(runner.unchecked_run(command, timeout=0.01))
+
+    def test_sha256_is_computed_without_mutating_artifact(self):
+        with tempfile.TemporaryDirectory() as directory:
+            artifact = Path(directory) / "capture.csv"
+            artifact.write_bytes(b"abc")
+            self.assertEqual(
+                runner.sha256_file(artifact),
+                "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+            )
+            self.assertEqual(artifact.read_bytes(), b"abc")
+
+
+if __name__ == "__main__":
+    unittest.main()
