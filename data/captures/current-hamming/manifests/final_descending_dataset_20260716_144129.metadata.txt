@@ -1,0 +1,20 @@
+run=final_descending_dataset_20260716_144129
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/final_descending_dataset_20260716_144129.csv
+capture_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/final_descending_dataset_20260716_144129.capture.log
+capture_pid=8504
+capture_started_utc=2026-07-16T18:41:29Z
+capture_duration_s=2200
+pi_ip=172.17.235.186
+git_commit=e1c1b17
+schedule=100,50,25,10,1; train=A-E each; test=F,G,H,I,J
+transmitter_started_utc=2026-07-16T18:42:17Z
+remote_pid=9773116
+remote_manifest=final_descending_dataset_20260716_144129.transmitter.csv
+remote_log=final_descending_dataset_20260716_144129.transmitter.log
+dataset_outcome=COMPLETE
+archived_utc=2026-07-16T19:19:35Z
+raw_sha256=5a1f951dc1d5d8e1cf71aeb426bb4c260c0b7ab1da6b1595bb90d6eb4018bc9d
+dataset_outcome=COMPLETE
+archived_utc=2026-07-16T19:19:40Z
+raw_sha256=5a1f951dc1d5d8e1cf71aeb426bb4c260c0b7ab1da6b1595bb90d6eb4018bc9d
+operator_note=People walked across the link during some unspecified frames; treat dataset as mixed motion/interference.

@@ -2,70 +2,59 @@
 
 ## Acquisition
 
-The Pico sends `t,x,y` at 200 Hz. Validate rows, timestamp continuity, and ADC
-clipping. Median-centre each sensor and apply the fourth-order 7.25-8.75 Hz
-Butterworth bandpass. Complex analytic signals or equivalent I/Q matched
-filters preserve carrier phase.
+The Pico streams `t,x,y` rows at approximately 200 Hz. `receiver/capture.py` is
+the authoritative serial owner. Live viewers must be read-only and must not
+compete for the serial device.
 
-## Synchronization
+Analysis validates required columns, estimates sample rate, reports clipping,
+and aligns frame windows to transmitter manifest timestamps. Primary final
+analyses use one synchronization-derived clock correction from the first 100%
+frame and freeze it for every later boundary. Autonomous acquisition is
+reported separately and was not evaluated for the accepted final datasets.
 
-Correlate both sensors against the Manchester waveform of the Hamming-encoded
-tilde. Sum normalized correlation power across sensors. The current live
-threshold is 0.8 on a two-channel 0-2 scale. Decoding with manifest-provided
-start times can succeed below this threshold, but that is not autonomous
-acquisition.
+## Signal extraction
 
-## Soft observations
+The receiver uses 8 Hz complex matched projections over Manchester
+half-symbols. The 7.25–8.75 Hz band is used consistently for physical carrier
+power and noise measurements, while raw coherent projections are retained for
+two-coded-bit/s decisions because an overly narrow preprocessing filter can
+remove Manchester sidebands.
 
-For every coded bit, extract complex 8 Hz phasors from its first and second
-one-second halves. Estimate the two-sensor channel `h` from known header tone
-and silence halves. Estimate the noise covariance `R` from the central
-transmitter-off gap.
-
-The analytical coherent metric is:
-
-```text
-LLR_i = 2 Re{h^H R^-1 (z_first,i - z_second,i)}
-```
-
-GNB is an alternative learned bit-metric model, not a required preprocessing
-stage before the analytical LLR.
-
-## Experimental neural whitening
-
-`duong_whitener.py` implements the gain-modulated recurrent circuit from Duong
-et al. rather than a GRU trained by backpropagation. A fixed overcomplete frame
-`W` is used while gains `g` adapt so the equilibrium response is
-`y = [I + W diag(g) W^T]^-1 x`. The current implementation whitens instantaneous
-four-dimensional real/imaginary sensor covariance; it does not guarantee
-temporal independence. Adapt only on transmitter-off data and freeze during a
-frame. Since it converges to symmetric/ZCA whitening, it must be compared with
-ordinary ZCA and cannot be credited with a neural-specific benefit unless it
-adapts better to changing contexts.
-
-Causal VAR, Kalman, GRU, and TCN prediction-error filters are implemented in
-`temporal_whitening.py` and benchmarked by `benchmark_temporal_whitening.py`.
-On the first physical dataset, VAR was the only model to substantially reduce
-held-out temporal correlation, but it also cancelled beacon evidence and
-reduced decoding. GRU and TCN retained decoder accuracy without demonstrating
-held-out temporal whitening. See [Temporal-whitening benchmark](Temporal-Whitening-Benchmark.md).
+Channel response is learned from the known sync only. Adaptive noise or
+frontend parameters must be learned from declared transmitter-off samples and
+frozen during the active frame.
 
 ## Decoders
 
-- naive-max: independent Manchester hard decisions.
-- L1: bit Gaussian evidence summed over legal Hamming words.
-- L2: Gaussian evidence over overlapping parity checks.
-- L3: complete seven-bit-group Gaussian classification.
-- L4: normalized hybrid of L1/L2/L3 and matched energy.
-- SLNN: fixed codebook-weight maximum-likelihood scorer; no training.
+- Hard uncoded payload decisions.
+- Hamming(15,11) syndrome correction.
+- Generic systematic Reed–Solomon correction over GF(32).
+- Truth-free exploratory GMD using least-reliable-symbol erasure prefixes.
+- Historical Hamming(7,4) layered Gaussian and fixed-codebook decoders.
 
-The restricted SLNN always chooses one of A-Z, so it is never sufficient proof
-of detection. Compare it with the unrestricted 65,536-word decoder.
+A decoder exception or invalid application padding is a frame error. Conditional
+BER is always accompanied by failure counts and failure-inclusive bounds.
+Wrong valid codewords are miscorrections, not successful decodes.
 
-## Acceptance
+## Frontends
 
-Operational acceptance should require synchronization, no clipping, a valid
-unrestricted `~` plus uppercase payload, restricted/unrestricted agreement,
-adequate margin, and an H0/no-transmission test calibrated from silent gaps.
-Hamming validity alone is not rejection because codebook decoding always emits
-a legal Hamming word.
+- Sync-trained coherent two-sensor combining.
+- Identity/no-whitening control.
+- Frozen off-RMS diagonal normalization.
+- Complex covariance combining.
+- Gao-style sensor-y-primary reference cancellation.
+- Duong gain-modulated instantaneous spatial/IQ whitening.
+- Gao followed by Duong.
+- Historical VAR, Kalman, GRU, and TCN prediction-error filters.
+
+Current Duong whitening is instantaneous; it is not temporal recurrence.
+Earlier temporal benchmarks found that VAR reduced held-out autocorrelation but
+also cancelled beacon evidence. GRU and TCN retained accuracy without proving
+held-out whitening.
+
+## Key interpretation
+
+The accepted RS18 data showed no meaningful gain from whitening. Sensor-y-only,
+no whitening, and frozen off-RMS each produced 40/45 frame errors; per-frame
+post-gap covariance produced 41/45. Gao and Duong had negligible effect because
+the sensors shared little useful transmitter-off noise.

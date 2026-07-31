@@ -1,0 +1,17 @@
+{
+  "adc_full_scale_assumed": 4095,
+  "capture_duration_s": 495.13,
+  "capture_samples": 99027,
+  "first_raw_coherent_sync_bit_errors": 4,
+  "first_raw_coherent_sync_signed_correlation": 0.740992605457095,
+  "manifest_clock_correction_s": 0.6349999999994225,
+  "prelaunch_off_duration_s": 120.00499999989086,
+  "prelaunch_off_mean_x": 622.7881754926879,
+  "prelaunch_off_mean_y": 1001.7280946627224,
+  "prelaunch_off_rms_x": 70.99370482012259,
+  "prelaunch_off_rms_y": 2.392399616432923,
+  "prelaunch_off_samples": 24001,
+  "prelaunch_off_start_sample": 0,
+  "prelaunch_off_stop_sample": 24001,
+  "sample_rate_hz": 200.0000000001819
+}

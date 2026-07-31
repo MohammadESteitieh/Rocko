@@ -1,0 +1,61 @@
+{
+  "fit_samples": 24002,
+  "fit_source": "metadata-declared prelaunch transmitter-off only",
+  "iterations": 2033,
+  "converged_before_limit": true,
+  "training_error": 4.9936004441914844e-05,
+  "tolerance": 1e-05,
+  "seed": 7,
+  "frame_errors": 40,
+  "frames": 45,
+  "decoder_failures": 40,
+  "raw_body_bit_errors": 1197,
+  "raw_body_bits": 4050,
+  "by_duty": {
+    "100": {
+      "frame_errors": 0,
+      "decoder_failures": 0,
+      "raw_ber": 0.06
+    },
+    "50": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.2311111111111111
+    },
+    "45": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.2288888888888889
+    },
+    "40": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.2311111111111111
+    },
+    "35": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.28444444444444444
+    },
+    "30": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.3511111111111111
+    },
+    "25": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.34
+    },
+    "10": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.44222222222222224
+    },
+    "1": {
+      "frame_errors": 5,
+      "decoder_failures": 5,
+      "raw_ber": 0.4911111111111111
+    }
+  }
+}

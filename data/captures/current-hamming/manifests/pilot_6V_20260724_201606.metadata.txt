@@ -1,0 +1,9 @@
+run=pilot_6V_20260724_201606
+voltage_v=6
+distance_m=0.35
+hardware_note=l298n-onboard-jumpers-observed-exact-module-pending
+planned_utc=2026-07-25T00:16:14.170387Z
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pilot_6V_20260724_201606.csv
+capture_started_utc=2026-07-25T00:16:14.524999Z
+capture_pid=59006
+transmitter_requested_utc=2026-07-25T00:16:17.554333Z

@@ -1,0 +1,179 @@
+{
+  "noise_split": {
+    "train_samples": 84000,
+    "validation_samples": 18000,
+    "test_samples": 18001
+  },
+  "metrics": {
+    "baseline": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.9560942174362271,
+      "max_abs_spatial_correlation": 0.09337519790346593,
+      "covariance_condition": 2.517588564758821,
+      "h0_max_preamble": 0.1927863854833696,
+      "h0_windows": 12402
+    },
+    "zca": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.9607598856842449,
+      "max_abs_spatial_correlation": 0.8165031991839069,
+      "covariance_condition": 30.37094602415333,
+      "h0_max_preamble": 0.3469780906032286,
+      "h0_windows": 12402
+    },
+    "var": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.3925694350432229,
+      "max_abs_spatial_correlation": 0.9383478717116938,
+      "covariance_condition": 59.31244709152985,
+      "h0_max_preamble": 0.11233737980599694,
+      "h0_windows": 12402
+    },
+    "kalman": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.9430050744960532,
+      "max_abs_spatial_correlation": 0.7037048037746633,
+      "covariance_condition": 7.2316851902483315,
+      "h0_max_preamble": 0.35726761661716105,
+      "h0_windows": 12402
+    },
+    "gru": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.9615680870557902,
+      "max_abs_spatial_correlation": 0.9099906687370622,
+      "covariance_condition": 32.126374071015555,
+      "h0_max_preamble": 0.23758465900630943,
+      "h0_windows": 12402
+    },
+    "tcn": {
+      "mean_abs_temporal_correlation_lags_1_40": 0.9606917633383409,
+      "max_abs_spatial_correlation": 0.8561516655992818,
+      "covariance_condition": 687.2777100426946,
+      "h0_max_preamble": 0.5445116374739472,
+      "h0_windows": 12402
+    }
+  },
+  "results": {
+    "baseline": {
+      "known_correct": 18,
+      "sync_correct": 18,
+      "h0_accepted_correct": 18,
+      "legacy_accepted_correct": 12,
+      "by_duty_sync": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      }
+    },
+    "zca": {
+      "known_correct": 18,
+      "sync_correct": 18,
+      "h0_accepted_correct": 18,
+      "legacy_accepted_correct": 17,
+      "by_duty_sync": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      }
+    },
+    "var": {
+      "known_correct": 11,
+      "sync_correct": 13,
+      "h0_accepted_correct": 13,
+      "legacy_accepted_correct": 9,
+      "by_duty_sync": {
+        "100.0": 5,
+        "50.0": 5,
+        "25.0": 3,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 5,
+        "50.0": 5,
+        "25.0": 3,
+        "10.0": 0,
+        "1.0": 0
+      }
+    },
+    "kalman": {
+      "known_correct": 14,
+      "sync_correct": 15,
+      "h0_accepted_correct": 15,
+      "legacy_accepted_correct": 13,
+      "by_duty_sync": {
+        "100.0": 6,
+        "50.0": 4,
+        "25.0": 5,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 6,
+        "50.0": 4,
+        "25.0": 5,
+        "10.0": 0,
+        "1.0": 0
+      }
+    },
+    "gru": {
+      "known_correct": 18,
+      "sync_correct": 18,
+      "h0_accepted_correct": 18,
+      "legacy_accepted_correct": 17,
+      "by_duty_sync": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      }
+    },
+    "tcn": {
+      "known_correct": 18,
+      "sync_correct": 18,
+      "h0_accepted_correct": 18,
+      "legacy_accepted_correct": 13,
+      "by_duty_sync": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      },
+      "by_duty_h0_accepted": {
+        "100.0": 6,
+        "50.0": 6,
+        "25.0": 6,
+        "10.0": 0,
+        "1.0": 0
+      }
+    }
+  },
+  "notes": [
+    "All temporal models were trained only on the first 70% of the static H0 recording.",
+    "Model-specific H0 thresholds are maxima over the untouched final 15% of that recording.",
+    "Blind temporal predictors may cancel predictable beacon energy; this benchmark measures that risk.",
+    "The physical signal run contains unlabelled human-motion interference."
+  ]
+}

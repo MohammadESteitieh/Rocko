@@ -1,0 +1,13 @@
+run=diagnostic_6V_10p_1p_20260724_202039
+voltage_v=6
+distance_m=0.35
+duties_percent=10,1
+analysis_scope=exploratory_1_percent_timing_unreliable
+planned_utc=2026-07-25T00:20:49.974481Z
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/diagnostic_6V_10p_1p_20260724_202039.csv
+capture_started_utc=2026-07-25T00:20:50.501354Z
+capture_pid=59098
+transmitter_requested_utc=2026-07-25T00:20:53.531684Z
+outcome=COMPLETE
+safe_shutdown_outcome=VERIFIED_WRITES
+finished_utc=2026-07-25T00:25:52.278839Z

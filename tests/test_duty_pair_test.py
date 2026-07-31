@@ -8,7 +8,7 @@ ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "transmitter"))
 
 import duty_pair_test as diagnostic  # noqa: E402
-import transmitter as hw  # noqa: E402
+import hardware as hw  # noqa: E402
 
 
 class FakeClock:

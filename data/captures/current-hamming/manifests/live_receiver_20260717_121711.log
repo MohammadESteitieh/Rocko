@@ -1,0 +1,167 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-17T12:17:12  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/live_20260717_121711.csv
+[#0002] 2026-07-17T12:17:12  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-17T12:17:13  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-17T12:18:08  WARN    signal ended without a valid tilde preamble — ignored
+[#0005] 2026-07-17T12:18:09  SIGNAL  carrier detected — recording beacon
+[#0006] 2026-07-17T12:18:33  SYNC    coded tilde locked t=331.54s score=1.77/2.00
+[#0007] 2026-07-17T12:19:00  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.88
+[#0008] 2026-07-17T12:19:00  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=1.38
+[#0009] 2026-07-17T12:19:00  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.01
+[#0010] 2026-07-17T12:19:00  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=0.87
+[#0011] 2026-07-17T12:19:00  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=3.22
+[#0012] 2026-07-17T12:19:05  WARN    coded frame rejected — preamble=0.51 successful layers=none
+[#0013] 2026-07-17T12:19:06  SYNC    coded tilde locked t=357.79s score=0.82/2.00
+[#0014] 2026-07-17T12:19:17  SIGNAL  carrier detected — recording beacon
+[#0015] 2026-07-17T12:19:27  LAYER   naive-max -- header=0x6C letter=\xcc parity=bad confidence=0.57
+[#0016] 2026-07-17T12:19:27  LAYER   L1        -- header=0x6C letter=\xdc parity=ok confidence=0.68
+[#0017] 2026-07-17T12:19:27  LAYER   L2        -- header=0x6C letter=l parity=ok confidence=1.21
+[#0018] 2026-07-17T12:19:27  LAYER   L3        -- header=0x6C letter=l parity=ok confidence=1.07
+[#0019] 2026-07-17T12:19:27  LAYER   L4        -- header=0x6C letter=l parity=ok confidence=1.33
+[#0020] 2026-07-17T12:19:43  SYNC    coded tilde locked t=402.53s score=1.77/2.00
+[#0021] 2026-07-17T12:20:11  LAYER   naive-max OK header=0x7E letter=B parity=ok confidence=0.87
+[#0022] 2026-07-17T12:20:11  LAYER   L1        OK header=0x7E letter=B parity=ok confidence=1.48
+[#0023] 2026-07-17T12:20:11  LAYER   L2        OK header=0x7E letter=B parity=ok confidence=1.05
+[#0024] 2026-07-17T12:20:11  LAYER   L3        OK header=0x7E letter=B parity=ok confidence=0.90
+[#0025] 2026-07-17T12:20:11  LAYER   L4        OK header=0x7E letter=B parity=ok confidence=3.19
+[#0026] 2026-07-17T12:20:17  DECODE  header=~ letter=B layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0027] 2026-07-17T12:20:18  SYNC    coded tilde locked t=402.53s score=1.77/2.00
+[#0028] 2026-07-17T12:20:18  LAYER   naive-max OK header=0x7E letter=B parity=ok confidence=0.87
+[#0029] 2026-07-17T12:20:18  LAYER   L1        OK header=0x7E letter=B parity=ok confidence=1.48
+[#0030] 2026-07-17T12:20:18  LAYER   L2        OK header=0x7E letter=B parity=ok confidence=1.04
+[#0031] 2026-07-17T12:20:18  LAYER   L3        OK header=0x7E letter=B parity=ok confidence=0.90
+[#0032] 2026-07-17T12:20:18  LAYER   L4        OK header=0x7E letter=B parity=ok confidence=3.19
+[#0033] 2026-07-17T12:20:28  SIGNAL  carrier detected — recording beacon
+[#0034] 2026-07-17T12:20:46  SYNC    coded tilde locked t=414.53s score=0.96/2.00
+[#0035] 2026-07-17T12:20:46  LAYER   naive-max -- header=0x36 letter=\xdb parity=bad confidence=0.73
+[#0036] 2026-07-17T12:20:46  LAYER   L1        -- header=0x36 letter=\xd7 parity=ok confidence=0.61
+[#0037] 2026-07-17T12:20:46  LAYER   L2        -- header=0x36 letter=\xdb parity=ok confidence=1.14
+[#0038] 2026-07-17T12:20:46  LAYER   L3        -- header=0x36 letter=\xdb parity=ok confidence=1.23
+[#0039] 2026-07-17T12:20:46  LAYER   L4        -- header=0x36 letter=\xdb parity=ok confidence=1.62
+[#0040] 2026-07-17T12:20:55  SYNC    coded tilde locked t=473.54s score=1.75/2.00
+[#0041] 2026-07-17T12:21:22  LAYER   naive-max OK header=0x7E letter=C parity=ok confidence=0.86
+[#0042] 2026-07-17T12:21:22  LAYER   L1        OK header=0x7E letter=C parity=ok confidence=1.52
+[#0043] 2026-07-17T12:21:22  LAYER   L2        OK header=0x7E letter=C parity=ok confidence=1.05
+[#0044] 2026-07-17T12:21:22  LAYER   L3        OK header=0x7E letter=C parity=ok confidence=0.88
+[#0045] 2026-07-17T12:21:22  LAYER   L4        OK header=0x7E letter=C parity=ok confidence=3.17
+[#0046] 2026-07-17T12:21:27  DECODE  header=~ letter=C layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0047] 2026-07-17T12:21:27  SYNC    coded tilde locked t=473.54s score=1.75/2.00
+[#0048] 2026-07-17T12:21:27  LAYER   naive-max OK header=0x7E letter=C parity=ok confidence=0.86
+[#0049] 2026-07-17T12:21:27  LAYER   L1        OK header=0x7E letter=C parity=ok confidence=1.52
+[#0050] 2026-07-17T12:21:27  LAYER   L2        OK header=0x7E letter=C parity=ok confidence=1.05
+[#0051] 2026-07-17T12:21:27  LAYER   L3        OK header=0x7E letter=C parity=ok confidence=0.88
+[#0052] 2026-07-17T12:21:27  LAYER   L4        OK header=0x7E letter=C parity=ok confidence=3.17
+[#0053] 2026-07-17T12:21:39  SIGNAL  carrier detected — recording beacon
+[#0054] 2026-07-17T12:21:57  SYNC    coded tilde locked t=482.77s score=0.93/2.00
+[#0055] 2026-07-17T12:21:57  LAYER   naive-max -- header=0x5E letter=\xf9 parity=bad confidence=0.43
+[#0056] 2026-07-17T12:21:57  LAYER   L1        -- header=0x7E letter=\xfd parity=ok confidence=0.71
+[#0057] 2026-07-17T12:21:57  LAYER   L2        -- header=0x7E letter=\xfd parity=ok confidence=1.04
+[#0058] 2026-07-17T12:21:57  LAYER   L3        -- header=0x7E letter=\xbd parity=ok confidence=1.20
+[#0059] 2026-07-17T12:21:57  LAYER   L4        -- header=0x7E letter=\xbd parity=ok confidence=1.47
+[#0060] 2026-07-17T12:22:05  SYNC    coded tilde locked t=544.51s score=1.66/2.00
+[#0061] 2026-07-17T12:22:33  LAYER   naive-max OK header=0x7E letter=D parity=ok confidence=0.84
+[#0062] 2026-07-17T12:22:33  LAYER   L1        OK header=0x7E letter=D parity=ok confidence=1.53
+[#0063] 2026-07-17T12:22:33  LAYER   L2        OK header=0x7E letter=D parity=ok confidence=1.06
+[#0064] 2026-07-17T12:22:33  LAYER   L3        OK header=0x7E letter=D parity=ok confidence=0.90
+[#0065] 2026-07-17T12:22:33  LAYER   L4        OK header=0x7E letter=D parity=ok confidence=3.20
+[#0066] 2026-07-17T12:22:39  DECODE  header=~ letter=D layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0067] 2026-07-17T12:22:39  SYNC    coded tilde locked t=544.53s score=1.70/2.00
+[#0068] 2026-07-17T12:22:39  LAYER   naive-max OK header=0x7E letter=D parity=ok confidence=0.84
+[#0069] 2026-07-17T12:22:39  LAYER   L1        OK header=0x7E letter=D parity=ok confidence=1.54
+[#0070] 2026-07-17T12:22:39  LAYER   L2        OK header=0x7E letter=D parity=ok confidence=1.06
+[#0071] 2026-07-17T12:22:39  LAYER   L3        OK header=0x7E letter=D parity=ok confidence=0.90
+[#0072] 2026-07-17T12:22:39  LAYER   L4        OK header=0x7E letter=D parity=ok confidence=3.20
+[#0073] 2026-07-17T12:22:50  SIGNAL  carrier detected — recording beacon
+[#0074] 2026-07-17T12:23:07  SYNC    coded tilde locked t=553.73s score=0.92/2.00
+[#0075] 2026-07-17T12:23:07  LAYER   naive-max -- header=0x5E letter=\xea parity=bad confidence=0.46
+[#0076] 2026-07-17T12:23:07  LAYER   L1        -- header=0x7E letter=\xcb parity=ok confidence=0.89
+[#0077] 2026-07-17T12:23:07  LAYER   L2        -- header=0x7E letter=\xcb parity=ok confidence=1.20
+[#0078] 2026-07-17T12:23:07  LAYER   L3        -- header=0x7E letter=\xcb parity=ok confidence=1.33
+[#0079] 2026-07-17T12:23:07  LAYER   L4        -- header=0x7E letter=\xcb parity=ok confidence=1.68
+[#0080] 2026-07-17T12:23:17  SYNC    coded tilde locked t=615.53s score=1.66/2.00
+[#0081] 2026-07-17T12:23:44  LAYER   naive-max OK header=0x7E letter=E parity=ok confidence=0.83
+[#0082] 2026-07-17T12:23:44  LAYER   L1        OK header=0x7E letter=E parity=ok confidence=1.52
+[#0083] 2026-07-17T12:23:44  LAYER   L2        OK header=0x7E letter=E parity=ok confidence=1.06
+[#0084] 2026-07-17T12:23:44  LAYER   L3        OK header=0x7E letter=E parity=ok confidence=0.92
+[#0085] 2026-07-17T12:23:44  LAYER   L4        OK header=0x7E letter=E parity=ok confidence=3.17
+[#0086] 2026-07-17T12:23:50  DECODE  header=~ letter=E layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0087] 2026-07-17T12:23:50  SYNC    coded tilde locked t=615.53s score=1.66/2.00
+[#0088] 2026-07-17T12:23:50  LAYER   naive-max OK header=0x7E letter=E parity=ok confidence=0.83
+[#0089] 2026-07-17T12:23:50  LAYER   L1        OK header=0x7E letter=E parity=ok confidence=1.52
+[#0090] 2026-07-17T12:23:50  LAYER   L2        OK header=0x7E letter=E parity=ok confidence=1.06
+[#0091] 2026-07-17T12:23:50  LAYER   L3        OK header=0x7E letter=E parity=ok confidence=0.92
+[#0092] 2026-07-17T12:23:50  LAYER   L4        OK header=0x7E letter=E parity=ok confidence=3.17
+[#0093] 2026-07-17T12:24:01  SIGNAL  carrier detected — recording beacon
+[#0094] 2026-07-17T12:24:19  SYNC    coded tilde locked t=624.73s score=0.96/2.00
+[#0095] 2026-07-17T12:24:19  LAYER   naive-max -- header=0x5E letter=\xbb parity=bad confidence=0.40
+[#0096] 2026-07-17T12:24:19  LAYER   L1        -- header=0x7E letter=\xbb parity=ok confidence=0.82
+[#0097] 2026-07-17T12:24:19  LAYER   L2        -- header=0x7E letter=\xbb parity=ok confidence=1.43
+[#0098] 2026-07-17T12:24:19  LAYER   L3        -- header=0x7E letter=\xbb parity=ok confidence=1.61
+[#0099] 2026-07-17T12:24:19  LAYER   L4        -- header=0x7E letter=\xbb parity=ok confidence=1.93
+[#0100] 2026-07-17T12:24:27  SYNC    coded tilde locked t=686.53s score=1.69/2.00
+[#0101] 2026-07-17T12:24:56  LAYER   naive-max OK header=0x7E letter=F parity=ok confidence=0.84
+[#0102] 2026-07-17T12:24:56  LAYER   L1        OK header=0x7E letter=F parity=ok confidence=1.39
+[#0103] 2026-07-17T12:24:56  LAYER   L2        OK header=0x7E letter=F parity=ok confidence=1.07
+[#0104] 2026-07-17T12:24:56  LAYER   L3        OK header=0x7E letter=F parity=ok confidence=0.90
+[#0105] 2026-07-17T12:24:56  LAYER   L4        OK header=0x7E letter=F parity=ok confidence=3.18
+[#0106] 2026-07-17T12:25:02  DECODE  header=~ letter=F layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0107] 2026-07-17T12:25:02  SYNC    coded tilde locked t=686.54s score=1.69/2.00
+[#0108] 2026-07-17T12:25:02  LAYER   naive-max OK header=0x7E letter=F parity=ok confidence=0.84
+[#0109] 2026-07-17T12:25:02  LAYER   L1        OK header=0x7E letter=F parity=ok confidence=1.39
+[#0110] 2026-07-17T12:25:02  LAYER   L2        OK header=0x7E letter=F parity=ok confidence=1.07
+[#0111] 2026-07-17T12:25:02  LAYER   L3        OK header=0x7E letter=F parity=ok confidence=0.90
+[#0112] 2026-07-17T12:25:02  LAYER   L4        OK header=0x7E letter=F parity=ok confidence=3.18
+[#0113] 2026-07-17T12:25:12  SIGNAL  carrier detected — recording beacon
+[#0114] 2026-07-17T12:25:29  SYNC    coded tilde locked t=695.69s score=0.94/2.00
+[#0115] 2026-07-17T12:25:29  LAYER   naive-max -- header=0x5E letter=\xbc parity=bad confidence=0.41
+[#0116] 2026-07-17T12:25:29  LAYER   L1        -- header=0x7E letter=\xbe parity=ok confidence=1.15
+[#0117] 2026-07-17T12:25:29  LAYER   L2        -- header=0x7E letter=\xbc parity=ok confidence=1.39
+[#0118] 2026-07-17T12:25:29  LAYER   L3        -- header=0x7E letter=\xbc parity=ok confidence=1.40
+[#0119] 2026-07-17T12:25:29  LAYER   L4        -- header=0x7E letter=\xbc parity=ok confidence=1.62
+[#0120] 2026-07-17T12:25:38  SYNC    coded tilde locked t=757.53s score=1.67/2.00
+[#0121] 2026-07-17T12:26:06  LAYER   naive-max OK header=0x7E letter=G parity=ok confidence=0.82
+[#0122] 2026-07-17T12:26:06  LAYER   L1        OK header=0x7E letter=G parity=ok confidence=1.36
+[#0123] 2026-07-17T12:26:06  LAYER   L2        OK header=0x7E letter=G parity=ok confidence=1.09
+[#0124] 2026-07-17T12:26:06  LAYER   L3        OK header=0x7E letter=G parity=ok confidence=0.97
+[#0125] 2026-07-17T12:26:06  LAYER   L4        OK header=0x7E letter=G parity=ok confidence=3.05
+[#0126] 2026-07-17T12:26:11  DECODE  header=~ letter=G layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0127] 2026-07-17T12:26:11  SYNC    coded tilde locked t=757.53s score=1.66/2.00
+[#0128] 2026-07-17T12:26:11  LAYER   naive-max OK header=0x7E letter=G parity=ok confidence=0.82
+[#0129] 2026-07-17T12:26:11  LAYER   L1        OK header=0x7E letter=G parity=ok confidence=1.36
+[#0130] 2026-07-17T12:26:11  LAYER   L2        OK header=0x7E letter=G parity=ok confidence=1.10
+[#0131] 2026-07-17T12:26:11  LAYER   L3        OK header=0x7E letter=G parity=ok confidence=0.97
+[#0132] 2026-07-17T12:26:11  LAYER   L4        OK header=0x7E letter=G parity=ok confidence=3.05
+[#0133] 2026-07-17T12:26:23  SIGNAL  carrier detected — recording beacon
+[#0134] 2026-07-17T12:26:41  SYNC    coded tilde locked t=799.43s score=0.82/2.00
+[#0135] 2026-07-17T12:26:48  LAYER   naive-max -- header=0x70 letter=\x85 parity=bad confidence=0.52
+[#0136] 2026-07-17T12:26:48  LAYER   L1        -- header=0x7A letter=\xcf parity=ok confidence=0.36
+[#0137] 2026-07-17T12:26:48  LAYER   L2        -- header=0x74 letter=\x81 parity=ok confidence=0.77
+[#0138] 2026-07-17T12:26:48  LAYER   L3        -- header=0x74 letter=\x81 parity=ok confidence=1.22
+[#0139] 2026-07-17T12:26:48  LAYER   L4        -- header=0x74 letter=\x81 parity=ok confidence=1.49
+[#0140] 2026-07-17T12:27:22  SYNC    coded tilde locked t=828.54s score=1.67/2.00
+[#0141] 2026-07-17T12:27:22  LAYER   naive-max OK header=0x7E letter=H parity=ok confidence=0.82
+[#0142] 2026-07-17T12:27:22  LAYER   L1        OK header=0x7E letter=H parity=ok confidence=1.49
+[#0143] 2026-07-17T12:27:22  LAYER   L2        OK header=0x7E letter=H parity=ok confidence=1.14
+[#0144] 2026-07-17T12:27:22  LAYER   L3        OK header=0x7E letter=H parity=ok confidence=0.98
+[#0145] 2026-07-17T12:27:22  LAYER   L4        OK header=0x7E letter=H parity=ok confidence=3.17
+[#0146] 2026-07-17T12:27:23  DECODE  header=~ letter=H layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0147] 2026-07-17T12:27:23  SYNC    coded tilde locked t=828.54s score=1.67/2.00
+[#0148] 2026-07-17T12:27:23  LAYER   naive-max OK header=0x7E letter=H parity=ok confidence=0.82
+[#0149] 2026-07-17T12:27:23  LAYER   L1        OK header=0x7E letter=H parity=ok confidence=1.49
+[#0150] 2026-07-17T12:27:23  LAYER   L2        OK header=0x7E letter=H parity=ok confidence=1.14
+[#0151] 2026-07-17T12:27:23  LAYER   L3        OK header=0x7E letter=H parity=ok confidence=0.98
+[#0152] 2026-07-17T12:27:23  LAYER   L4        OK header=0x7E letter=H parity=ok confidence=3.17
+[#0153] 2026-07-17T12:27:34  SIGNAL  carrier detected — recording beacon
+[#0154] 2026-07-17T12:27:52  SYNC    coded tilde locked t=837.69s score=0.94/2.00
+[#0155] 2026-07-17T12:27:52  LAYER   naive-max -- header=0x5E letter=\x9d parity=bad confidence=0.42
+[#0156] 2026-07-17T12:27:52  LAYER   L1        -- header=0x7E letter=\xbf parity=ok confidence=0.84
+[#0157] 2026-07-17T12:27:52  LAYER   L2        -- header=0x7E letter=\xbf parity=ok confidence=1.27
+[#0158] 2026-07-17T12:27:52  LAYER   L3        -- header=0x7E letter=\xbf parity=ok confidence=1.44
+[#0159] 2026-07-17T12:27:52  LAYER   L4        -- header=0x7E letter=\xbf parity=ok confidence=1.55
+[#0160] 2026-07-17T12:28:00  SYNC    coded tilde locked t=899.52s score=1.63/2.00

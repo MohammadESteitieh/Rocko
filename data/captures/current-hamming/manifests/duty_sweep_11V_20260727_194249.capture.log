@@ -1,0 +1,14 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-27T19:42:51  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/duty_sweep_11V_20260727_194249.csv
+[#0002] 2026-07-27T19:42:51  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 1 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-27T19:42:53  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-27T19:43:21  WARN    signal ended without a valid tilde preamble — ignored
+
+  interrupted — shutting down
+[#0005] 2026-07-27T19:43:58  CAPTURE stopped — saved /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/duty_sweep_11V_20260727_194249.csv

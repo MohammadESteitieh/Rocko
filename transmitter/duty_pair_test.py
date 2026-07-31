@@ -21,7 +21,7 @@ import time
 from typing import Callable
 
 import alphabet_transmitter as alphabet
-import transmitter as hw
+import hardware as hw
 
 LETTERS = "ABCDE"
 DUTIES = (100.0, 1.0)

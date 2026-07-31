@@ -1,36 +1,60 @@
-# Hamming Alphabet Protocol
+# Research Protocols
 
-## Frame construction
+The repository retains several explicit protocol families rather than one
+mutable “current frame.” Each capture manifest names its scheme, timing, coded
+body, and complete frame.
 
-Two data bytes are sent MSB-first:
+## Calibration Hamming protocol
 
-1. Header `~` = `0x7E`.
-2. One uppercase letter `A` through `Z`.
+- Payload: MSB-first tilde header plus one uppercase letter.
+- Code: four standard even-parity Hamming(7,4) groups.
+- Body: 28 coded bits.
+- Default coded-bit duration: 2 seconds.
+- Gap: 15 seconds transmitter-off.
 
-Each four-bit nibble `[d1,d2,d3,d4]` becomes:
+Pilot-only timing can be configured process-locally for one or two coded bits/s.
+The frozen default remains unchanged.
 
-```text
-[p1,p2,d1,p4,d2,d3,d4]
-p1 = d1 XOR d2 XOR d4
-p2 = d1 XOR d3 XOR d4
-p4 = d2 XOR d3 XOR d4
-```
+## Final comparison protocol
 
-Sixteen data bits therefore become 28 coded bits. Hamming(7,4) has minimum
-distance three and corrects one hard-bit error per group under its standard
-assumptions.
+Shared synchronization word: `0111111001111110`.
 
-## Modulation
+| Scheme | Payload | Coded body | Total frame |
+|---|---:|---:|---:|
+| Uncoded | 11 bits | 11 bits | 27 bits |
+| Hamming(15,11) | 11 bits | 15 bits | 31 bits |
+| RS(5,3) | 11 meaningful bits plus padding | 25 bits | 41 bits |
+| RS(12,6) | 30 bits | 60 bits | 76 bits |
 
-```text
-coded 1 -> 1 s 8 Hz tone, then 1 s silence
-coded 0 -> 1 s silence, then 1 s 8 Hz tone
-```
+The experiment uses two coded bits/s, 15-second gaps, and duties 100%, 50%,
+25%, 10%, and commanded 1%, with five repetitions per cell.
 
-- Coded bit rate: 0.5 bit/s.
-- Frame duration: 56 seconds.
-- Interframe transmitter-off gap: 15 seconds.
+## RS(18,6) follow-up
 
-The encoded tilde occupies the first 14 coded bits and is the synchronization
-preamble. Old pairwise-code or one-bit/s captures are not end-to-end compatible
-with this protocol.
+- Field: GF(32).
+- Data: six symbols / 30 bits.
+- Parity: twelve symbols / 60 bits.
+- Body: 18 symbols / 90 bits.
+- Frame: 16 sync bits plus 90 body bits.
+- Hard unique-decoding capability: six arbitrary symbol errors.
+- Duties: 100%, 50%, 45%, 40%, 35%, 30%, 25%, 10%, and commanded 1%.
+- Five preregistered payloads, fixed by repetition across duties.
+
+## GF(32) convention
+
+- Primitive-polynomial identifier: `0x25`.
+- Primitive element: 2.
+- Five-bit symbols are MSB-first.
+- Systematic data symbols precede parity symbols.
+- Generator roots start at the first nonzero field power.
+
+Exact payloads and golden frames live in:
+
+- `transmitter/final_experiment_protocol.py`
+- `transmitter/rs18_experiment_protocol.py`
+
+## Manchester modulation
+
+A coded one is tone then silence; a coded zero is silence then tone. Physical
+experiments use an 8 Hz polarity-switched carrier. Commanded 1% is explicitly
+labelled timing-limited because software pulse deadlines can exceed the target.

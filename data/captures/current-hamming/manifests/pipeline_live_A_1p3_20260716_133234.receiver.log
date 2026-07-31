@@ -1,0 +1,23 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-16T13:32:35  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pipeline_live_A_1p3_20260716_133234.csv
+[#0002] 2026-07-16T13:32:35  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-16T13:32:36  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-16T13:33:31  WARN    signal ended without a valid tilde preamble — ignored
+[#0005] 2026-07-16T13:33:39  SIGNAL  carrier detected — recording beacon
+[#0006] 2026-07-16T13:34:27  WARN    signal ended without a valid tilde preamble — ignored
+[#0007] 2026-07-16T13:34:48  SIGNAL  carrier detected — recording beacon
+[#0008] 2026-07-16T13:35:28  WARN    signal ended without a valid tilde preamble — ignored
+[#0009] 2026-07-16T13:35:32  SIGNAL  carrier detected — recording beacon
+[#0010] 2026-07-16T13:36:24  WARN    signal ended without a valid tilde preamble — ignored
+[#0011] 2026-07-16T13:36:48  SIGNAL  carrier detected — recording beacon
+[#0012] 2026-07-16T13:37:20  WARN    signal ended without a valid tilde preamble — ignored
+[#0013] 2026-07-16T13:37:46  SIGNAL  carrier detected — recording beacon
+[#0014] 2026-07-16T13:38:16  WARN    signal ended without a valid tilde preamble — ignored
+[#0015] 2026-07-16T13:38:27  SIGNAL  carrier detected — recording beacon
+[#0016] 2026-07-16T13:39:19  WARN    signal ended without a valid tilde preamble — ignored

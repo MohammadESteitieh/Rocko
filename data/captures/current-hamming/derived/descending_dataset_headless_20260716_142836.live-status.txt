@@ -1,0 +1,3 @@
+Frame 07/30  ~A@50%  FAIL
+Layered=\x16 layers=none  preamble=0.13/2.00
+Coherent-SLNN=E  full=0xF6/\xc5

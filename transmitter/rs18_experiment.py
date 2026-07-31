@@ -21,7 +21,7 @@ from typing import Callable, Sequence
 
 import duty_pair_test as duty_tx
 import rs18_experiment_protocol as protocol
-import transmitter as hw
+import hardware as hw
 
 INITIAL_WAIT_SECONDS = 15.0
 GAP_SECONDS = 15.0

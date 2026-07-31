@@ -1,0 +1,10 @@
+run=corrected_wiring_final_placement_background_20260728_154237
+purpose=corrected-wiring final-placement transmitter-off background diagnostic
+configuration=operator-final-sensor-placement_corrected-wiring
+settling_seconds=15
+capture_seconds=60
+transmitter_state=OFF_FROM_PREVIOUS_VERIFIED_GPIO_CLEANUP_NO_TRANSMISSION_REQUESTED
+serial_port=/dev/cu.usbmodem1201
+outcome=COMPLETE
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/corrected_wiring_final_placement_background_20260728_154237.csv
+finished_utc=2026-07-28T15:43:37Z

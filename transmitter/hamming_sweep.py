@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Sequence
 
-import transmitter as legacy
+import hardware as legacy
 
 HEADER = 0x7E
 TRAIN_LETTERS = "ABCDE"

@@ -1,0 +1,10 @@
+run=isolated_A_100_no_person_20260716_143805
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/isolated_A_100_no_person_20260716_143805.csv
+capture_pid=8434
+capture_started_utc=2026-07-16T18:38:05Z
+letter=A
+duty_percent=100
+pi_ip=172.17.235.186
+transmitter_command_utc=2026-07-16T18:38:21Z
+transmitter_return_utc=2026-07-16T18:39:17Z
+capture_finished_utc=2026-07-16T18:39:40Z

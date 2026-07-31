@@ -1,0 +1,24 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-27T19:06:18  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pilot_11V_3m_100p_20260727_190519.csv
+[#0002] 2026-07-27T19:06:18  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-27T19:06:19  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-27T19:07:10  SYNC    coded tilde locked t=2466.55s score=0.93/2.00
+[#0005] 2026-07-27T19:07:38  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.42
+[#0006] 2026-07-27T19:07:38  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.69
+[#0007] 2026-07-27T19:07:38  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=2.13
+[#0008] 2026-07-27T19:07:38  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.83
+[#0009] 2026-07-27T19:07:38  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.75
+[#0010] 2026-07-27T19:07:43  DECODE  header=~ letter=A layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0011] 2026-07-27T19:07:43  SYNC    coded tilde locked t=2466.56s score=0.95/2.00
+[#0012] 2026-07-27T19:07:43  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.42
+[#0013] 2026-07-27T19:07:43  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.73
+[#0014] 2026-07-27T19:07:43  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=2.10
+[#0015] 2026-07-27T19:07:43  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.81
+[#0016] 2026-07-27T19:07:43  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.77
+[#0017] 2026-07-27T19:08:47  CAPTURE stopped — saved /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pilot_11V_3m_100p_20260727_190519.csv

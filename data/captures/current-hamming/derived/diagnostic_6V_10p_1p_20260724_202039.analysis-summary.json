@@ -1,0 +1,53 @@
+{
+  "run": "diagnostic_6V_10p_1p_20260724_202039",
+  "analysis_scope": "exploratory; commanded 1% timing unreliable",
+  "sample_rate_hz": 200.0000000320142,
+  "frames": [
+    {
+      "duty_percent": 10.0,
+      "start_offset_s": 17.74999999715874,
+      "preamble_score": 1.829868435931187,
+      "decoded_header": "0x7E",
+      "decoded_letter": "A",
+      "restricted_letter": "A",
+      "decode_ok": 1,
+      "full_expected_rank": 1,
+      "alphabet_expected_rank": 1,
+      "decode_margin": 2263670.0414996,
+      "clipped_x_percent": 0.0,
+      "clipped_y_percent": 0.0,
+      "clipped_any_percent": 0.0,
+      "broadband_snr_db_x": 6.208393787675331,
+      "broadband_snr_db_y": 25.060464507970952,
+      "broadband_snr_db_pooled": 20.59971290053642,
+      "inband_snr_db_x": 29.114072897623238,
+      "inband_snr_db_y": 48.95977262908133,
+      "inband_snr_db_pooled": 44.207603499719504,
+      "tone_coherence": 0.9996110310406934,
+      "off_coherence": 0.14296311608789875
+    },
+    {
+      "duty_percent": 1.0,
+      "start_offset_s": 89.05499998574487,
+      "preamble_score": 1.7570938894928725,
+      "decoded_header": "0x7E",
+      "decoded_letter": "A",
+      "restricted_letter": "A",
+      "decode_ok": 1,
+      "full_expected_rank": 1,
+      "alphabet_expected_rank": 1,
+      "decode_margin": 17883.92157073594,
+      "clipped_x_percent": 0.0,
+      "clipped_y_percent": 0.0,
+      "clipped_any_percent": 0.0,
+      "broadband_snr_db_x": -12.110940852628328,
+      "broadband_snr_db_y": -0.25284872596840086,
+      "broadband_snr_db_pooled": -1.9507840284930533,
+      "inband_snr_db_x": 13.171404616789147,
+      "inband_snr_db_y": 28.40351366273942,
+      "inband_snr_db_pooled": 26.163069619429294,
+      "tone_coherence": 0.9786056542917106,
+      "off_coherence": 0.05836816697249638
+    }
+  ]
+}

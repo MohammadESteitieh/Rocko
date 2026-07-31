@@ -1,0 +1,29 @@
+{
+  "run": "pilot_11V_3m_100p_20260727_190519",
+  "analysis_scope": "11 V, 3 m, 100% detection pilot; not matrix data",
+  "pilot_passed": true,
+  "sample_rate_hz": 199.99999999563443,
+  "frame": {
+    "duty_percent": 100.0,
+    "located_start_offset_s": 24.34000000053129,
+    "preamble_score": 0.9496830734294887,
+    "decoded_header": "0x7E",
+    "decoded_letter": "A",
+    "restricted_letter": "A",
+    "decode_ok": 1,
+    "expected_rank_full": 1,
+    "expected_rank_alphabet": 1,
+    "decode_margin": 1298.655687977429,
+    "broadband_snr_db_x": -13.230776663218895,
+    "broadband_snr_db_y": 0.5828978534599077,
+    "broadband_snr_db_pooled": -2.499825978820192,
+    "inband_snr_db_x": null,
+    "inband_snr_db_y": 19.636338701665874,
+    "inband_snr_db_pooled": 14.539901268160989,
+    "clipped_x_percent": 0.0,
+    "clipped_y_percent": 0.0,
+    "clipped_any_percent": 0.0,
+    "tone_coherence": 0.1696133827690842,
+    "off_coherence": 0.013968793730703024
+  }
+}

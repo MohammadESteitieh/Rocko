@@ -15,7 +15,7 @@ import final_experiment_protocol as gf  # noqa: E402
 import rs18_experiment as experiment  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_rs18_experiment as runner  # noqa: E402
-import transmitter as hw  # noqa: E402
+import hardware as hw  # noqa: E402
 
 GOLDEN_REPETITION_1_SYMBOLS = (
     7, 6, 17, 16, 19, 29, 25, 9, 20, 2, 23, 19, 0, 17, 10, 19, 23, 17,

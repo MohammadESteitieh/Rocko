@@ -1,0 +1,14 @@
+INITIAL OFF 15s
+5 PERCENT START
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@5%
+TEST 01/1 START header=~ letter=A duty=5% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=5% duration=56.001s pulses=448 median=3760.1us p95=3771.7us late=0
+DIAGNOSTIC COMPLETE manifest=exploratory_6V_3m_5p_1p_20260727_184555.5.csv
+GAP OFF 15s
+1 PERCENT START
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@1%
+TEST 01/1 START header=~ letter=A duty=1% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=1% duration=56.001s pulses=448 median=756.4us p95=774.1us late=224
+DIAGNOSTIC COMPLETE manifest=exploratory_6V_3m_5p_1p_20260727_184555.1.csv

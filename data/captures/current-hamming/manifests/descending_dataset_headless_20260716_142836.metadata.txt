@@ -1,0 +1,15 @@
+run=descending_dataset_headless_20260716_142836
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/descending_dataset_headless_20260716_142836.csv
+capture_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/descending_dataset_headless_20260716_142836.capture.log
+capture_pid=8238
+capture_started_utc=2026-07-16T18:28:36Z
+capture_duration_s=2200
+pi_ip=172.17.235.186
+git_commit=e1c1b17
+schedule=100,50,25,10,1; train=A-E each; test=F,G,H,I,J
+transmitter_started_utc=2026-07-16T18:29:21Z
+remote_pid=9461820
+remote_manifest=descending_dataset_headless_20260716_142836.transmitter.csv
+remote_log=descending_dataset_headless_20260716_142836.transmitter.log
+dataset_outcome=ABORTED_FOR_ISOLATED_FRAME
+aborted_utc=2026-07-16T18:37:47Z

@@ -10,7 +10,7 @@ import string
 import sys
 import time
 
-import transmitter as hw
+import hardware as hw
 
 HEADER = 0x7E
 GAP_SECONDS = 15.0

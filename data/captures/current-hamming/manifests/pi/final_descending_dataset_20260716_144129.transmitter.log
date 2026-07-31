@@ -1,0 +1,92 @@
+Diagnostic schedule: 30 frames, 15s gaps, estimated 35.25 minutes
+~A@100% ~B@100% ~C@100% ~D@100% ~E@100% ~F@100% ~A@50% ~B@50% ~C@50% ~D@50% ~E@50% ~G@50% ~A@25% ~B@25% ~C@25% ~D@25% ~E@25% ~H@25% ~A@10% ~B@10% ~C@10% ~D@10% ~E@10% ~I@10% ~A@1% ~B@1% ~C@1% ~D@1% ~E@1% ~J@1%
+TEST 01/30 START header=~ letter=A duty=100% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 02/30 START header=~ letter=B duty=100% coded=0001111001011010011000101010
+TEST 02 DONE letter=B duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 03/30 START header=~ letter=C duty=100% coded=0001111001011010011001000011
+TEST 03 DONE letter=C duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 04/30 START header=~ letter=D duty=100% coded=0001111001011010011001001100
+TEST 04 DONE letter=D duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 05/30 START header=~ letter=E duty=100% coded=0001111001011010011000100101
+TEST 05 DONE letter=E duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 06/30 START header=~ letter=F duty=100% coded=0001111001011010011001100110
+TEST 06 DONE letter=F duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+COIL OFF gap=15s
+TEST 07/30 START header=~ letter=A duty=50% coded=0001111001011010011001101001
+TEST 07 DONE letter=A duty=50% duration=56.001s pulses=448 median=31763.8us p95=31781.4us late=0
+COIL OFF gap=15s
+TEST 08/30 START header=~ letter=B duty=50% coded=0001111001011010011000101010
+TEST 08 DONE letter=B duty=50% duration=56.001s pulses=448 median=31770.2us p95=31784.3us late=0
+COIL OFF gap=15s
+TEST 09/30 START header=~ letter=C duty=50% coded=0001111001011010011001000011
+TEST 09 DONE letter=C duty=50% duration=56.001s pulses=448 median=31761.9us p95=31781.7us late=0
+COIL OFF gap=15s
+TEST 10/30 START header=~ letter=D duty=50% coded=0001111001011010011001001100
+TEST 10 DONE letter=D duty=50% duration=56.001s pulses=448 median=31760.9us p95=31775.5us late=0
+COIL OFF gap=15s
+TEST 11/30 START header=~ letter=E duty=50% coded=0001111001011010011000100101
+TEST 11 DONE letter=E duty=50% duration=56.001s pulses=448 median=31762.7us p95=31779.0us late=0
+COIL OFF gap=15s
+TEST 12/30 START header=~ letter=G duty=50% coded=0001111001011010011000001111
+TEST 12 DONE letter=G duty=50% duration=56.001s pulses=448 median=31760.0us p95=31776.1us late=0
+COIL OFF gap=15s
+TEST 13/30 START header=~ letter=A duty=25% coded=0001111001011010011001101001
+TEST 13 DONE letter=A duty=25% duration=56.001s pulses=448 median=15766.5us p95=15781.3us late=0
+COIL OFF gap=15s
+TEST 14/30 START header=~ letter=B duty=25% coded=0001111001011010011000101010
+TEST 14 DONE letter=B duty=25% duration=56.001s pulses=448 median=15760.5us p95=15780.5us late=0
+COIL OFF gap=15s
+TEST 15/30 START header=~ letter=C duty=25% coded=0001111001011010011001000011
+TEST 15 DONE letter=C duty=25% duration=56.001s pulses=448 median=15757.4us p95=15777.8us late=0
+COIL OFF gap=15s
+TEST 16/30 START header=~ letter=D duty=25% coded=0001111001011010011001001100
+TEST 16 DONE letter=D duty=25% duration=56.001s pulses=448 median=15766.3us p95=15782.2us late=0
+COIL OFF gap=15s
+TEST 17/30 START header=~ letter=E duty=25% coded=0001111001011010011000100101
+TEST 17 DONE letter=E duty=25% duration=56.001s pulses=448 median=15767.7us p95=15785.1us late=0
+COIL OFF gap=15s
+TEST 18/30 START header=~ letter=H duty=25% coded=0001111001011010011001110000
+TEST 18 DONE letter=H duty=25% duration=56.001s pulses=448 median=15766.1us p95=15786.9us late=0
+COIL OFF gap=15s
+TEST 19/30 START header=~ letter=A duty=10% coded=0001111001011010011001101001
+TEST 19 DONE letter=A duty=10% duration=56.001s pulses=448 median=6760.5us p95=6774.6us late=0
+COIL OFF gap=15s
+TEST 20/30 START header=~ letter=B duty=10% coded=0001111001011010011000101010
+TEST 20 DONE letter=B duty=10% duration=56.001s pulses=448 median=6763.9us p95=6776.5us late=0
+COIL OFF gap=15s
+TEST 21/30 START header=~ letter=C duty=10% coded=0001111001011010011001000011
+TEST 21 DONE letter=C duty=10% duration=56.001s pulses=448 median=6763.7us p95=6777.7us late=0
+COIL OFF gap=15s
+TEST 22/30 START header=~ letter=D duty=10% coded=0001111001011010011001001100
+TEST 22 DONE letter=D duty=10% duration=56.001s pulses=448 median=6768.0us p95=6781.8us late=0
+COIL OFF gap=15s
+TEST 23/30 START header=~ letter=E duty=10% coded=0001111001011010011000100101
+TEST 23 DONE letter=E duty=10% duration=56.001s pulses=448 median=6761.0us p95=6779.2us late=0
+COIL OFF gap=15s
+TEST 24/30 START header=~ letter=I duty=10% coded=0001111001011010011000011001
+TEST 24 DONE letter=I duty=10% duration=56.001s pulses=448 median=6760.4us p95=6775.6us late=0
+COIL OFF gap=15s
+TEST 25/30 START header=~ letter=A duty=1% coded=0001111001011010011001101001
+TEST 25 DONE letter=A duty=1% duration=56.001s pulses=448 median=764.7us p95=780.8us late=224
+COIL OFF gap=15s
+TEST 26/30 START header=~ letter=B duty=1% coded=0001111001011010011000101010
+TEST 26 DONE letter=B duty=1% duration=56.001s pulses=448 median=760.4us p95=775.6us late=224
+COIL OFF gap=15s
+TEST 27/30 START header=~ letter=C duty=1% coded=0001111001011010011001000011
+TEST 27 DONE letter=C duty=1% duration=56.001s pulses=448 median=760.8us p95=775.8us late=224
+COIL OFF gap=15s
+TEST 28/30 START header=~ letter=D duty=1% coded=0001111001011010011001001100
+TEST 28 DONE letter=D duty=1% duration=56.001s pulses=448 median=766.2us p95=778.2us late=224
+COIL OFF gap=15s
+TEST 29/30 START header=~ letter=E duty=1% coded=0001111001011010011000100101
+TEST 29 DONE letter=E duty=1% duration=56.001s pulses=448 median=768.6us p95=783.5us late=224
+COIL OFF gap=15s
+TEST 30/30 START header=~ letter=J duty=1% coded=0001111001011010011001011010
+TEST 30 DONE letter=J duty=1% duration=56.001s pulses=448 median=767.0us p95=781.8us late=224
+DIAGNOSTIC COMPLETE manifest=final_descending_dataset_20260716_144129.transmitter.csv

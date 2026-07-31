@@ -1,0 +1,10 @@
+run=stacked_sensors_location_control_background_20260728_151943
+purpose=stacked-sensors same-location transmitter-off background diagnostic
+configuration=sensors_stacked_same_location
+settling_seconds=15
+capture_seconds=60
+transmitter_state=OFF_FROM_PREVIOUS_VERIFIED_GPIO_CLEANUP_NO_TRANSMISSION_REQUESTED
+serial_port=/dev/cu.usbmodem1201
+outcome=COMPLETE
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/stacked_sensors_location_control_background_20260728_151943.csv
+finished_utc=2026-07-28T15:20:43Z

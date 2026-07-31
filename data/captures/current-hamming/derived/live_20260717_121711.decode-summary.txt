@@ -1,0 +1,36 @@
+Live alphabet run 2026-07-17
+Capture: raw/live_20260717_121711.csv
+Samples: 134393 at 200 Hz
+
+Transmitter and receiver stopped. GPIO27, GPIO18, GPIO22, GPIO17 forced low.
+
+Live accepted DECODE events:
+B C D E F G H
+Each used L4 and was independently successful in naive-max, L1, L2, L3, and L4.
+
+A produced a valid tilde and A in every layer but was not emitted as a final live
+DECODE event because the receiver had entered its initial signal state before the
+transmitter began.
+
+Offline covariance-aware coherent-LLR results at the strong live synchronization
+peaks:
+A start=331.54 header=0x7E payload=A valid=True expected-rank=1
+B start=402.53 header=0x7E payload=B valid=True expected-rank=1
+C start=473.54 header=0x7E payload=C valid=True expected-rank=1
+D start=544.53 header=0x7E payload=D valid=True expected-rank=1
+E start=615.53 header=0x7E payload=E valid=True expected-rank=1
+F start=686.54 header=0x7E payload=F valid=True expected-rank=1
+G start=757.53 header=0x7E payload=G valid=True expected-rank=1
+H start=828.54 header=0x7E payload=H valid=True expected-rank=1
+
+I synchronized at t=899.52 with score 1.63/2.00, but the recording ended at
+t=951.76, about 3.76 seconds before its 56-second frame was complete.
+
+Several weaker candidate peaks between true frames were rejected; none became an
+accepted DECODE event.
+
+Observed post-ADC pooled in-band SNR across A-H: 56.05 dB. This uses identical
+7.25-8.75 Hz filtering, Psignal=Pframe-Pnoise, and each central ten-second gap.
+The estimate is clipping-limited: 25,114/89,600 frame rows (28.03%) saturated at
+least one ADC channel, so it is not a trustworthy estimate of the unclipped
+physical link SNR. Per-frame values are in live_20260717_121711.snr.csv.

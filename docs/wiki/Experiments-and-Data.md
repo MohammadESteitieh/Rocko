@@ -1,43 +1,63 @@
 # Experiments and Data
 
-## Persistent layout
+## Repository archive
+
+Selected research data is committed under:
 
 ```text
-~/Desktop/CU-hakcing-captures/current-hamming/
-├── raw/        immutable continuous t,x,y captures
-├── manifests/  transmitter manifests, metadata, and logs
-├── derived/    analysis tables, plots, and reports
-└── models/     models fitted from designated training frames
+data/captures/
+├── current-hamming/
+├── final-experiment/
+├── rs18-experiment/
+├── rs18-quick-screen/
+└── SHA256SUMS
 ```
 
-Legacy material is preserved under `legacy-naive-bayes/` with SHA-256 checksums.
-It can test the 8 Hz front end but predates the current Hamming/timing contract.
+The original working archive remains at `~/Desktop/CU-hakcing-captures/`.
+Raw captures and transmitter manifests are immutable. Regenerated analysis must
+use a new derived filename and checksum.
+
+## Accepted principal datasets
+
+| Dataset | Purpose | Frames |
+|---|---|---:|
+| `final_experiment_all_11V_20260727_204243` | Uncoded/Hamming/RS comparison | 100 |
+| `rs18_experiment_11V_20260728_091828` | RS(18,6) follow-up | 45 |
+| `rs18_quick_screen_11V_20260728_120220` | Corrected-wiring exploratory screen | 5 |
+
+The quick screen completed safely but contained insufficient desired signal;
+it is diagnostic rather than evidence of improved decoding.
 
 ## Dataset rules
 
-- Split by complete physical frame, never individual bits.
-- Fit only on rows marked `train`.
-- Do not inspect or tune against held-out letters before model fitting.
-- Preserve raw captures unchanged; derived work goes elsewhere.
-- Record transmitter UTC starts, requested duty, pulse statistics, distance,
-  orientation, coil configuration, and environmental interventions.
-- Use the central portion of the 15-second gap for H0/noise estimates.
+- Preserve failed, interrupted, and invalidated runs as provenance.
+- Split fitting and validation by complete frames or sessions, not bits.
+- Fit frontends only on declared transmitter-off observations.
+- Freeze a fitted frontend during active frames.
+- Do not optimize boundaries or candidate codewords using payload truth.
+- Report autonomous acquisition separately from manifest-boundary decoding.
+- Retain decoder failures and wrong-codeword miscorrections as frame errors.
+- Do not claim a true zero error rate from a five-frame zero-error cell.
 
-## SNR definition
+## SNR convention
 
-After applying the identical 7.25-8.75 Hz filter to frame and gap:
+Apply the identical 7.25–8.75 Hz filter to active and transmitter-off windows.
+Subtract off power from active power before treating any component as signal.
+If active power does not exceed off power, report no positive signal estimate.
+Never substitute a floor or infer SNR from commanded duty.
 
-```text
-Psignal = Pframe - Pnoise
-SNR = 10 log10(Psignal / Pnoise)
-```
+Carrier-versus-0–10 Hz SNR retains the carrier-only, power-subtracted numerator
+and uses the zero-to-10 Hz transmitter-off denominator. Out-of-band active
+excess is not signal.
 
-If `Pframe <= Pnoise`, report no positive power estimate rather than inventing
-an SNR. Duty is an experimental control; measured in-band SNR is ground truth.
+## Accepted results summary
 
-## Reliable long capture
+The final comparison produced 59/100 payload frame errors overall. Hamming
+(15,11) decoded all five frames at 100% and 50%, while RS(12,6) decoded all five
+at 100% and four of five at 50%.
 
-Use `receiver/capture.py` as the authoritative serial owner. It launches
-`caffeinate` and is independent of a GUI window. Keep the laptop powered with
-its lid open. A read-only growing-CSV viewer may be opened or closed without
-affecting collection.
+The RS18 session produced 41/45 primary hard frame errors: one of five at 100%
+and five of five at every lower duty. Frozen off-RMS and sensor-y-only improved
+the 100% cell to zero of five but did not recover lower duties. The RS18 session
+had materially lower physical SNR than the earlier RS(12,6) session, so it is
+not a fair code-only comparison.

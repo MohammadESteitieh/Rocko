@@ -1,0 +1,55 @@
+{
+  "run": "exploratory_6V_3m_5p_1p_20260727_185315",
+  "analysis_scope": "clean exploratory curiosity run; not matrix data",
+  "capture_valid_for_exploratory_scope": true,
+  "valid_for_condition_selection": false,
+  "condition_selection_cautions": [
+    "only one frame per duty",
+    "neither frame acquired a valid tilde preamble",
+    "SNR ordering was nonmonotonic near the noise floor",
+    "commanded pulse widths exceeded targets, especially at 1%"
+  ],
+  "sample_rate_hz": 199.99999999563443,
+  "frames": [
+    {
+      "duty_percent": 5.0,
+      "boundary_source": "transmitter_utc_second_resolution_no_signal_search",
+      "start_offset_s": 22.144418001174927,
+      "live_acquisition": "NO_VALID_TILDE_PREAMBLE",
+      "broadband_snr_db_x": -20.865373669849486,
+      "broadband_snr_db_y": -1.3900557656571086,
+      "broadband_snr_db_pooled": -4.417554772538556,
+      "inband_snr_db_x": -5.9808714387675765,
+      "inband_snr_db_y": -8.565513985948872,
+      "inband_snr_db_pooled": -7.8693885640848045,
+      "clipped_x_percent": 0.0,
+      "clipped_y_percent": 0.0,
+      "clipped_any_percent": 0.0,
+      "target_pulse_us": 3125.0,
+      "pulse_count": 448,
+      "late_starts": 0,
+      "pulse_median_us": 3758.463,
+      "pulse_p95_us": 3773.385
+    },
+    {
+      "duty_percent": 1.0,
+      "boundary_source": "transmitter_utc_second_resolution_no_signal_search",
+      "start_offset_s": 94.14441800117493,
+      "live_acquisition": "NO_VALID_TILDE_PREAMBLE",
+      "broadband_snr_db_x": -18.017982461374565,
+      "broadband_snr_db_y": 1.556584835665634,
+      "broadband_snr_db_pooled": -2.452413323563685,
+      "inband_snr_db_x": -11.76331259771051,
+      "inband_snr_db_y": 0.455620961010765,
+      "inband_snr_db_pooled": -1.085419853554365,
+      "clipped_x_percent": 0.0,
+      "clipped_y_percent": 0.0,
+      "clipped_any_percent": 0.0,
+      "target_pulse_us": 625.0,
+      "pulse_count": 448,
+      "late_starts": 224,
+      "pulse_median_us": 760.769,
+      "pulse_p95_us": 779.107
+    }
+  ]
+}

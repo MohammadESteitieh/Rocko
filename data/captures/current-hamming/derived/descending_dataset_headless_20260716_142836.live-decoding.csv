@@ -1,0 +1,8 @@
+sequence,phase,duty_percent,expected,start_offset_s,preamble_score,layered,successful_layers,coherent_slnn,coherent_full_header,coherent_full_letter,accepted
+1,train,100.0,A,42.000,0.178801,\x93,,P,0x7E,\xbe,0
+2,train,100.0,B,113.635,0.122662,w,,P,0xEE,\xc0,0
+3,train,100.0,C,185.320,0.096777,\xe2,,Q,0x77,\xc1,0
+4,train,100.0,D,256.405,0.099912,\xb0,,Z,0x5A,Z,0
+5,train,100.0,E,323.000,0.157245,\xc7,,J,0x7E,\x8a,0
+6,test,100.0,F,394.065,0.154455,\xff,,C,0x7E,C,0
+7,train,50.0,A,470.095,0.134736,\x16,,E,0xF6,\xc5,0

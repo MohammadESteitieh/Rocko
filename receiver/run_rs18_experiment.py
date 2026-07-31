@@ -42,7 +42,7 @@ REMOTE_CONTACT_GRACE_SECONDS = 60.0
 SUBPROCESS_TIMEOUT_SECONDS = 30.0
 POLL_SECONDS = 10.0
 DEPLOY_NAMES = (
-    "transmitter.py", "alphabet_transmitter.py", "duty_pair_test.py",
+    "hardware.py", "alphabet_transmitter.py", "duty_pair_test.py",
     "final_experiment_protocol.py", "rs18_experiment_protocol.py",
     "rs18_experiment.py", "rs18_quick_screen.py",
 )

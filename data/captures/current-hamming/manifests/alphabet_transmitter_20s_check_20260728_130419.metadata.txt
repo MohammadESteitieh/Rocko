@@ -1,0 +1,9 @@
+run=alphabet_transmitter_20s_check_20260728_130419
+purpose=20-second alphabet transmitter hardware check
+host=172.20.10.2
+serial_port=/dev/cu.usbmodem1201
+transmitter_started_utc=2026-07-28T13:04:24Z
+finished_utc=2026-07-28T13:04:51Z
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/alphabet_transmitter_20s_check_20260728_130419.csv
+transmitter_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/pi/alphabet_transmitter_20s_check_20260728_130419.transmitter.log
+safe_shutdown_outcome=VERIFIED_WRITES

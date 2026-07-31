@@ -1,0 +1,13 @@
+run=orientation_pilot_perpendicular_colocated_absent_20260728_113956
+configuration=perpendicular_colocated_pinned
+person=absent
+settling_seconds=60
+off_capture_seconds=120
+transmitter_safe_preflight=VERIFIED_WRITES
+serial_port=/dev/cu.usbmodem1201
+started_utc=2026-07-28T11:39:56Z
+off_capture=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/orientation_pilot_perpendicular_colocated_absent_20260728_113956.off-120s.csv
+sha256_off_capture=8a54497c6b9c0a3d1c1e479f414c83be13bd1ee0ae85329f2ae61aa8c18bb02e
+off_capture_finished_utc=2026-07-28T11:41:56Z
+pilot_exit_status=0
+finished_utc=2026-07-28T11:43:26Z

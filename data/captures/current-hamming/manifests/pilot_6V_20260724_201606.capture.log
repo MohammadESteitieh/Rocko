@@ -1,0 +1,11 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-24T20:16:15  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pilot_6V_20260724_201606.csv
+[#0002] 2026-07-24T20:16:15  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-24T20:16:16  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-24T20:16:46  SYNC    coded tilde locked t=8002.90s score=1.66/2.00

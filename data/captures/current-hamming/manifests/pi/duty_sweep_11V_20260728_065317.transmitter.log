@@ -1,0 +1,9 @@
+Calibration: 11 V, distance=3 m, 2 frames, estimated 1.30 minutes
+R1:100% R1:40%
+COIL OFF initial_wait=15s
+CAL 01/2 START round=1 position=1 letter=A duty=100% coded=0001111001011010011001101001
+CAL 01 DONE duty=100% duration=14.001s; COIL OFF gap=15s
+CAL 02/2 START round=1 position=2 letter=A duty=40% coded=0001111001011010011001101001
+CAL 02 DONE duty=40% duration=14.001s; COIL OFF gap=15s
+COIL OFF final_wait=5s
+CALIBRATION COMPLETE manifest=duty_sweep_11V_20260728_065317.transmitter.csv

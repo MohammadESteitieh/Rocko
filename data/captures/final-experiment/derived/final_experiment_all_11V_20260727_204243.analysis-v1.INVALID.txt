@@ -1,0 +1,15 @@
+INVALIDATED / SUPERSEDED ANALYSIS
+
+The original `analysis.csv` and `analysis-summary.json`, plus their dependent
+`results.md`, `error-rates.*`, and `error-rates-with-snr.*` artifacts, used the
+transpose/conjugate of the required complex covariance in coherent LLR
+combining. With observations stored as rows z, the required Hermitian
+covariance is E[z z^H], implemented as `centered.T @ centered.conj() / N`.
+The original analysis instead used `centered.conj().T @ centered / N`.
+
+The issue was discovered during the Gao/Duong frontend review and reproduced by
+a complex-correlated synthetic regression test. It leaves overall observed FER
+at 59/100 but changes raw error counts and the 25% uncoded/Hamming cell FER.
+
+Use only artifacts containing `v2-covariance-corrected` and the later
+RS-frontends comparison. Preserve v1 files solely as invalidated provenance.

@@ -1,48 +1,69 @@
 # Operations and Troubleshooting
 
-## Preflight
+## Before a capture
 
-1. Confirm the Pico serial port.
-2. Confirm the Pi IP with one bounded SSH attempt.
-3. Confirm no transmitter process or stale PID lock.
-4. Force GPIO27, GPIO18, GPIO22, and GPIO17 low.
-5. Start `receiver/capture.py` and verify rows are increasing.
-6. Confirm its `caffeinate` child is active.
-7. Record pre-run silence before starting the transmitter.
+1. Confirm the intended voltage, distance, duty schedule, bit rate, payload,
+   sensor geometry, and operator-presence condition.
+2. Verify GPIO22→IN3, GPIO17→IN4, GPIO27→ENB, and shared ground.
+3. Confirm exactly one `/dev/cu.usbmodem*` device or pass `--port` explicitly.
+4. Ensure no process owns the serial port.
+5. Run the transmitter and macOS runner without `--execute` first.
+6. Confirm the output directory is persistent and collision-free.
+7. Allow the declared person-absent settling period.
 
-## Connectivity rule
+## During a physical run
 
-If the hotspot/internet path fails, stop and return the issue to the operator.
-Do not scan repeatedly, switch networks autonomously, or create indefinite
-retry loops. A guest network may isolate wireless clients even when both show
-the same SSID.
+Use the macOS `receiver/run_*.py` orchestrator. It should be the only serial
+owner and should run under `caffeinate` for long sessions. Do not close a
+foreground harness that owns capture or transmission.
 
-## Collector architecture
+Stop and return control to the operator on DNS, routing, SSH, relay, or remote
+host failure. Do not automatically retry a physical transmission.
 
-Do not use the Matplotlib live receiver as the authoritative long-duration
-collector. Closing the window terminates capture. Use the headless collector
-for serial ownership, and use `watch_capture.py` only as a read-only viewer of
-the growing CSV.
+## After a run
 
-`caffeinate` prevents idle/display/disk sleep but cannot reliably override
-closing a MacBook lid. Keep the laptop powered and open.
+Verify all of the following:
 
-## No visible transmitter current
+- raw capture exists and is nonempty;
+- transmitter manifest and log were transferred;
+- manifest schedule validates exactly;
+- metadata says `outcome=COMPLETE` where applicable;
+- checksums pass;
+- GPIO27, GPIO18, GPIO22, and GPIO17 were independently forced low;
+- metadata says `safe_shutdown_outcome=VERIFIED_WRITES`.
 
-- First run the exact known path: `run-alphabet.sh --start A --once`.
-- Do not substitute an ad-hoc GPIO/PWM implementation.
-- GPIO27 is the current verified ENB path; GPIO18 PWM is experimental.
-- A successful Python return is not physical proof. Check receiver carrier
-  response or direct hardware observation.
+## Common failures
 
-## False decodes
+### Serial device busy
 
-A restricted alphabet decoder always emits a letter. Reject when the tilde
-preamble is weak, the unrestricted header/payload disagrees, margins are low,
-clipping occurs, or the H1 likelihood does not exceed calibrated H0.
+Use `lsof /dev/cu.usbmodem...` and stop the competing capture/viewer. Never run
+two serial readers.
 
-## Safe stop
+### Capture exists but no useful signal
 
-Terminate the active transmitter, force all bridge pins low, stop the serial
-collector only after a clean post-run gap, copy the manifest/log, and checksum
-the immutable raw CSV.
+Check desired carrier power and synchronization before changing the decoder.
+Low background noise is not proof of sensor coupling. Verify sensor sensitive
+axis, signal wiring, cable motion, transmitter current, coil orientation, and
+physical distance.
+
+### One sensor is much noisier
+
+Swap complete sensor connections while holding geometry fixed. If the problem
+moves, inspect the sensor and sensor-end wiring. If it stays on one ADC channel,
+inspect its cable, ground, frontend, and Pico input. A miswired diagnostic must
+be marked invalid rather than interpreted.
+
+### Transmitter import failure
+
+Deploy the complete transitive file list. Preserve a failed pre-transmission run
+and perform independent GPIO-low cleanup.
+
+### No positive SNR estimate
+
+This is a valid result. Do not add a numerical floor. Record that active carrier
+power did not exceed transmitter-off power.
+
+## Credentials
+
+Never store or relay the QNX password. Use a hidden local prompt and ephemeral
+process environment only.

@@ -1,8 +1,0 @@
-Abrasions
-Bruises
-Burns
-Normal
-Pressure_wound
-Sharp_wound
-Surgical_wound
-Venous_wound

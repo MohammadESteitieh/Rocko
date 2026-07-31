@@ -1,46 +1,61 @@
-# hackathon-team-template
+# Rocko magnetic-link research
 
-Team operating system for a 4-person hackathon team running Claude Code.
-This repo is **pre-event tooling** — workflow scaffolding only. All project
-code is written during the event in a fresh repo instantiated from this one.
+Rocko is a research codebase for a low-frequency magnetic communication link.
+A QNX Raspberry Pi drives a coil through an L298N H-bridge; two magnetic
+sensors feed a Raspberry Pi Pico, which streams `t,x,y` samples to a macOS
+receiver at approximately 200 Hz.
 
-## What this is
+This repository contains only the research system:
 
-- **Kernel** (`CLAUDE.md`) — the team's working rules, loaded by every seat
-- **Commands** (`.claude/commands/`) — `/doctor` `/start` `/ship` `/gotcha` `/propose`
-- **Hooks** (`.claude/settings.json` + `scripts/hooks/`) — quality gates on every seat
-- **Skills** (`.claude/skills/`) — project skill pack, auto-loaded from clone
-- **Memory bank** (`data/context/`) — decisions, gotchas, instincts, handoffs
-- **Automation** (`.github/workflows/`) — review bot, tripwires, gotcha-bot
-- **Scripts** (`scripts/`) — `task` (command backend), `repo-init.sh` (instantiation)
+- safe calibration and coded-frame transmitters;
+- serial acquisition and offline receiver analysis;
+- Hamming and Reed–Solomon protocols and decoders;
+- coherent combining, Gao cancellation, Duong whitening, and temporal models;
+- reproducible experiment manifests, checksums, plots, and selected captures;
+- the project wiki under [`docs/wiki/`](docs/wiki/Home.md).
 
-## Quickstart (teammates)
+The original hackathon audio, emergency-intent, photo/CNN, team-automation, and
+demo layers have been removed from the research branch. Their history remains
+available through Git.
+
+## Repository map
+
+- [`transmitter/`](transmitter/README.md) — QNX GPIO/coil control, calibration
+  sweeps, frozen experimental protocols, and physical schedules.
+- [`receiver/`](receiver/README.md) — Pico acquisition, live monitoring, DSP,
+  decoding, offline analysis, and plots.
+- [`tests/`](tests/) — deterministic protocol, decoder, safety, runner, and
+  analysis tests.
+- [`docs/wiki/`](docs/wiki/Home.md) — canonical research wiki.
+- [`data/captures/`](data/captures/README.md) — selected physical captures,
+  manifests, derived results, and a repository-wide checksum inventory.
+
+## Quick start
 
 ```bash
-git clone <this-repo> && cd <repo>
-claude
-/doctor        # verifies your seat: hooks firing, parity, versions
-/start <N>     # take issue N: worktree + branch + brief loaded
-/ship          # tests green -> PR + bot review; red -> draft PR
+python3 -m venv receiver/.venv
+receiver/.venv/bin/pip install -r receiver/requirements.txt
+receiver/.venv/bin/python -m unittest discover -s tests -q
 ```
 
-That's the whole interface. `/gotcha` records a lesson, `/propose` files an idea.
-
-## Instantiating the event repo (hour zero)
-
-GitHub copies **files only** — labels, branch protection, secrets, and webhooks
-do not transfer. After creating the fresh event repo and pushing this
-template's contents into it, stamp the settings:
+Capture without energizing the transmitter:
 
 ```bash
-scripts/repo-init.sh <owner>/<event-repo>
+receiver/.venv/bin/python receiver/capture.py \
+  --port /dev/cu.usbmodem1201 --out capture.csv --duration 60
 ```
 
-## Status
+All physical transmitter tools default to a dry run and require explicit
+`--execute`. Follow the safety procedure in
+[`docs/wiki/Operations-and-Troubleshooting.md`](docs/wiki/Operations-and-Troubleshooting.md).
 
-Build week in progress (D0 complete: repos + protection). Event ≈ Jul 14, 2026.
+## Current research status
 
-## Disclosure
+The accepted datasets compare uncoded, Hamming(15,11), RS(5,3), RS(12,6), and
+RS(18,6) frames at 11 V and 3 m. The strongest accepted RS(18,6) result decoded
+all five 100% frames with sensor-y-only or frozen off-RMS processing, but no
+frames at 50% or below. Results are small-sample physical measurements, not
+claims of general channel performance.
 
-This tooling repository was built before the event and contains no project
-code. The event project's commit history begins at the event.
+See [`docs/wiki/Context-Handoff.md`](docs/wiki/Context-Handoff.md) for exact
+run identifiers, analysis qualifications, and immediate work.

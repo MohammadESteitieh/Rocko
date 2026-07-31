@@ -1,0 +1,3 @@
+INVALID FOR CALIBRATION SELECTION
+Reason: operator remained beside the apparatus for all frames because capture activity was not visibly indicated.
+Retain raw data; do not use its SNR or decode values to select physical conditions.

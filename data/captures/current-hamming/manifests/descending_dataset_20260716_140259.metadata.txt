@@ -1,0 +1,8 @@
+run=descending_dataset_20260716_140259
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/descending_dataset_20260716_140259.csv
+receiver_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/descending_dataset_20260716_140259.receiver.log
+receiver_pid=7703
+receiver_started_utc=2026-07-16T18:02:59Z
+git_commit=e1c1b17
+schedule=100,50,25,10,1; train=A-E each; test=F,G,H,I,J
+supervisor_started_utc=2026-07-16T18:05:16Z

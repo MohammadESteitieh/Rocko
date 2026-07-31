@@ -1,0 +1,162 @@
+{
+  "run": "final_descending_dataset_20260716_144129",
+  "dataset_outcome": "COMPLETE",
+  "raw_path": "/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/final_descending_dataset_20260716_144129.csv",
+  "raw_sha256": "5a1f951dc1d5d8e1cf71aeb426bb4c260c0b7ab1da6b1595bb90d6eb4018bc9d",
+  "plot_path": "/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/final_descending_dataset_20260716_144129.signal-overview.png",
+  "plot_sha256": "2ca9ae2579c844be9b15f508e0febce32aa933ad3567584cb999aa7d17c0d0ec",
+  "samples": 439996,
+  "csv_rows_including_header": 439997,
+  "sample_rate_hz": 199.99999999563443,
+  "receiver_time_start_s": 1245.415005,
+  "receiver_time_end_s": 3445.390006,
+  "sampled_duration_s": 2199.975001,
+  "capture_started_utc": "2026-07-16T18:41:29Z",
+  "transmitter_started_utc": "2026-07-16T18:42:17Z",
+  "capture_requested_duration_s": 2200,
+  "pi_ip": "172.17.235.186",
+  "git_commit": "e1c1b17",
+  "protocol": {
+    "message": "encoded tilde plus uppercase letter",
+    "coded_bits_per_frame": 28,
+    "frame_seconds": 56,
+    "gap_seconds": 15,
+    "carrier_hz": 8,
+    "coded_bit_rate_hz": 0.5,
+    "manchester": "1=tone/silence, 0=silence/tone"
+  },
+  "schedule": {
+    "requested_duty_percent": [
+      100,
+      50,
+      25,
+      10,
+      1
+    ],
+    "frames_per_duty": 6,
+    "train_letters": "A-E",
+    "held_out_letters_by_duty": [
+      "F",
+      "G",
+      "H",
+      "I",
+      "J"
+    ],
+    "total_frames": 30
+  },
+  "receiver_filter": {
+    "order": 4,
+    "bandpass_hz": [
+      7.25,
+      8.75
+    ],
+    "zero_phase": true
+  },
+  "snr_method": "Identically filtered frame and central 10 s of following gap; signal power is frame power minus noise power; no SNR when the difference is non-positive.",
+  "adc": {
+    "x_min": 725.0,
+    "x_max": 1115.0,
+    "y_min": 287.0,
+    "y_max": 3437.0,
+    "frame_level_clipping_reported": false
+  },
+  "duty_summary": {
+    "100.0": {
+      "frames": 6,
+      "letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "pooled_frame_power": 20.43618897043292,
+      "pooled_noise_power": 6.442826048007286,
+      "pooled_signal_power": 13.993362922425632,
+      "pooled_snr_db": 3.3684569200310506,
+      "coherent_llr_correct": 6,
+      "layered_correct": 5,
+      "median_preamble": 0.8924644619623998
+    },
+    "50.0": {
+      "frames": 6,
+      "letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "G"
+      ],
+      "pooled_frame_power": 19.499032248896427,
+      "pooled_noise_power": 4.919489436448083,
+      "pooled_signal_power": 14.579542812448345,
+      "pooled_snr_db": 4.718238731692421,
+      "coherent_llr_correct": 6,
+      "layered_correct": 5,
+      "median_preamble": 0.8732103079985795
+    },
+    "25.0": {
+      "frames": 6,
+      "letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "H"
+      ],
+      "pooled_frame_power": 7.392016814087408,
+      "pooled_noise_power": 3.61735093279511,
+      "pooled_signal_power": 3.774665881292298,
+      "pooled_snr_db": 0.1848787226841123,
+      "coherent_llr_correct": 6,
+      "layered_correct": 3,
+      "median_preamble": 0.6330989188635706
+    },
+    "10.0": {
+      "frames": 6,
+      "letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "I"
+      ],
+      "pooled_frame_power": 4.172688151590768,
+      "pooled_noise_power": 5.064388412235501,
+      "pooled_signal_power": -0.8917002606447326,
+      "pooled_snr_db": null,
+      "coherent_llr_correct": 0,
+      "layered_correct": 0,
+      "median_preamble": 0.09997425744051247
+    },
+    "1.0": {
+      "frames": 6,
+      "letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "J"
+      ],
+      "pooled_frame_power": 3.439161710030401,
+      "pooled_noise_power": 3.4352985347283522,
+      "pooled_signal_power": 0.003863175302048827,
+      "pooled_snr_db": -29.490200682660408,
+      "coherent_llr_correct": 0,
+      "layered_correct": 0,
+      "median_preamble": 0.326370989749332
+    }
+  },
+  "timing_note": "At requested 1% duty, 224 of 448 pulse starts were late per frame and median pulses were about 760\u2013769 us rather than 625 us.",
+  "environment_note": "People walked across the link during unspecified frames; dataset is mixed motion/interference and no outcome-based exclusions were made.",
+  "plot_processing": {
+    "raw_downsample_step": 20,
+    "envelope": "absolute Hilbert analytic channel, 1 s moving average",
+    "frame_boundaries": "offline benchmark/manifest timing"
+  }
+}

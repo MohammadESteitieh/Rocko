@@ -1,28 +1,21 @@
+# Local configuration and OS files
 .env
 .env.*
-!.env.example
-node_modules/
-dist/
 .DS_Store
-*.log
-.task/worktrees/
-.stack-stamp-probe.*
-# First Mate / River runtime state (data/context/fm/README.md is committed; these are per-machine)
-data/context/fm/state.json
-data/context/fm/.state.*
-data/context/fm/PAUSE
-data/context/fm/.lock/
-data/context/fm/merge.lock/
 
-__pycache__/
-*.py[cod]
-
-# Receiver local runtime
+# Python environments and caches
 .venv/
 receiver/.venv/
-captures/
+__pycache__/
+*.py[cod]
+.pytest_cache/
 
-# compiled classifier binary (build artifact)
-TTS/classifier
-TTS/classifier_qnx
-TTS/interactive
+# Local runtime output
+/captures/
+*.log
+
+# The committed research archive intentionally retains experiment logs.
+!data/captures/**/*.log
+
+# Local task worktrees
+.task/worktrees/

@@ -1,0 +1,20 @@
+{
+  "frames": 2,
+  "decode_only_accepted": 0,
+  "by_duty": {
+    "100": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 0,
+      "conditional_median_positive_inband_snr_db_pooled": null,
+      "max_clipped_any_percent": 0.8928571428571428
+    },
+    "40": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 0,
+      "conditional_median_positive_inband_snr_db_pooled": null,
+      "max_clipped_any_percent": 1.1785714285714286
+    }
+  }
+}

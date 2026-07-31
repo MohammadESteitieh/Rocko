@@ -1,0 +1,14 @@
+receiver_pid=7097
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/canonical_run_alphabet_A_100_20260716_134251.csv
+receiver_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/canonical_run_alphabet_A_100_20260716_134251.receiver.log
+receiver_started_utc=2026-07-16T17:42:51Z
+transmitter_command=/data/home/qnxuser/run-alphabet.sh --start A --once
+transmitter_started_command_utc=2026-07-16T17:43:07Z
+transmitter_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/canonical_run_alphabet_A_100_20260716_134302.transmitter.log
+transmitter_command_returned_utc=2026-07-16T17:44:04Z
+
+duty_sequence_started_utc=2026-07-16T17:47:30Z
+duty_sequence=10,1,0.1
+duty_sequence_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/canonical_duty_10_1_0p1_20260716_134730.transmitter.log
+duty_sequence_returned_utc=2026-07-16T17:50:49Z
+receiver_stopped_utc=2026-07-16T17:51:36Z

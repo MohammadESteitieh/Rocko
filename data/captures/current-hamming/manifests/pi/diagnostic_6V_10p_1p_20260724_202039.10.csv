@@ -1,0 +1,2 @@
+sequence,phase,letter,duty_percent,coded_bits,started_utc,finished_utc,duration_s,target_pulse_us,pulse_count,late_starts,pulse_min_us,pulse_median_us,pulse_p95_us,pulse_max_us
+1,train,A,10.0,0001111001011010011001101001,2026-07-25T00:21:09Z,2026-07-25T00:22:05Z,56.000931,6250.000,448,0,6545.074,6761.250,6774.594,6783.685

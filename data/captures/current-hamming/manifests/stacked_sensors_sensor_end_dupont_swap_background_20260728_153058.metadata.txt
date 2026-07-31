@@ -1,0 +1,10 @@
+run=stacked_sensors_sensor_end_dupont_swap_background_20260728_153058
+purpose=stacked-sensors sensor-end-Dupont-cables-swapped transmitter-off background diagnostic
+configuration=sensors_stacked_same_location_sensor_end_cables_swapped
+settling_seconds=15
+capture_seconds=60
+transmitter_state=OFF_FROM_PREVIOUS_VERIFIED_GPIO_CLEANUP_NO_TRANSMISSION_REQUESTED
+serial_port=/dev/cu.usbmodem1201
+outcome=COMPLETE
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/stacked_sensors_sensor_end_dupont_swap_background_20260728_153058.csv
+finished_utc=2026-07-28T15:31:58Z

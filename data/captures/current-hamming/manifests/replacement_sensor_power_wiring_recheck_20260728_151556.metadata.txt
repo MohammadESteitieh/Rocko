@@ -1,0 +1,9 @@
+run=replacement_sensor_power_wiring_recheck_20260728_151556
+purpose=replacement-sensor swapped-power-source reseated-Dupont-wires transmitter-off background diagnostic
+settling_seconds=15
+capture_seconds=60
+transmitter_state=OFF_FROM_PREVIOUS_VERIFIED_GPIO_CLEANUP_NO_TRANSMISSION_REQUESTED
+serial_port=/dev/cu.usbmodem1201
+outcome=COMPLETE
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/replacement_sensor_power_wiring_recheck_20260728_151556.csv
+finished_utc=2026-07-28T15:16:56Z

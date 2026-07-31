@@ -27,7 +27,7 @@ from typing import Callable
 
 import alphabet_transmitter as alphabet
 import duty_pair_test as duty_tx
-import transmitter as hw
+import hardware as hw
 
 LETTER = "A"
 INITIAL_WAIT_SECONDS = 15.0

@@ -1,0 +1,44 @@
+Run: calibration_11V_20260724_184135
+Raw capture: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/calibration_11V_20260724_184135.csv
+Serial: /dev/cu.usbmodem1201
+Voltage: 11 V; distance: 0.35 m
+Calibration running on QNX as PID 2003001
+2026-07-24T22:41:40.355211Z calibration running; capture PID 54515
+2026-07-24T22:41:50.717001Z calibration running; capture PID 54515
+2026-07-24T22:42:00.977085Z calibration running; capture PID 54515
+2026-07-24T22:42:11.318866Z calibration running; capture PID 54515
+2026-07-24T22:42:21.656766Z calibration running; capture PID 54515
+2026-07-24T22:42:31.995586Z calibration running; capture PID 54515
+2026-07-24T22:42:42.338547Z calibration running; capture PID 54515
+2026-07-24T22:42:52.677262Z calibration running; capture PID 54515
+2026-07-24T22:43:03.206207Z calibration running; capture PID 54515
+2026-07-24T22:43:13.690879Z calibration running; capture PID 54515
+2026-07-24T22:43:24.108681Z calibration running; capture PID 54515
+2026-07-24T22:43:34.644002Z calibration running; capture PID 54515
+2026-07-24T22:43:44.903695Z calibration running; capture PID 54515
+2026-07-24T22:43:55.243751Z calibration running; capture PID 54515
+2026-07-24T22:44:05.591557Z calibration running; capture PID 54515
+2026-07-24T22:44:15.932693Z calibration running; capture PID 54515
+2026-07-24T22:44:26.273331Z calibration running; capture PID 54515
+2026-07-24T22:44:36.607098Z calibration running; capture PID 54515
+2026-07-24T22:44:46.952073Z calibration running; capture PID 54515
+2026-07-24T22:44:57.283611Z calibration running; capture PID 54515
+2026-07-24T22:45:07.627634Z calibration running; capture PID 54515
+2026-07-24T22:45:18.036149Z calibration running; capture PID 54515
+2026-07-24T22:45:28.318565Z calibration running; capture PID 54515
+2026-07-24T22:45:39.072505Z calibration running; capture PID 54515
+2026-07-24T22:45:49.409351Z calibration running; capture PID 54515
+2026-07-24T22:45:59.758695Z calibration running; capture PID 54515
+2026-07-24T22:46:10.091858Z calibration running; capture PID 54515
+2026-07-24T22:46:20.430154Z calibration running; capture PID 54515
+2026-07-24T22:46:30.772344Z calibration running; capture PID 54515
+2026-07-24T22:46:41.116478Z calibration running; capture PID 54515
+2026-07-24T22:46:51.451716Z calibration running; capture PID 54515
+2026-07-24T22:47:01.944361Z calibration running; capture PID 54515
+2026-07-24T22:47:12.394853Z calibration running; capture PID 54515
+2026-07-24T22:47:22.844015Z calibration running; capture PID 54515
+2026-07-24T22:47:33.258698Z calibration running; capture PID 54515
+2026-07-24T22:47:43.758024Z calibration running; capture PID 54515
+2026-07-24T22:47:54.103746Z calibration running; capture PID 54515
+2026-07-24T22:48:04.476523Z calibration running; capture PID 54515
+ERROR: Command '['sshpass', '-e', 'ssh', '-o', 'PreferredAuthentications=password', '-o', 'PubkeyAuthentication=no', '-o', 'ConnectTimeout=8', 'qnxuser@172.17.235.186', "cd /data/home/qnxuser/calibration-runner || exit 1; if grep -q 'CALIBRATION COMPLETE' calibration_11V_20260724_184135.transmitter.log 2>/dev/null; then echo COMPLETE; elif kill -0 2003001 2>/dev/null; then echo RUNNING; else echo FAILED; fi"]' returned non-zero exit status 255.

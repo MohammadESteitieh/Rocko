@@ -1,0 +1,9 @@
+run=replacement_sensor_swapped_background_20260728_151154
+purpose=swapped replacement/original sensor transmitter-off background diagnostic
+settling_seconds=15
+capture_seconds=60
+transmitter_state=OFF_FROM_PREVIOUS_VERIFIED_GPIO_CLEANUP_NO_TRANSMISSION_REQUESTED
+serial_port=/dev/cu.usbmodem1201
+outcome=COMPLETE
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/replacement_sensor_swapped_background_20260728_151154.csv
+finished_utc=2026-07-28T15:12:54Z

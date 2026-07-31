@@ -1,52 +1,45 @@
-# Transmitter
+# Research Transmitter
 
-## Canonical commands
+The research transmitter runs on QNX and controls the L298N through text nodes
+under `/dev/gpio`.
 
-Full direct-drive alphabet frame:
+## Components
 
-```bash
-/data/home/qnxuser/run-alphabet.sh --start A --once
-```
+- `transmitter/hardware.py` supplies the shared GPIO backend, coil driver,
+  Manchester primitives, simulation backend, and process lock.
+- `transmitter/calibration_sweep.py` sends controlled duty/rate calibration
+  schedules.
+- `transmitter/duty_pair_test.py` provides short duty diagnostics.
+- `transmitter/hamming_sweep.py` sends the historical Hamming training sweep.
+- `transmitter/final_experiment.py` sends the frozen 100-frame comparison.
+- `transmitter/rs18_experiment.py` sends the frozen 45-frame RS18 follow-up.
+- `transmitter/rs18_quick_screen.py` sends one frame at 100%, 50%, 40%, 30%,
+  and 10%.
 
-Finite duty frame through the same GPIO27 driver:
+Protocol constants and golden vectors are separated into
+`final_experiment_protocol.py` and `rs18_experiment_protocol.py`.
 
-```bash
-cd /data/home/qnxuser/transmitter
-./duty_pair_test.py --single-duty 10 --letter A
-```
+## Execution controls
 
-Descending dataset:
+Every finite physical tool prints its schedule without touching GPIO unless
+`--execute` is supplied. An exclusive pidfile prevents concurrent coil owners.
+The manifest records scheduled condition, payload, frame, timestamps, observed
+duration, and pulse statistics.
 
-```bash
-./duty_pair_test.py --dataset --manifest RUN.transmitter.csv
-```
+The macOS runners deploy complete transitive file sets, start the single serial
+capture owner, wait for capture readiness, preserve any declared prelaunch-off
+baseline, launch the QNX process, poll it, retrieve the manifest/log, validate
+the schedule, and checksum every artifact.
 
-`--dataset` sends, in order:
+## Cleanup
 
-- A-E training plus held-out F at 100%.
-- A-E training plus held-out G at 50%.
-- A-E training plus held-out H at 25%.
-- A-E training plus held-out I at 10%.
-- A-E training plus held-out J at 1%.
+All experiment exit paths attempt to force GPIO27, GPIO18, GPIO22, and GPIO17
+low. The macOS runner performs a second independent remote cleanup and records
+whether those writes were verified.
 
-This is 30 frames and takes 35m15s before extra pre/post silence.
+## Credentials
 
-## Software-duty limitation
-
-The GPIO27 duty implementation gates ENB inside each 62.5 ms carrier
-half-cycle. Representative measured software intervals were:
-
-| Requested | Median software interval |
-|---:|---:|
-| 10% | 6763 us |
-| 1% | 762 us |
-| 0.1% | 761 us |
-
-Thus Python/QNX scheduling cannot distinguish requested 1% from 0.1%. A scope
-is required for physical pulse-width claims. GPIO18 hardware PWM would require
-a separately verified physical wiring path.
-
-## Safe stop
-
-Terminate the active transmitter PID, then force GPIO27, GPIO18, GPIO22, and
-GPIO17 low. Never leave cleanup dependent only on normal interpreter exit.
+Do not place a password in a command line, file, manifest, shell history, or
+repository. Use a hidden macOS prompt and pass the credential ephemerally to the
+SSH process. Stop on DNS, routing, SSH, or remote-host failure; do not
+repeatedly retry a physical operation without explicit authorization.

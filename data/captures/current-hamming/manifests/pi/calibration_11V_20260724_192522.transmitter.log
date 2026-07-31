@@ -1,0 +1,29 @@
+Calibration: 11 V, distance=0.35 m, 12 frames, estimated 14.53 minutes
+R1:100% R1:50% R1:25% R1:10% R2:10% R2:25% R2:50% R2:100% R3:50% R3:10% R3:100% R3:25%
+COIL OFF initial_wait=15s
+CAL 01/12 START round=1 position=1 letter=A duty=100% coded=0001111001011010011001101001
+CAL 01 DONE duty=100% duration=56.001s; COIL OFF gap=15s
+CAL 02/12 START round=1 position=2 letter=A duty=50% coded=0001111001011010011001101001
+CAL 02 DONE duty=50% duration=56.001s; COIL OFF gap=15s
+CAL 03/12 START round=1 position=3 letter=A duty=25% coded=0001111001011010011001101001
+CAL 03 DONE duty=25% duration=56.001s; COIL OFF gap=15s
+CAL 04/12 START round=1 position=4 letter=A duty=10% coded=0001111001011010011001101001
+CAL 04 DONE duty=10% duration=56.001s; COIL OFF gap=15s
+CAL 05/12 START round=2 position=1 letter=A duty=10% coded=0001111001011010011001101001
+CAL 05 DONE duty=10% duration=56.001s; COIL OFF gap=15s
+CAL 06/12 START round=2 position=2 letter=A duty=25% coded=0001111001011010011001101001
+CAL 06 DONE duty=25% duration=56.001s; COIL OFF gap=15s
+CAL 07/12 START round=2 position=3 letter=A duty=50% coded=0001111001011010011001101001
+CAL 07 DONE duty=50% duration=56.001s; COIL OFF gap=15s
+CAL 08/12 START round=2 position=4 letter=A duty=100% coded=0001111001011010011001101001
+CAL 08 DONE duty=100% duration=56.001s; COIL OFF gap=15s
+CAL 09/12 START round=3 position=1 letter=A duty=50% coded=0001111001011010011001101001
+CAL 09 DONE duty=50% duration=56.001s; COIL OFF gap=15s
+CAL 10/12 START round=3 position=2 letter=A duty=10% coded=0001111001011010011001101001
+CAL 10 DONE duty=10% duration=56.001s; COIL OFF gap=15s
+CAL 11/12 START round=3 position=3 letter=A duty=100% coded=0001111001011010011001101001
+CAL 11 DONE duty=100% duration=56.001s; COIL OFF gap=15s
+CAL 12/12 START round=3 position=4 letter=A duty=25% coded=0001111001011010011001101001
+CAL 12 DONE duty=25% duration=56.001s; COIL OFF gap=15s
+COIL OFF final_wait=5s
+CALIBRATION COMPLETE manifest=calibration_11V_20260724_192522.transmitter.csv

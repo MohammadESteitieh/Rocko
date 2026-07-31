@@ -1,0 +1,9 @@
+capture_file=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/pipeline_check_A_0p1_20260716_132356.csv
+receiver_port=/dev/cu.usbmodem1201
+letter=A
+requested_duty_percent=0.1
+receiver_capture_command_utc=2026-07-16T17:23:56Z
+transmitter_command_utc=2026-07-16T17:24:14Z
+receiver_rows_before_tx=     521
+transmitter_return_utc=2026-07-16T17:25:11Z
+capture_finished_utc=2026-07-16T17:25:42Z

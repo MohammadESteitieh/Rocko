@@ -1,0 +1,56 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-27T19:18:54  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/duty_sweep_11V_20260727_191851.csv
+[#0002] 2026-07-27T19:18:54  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-27T19:18:55  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-27T19:19:39  SYNC    coded tilde locked t=3215.82s score=1.00/2.00
+[#0005] 2026-07-27T19:20:07  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.41
+[#0006] 2026-07-27T19:20:07  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.70
+[#0007] 2026-07-27T19:20:07  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.97
+[#0008] 2026-07-27T19:20:07  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=2.12
+[#0009] 2026-07-27T19:20:07  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.42
+[#0010] 2026-07-27T19:20:12  DECODE  header=~ letter=A layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0011] 2026-07-27T19:20:12  SYNC    coded tilde locked t=3215.84s score=1.02/2.00
+[#0012] 2026-07-27T19:20:12  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.40
+[#0013] 2026-07-27T19:20:12  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.67
+[#0014] 2026-07-27T19:20:12  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.94
+[#0015] 2026-07-27T19:20:12  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=2.16
+[#0016] 2026-07-27T19:20:12  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.40
+[#0017] 2026-07-27T19:20:24  SIGNAL  carrier detected — recording beacon
+[#0018] 2026-07-27T19:20:50  SYNC    coded tilde locked t=3286.78s score=0.96/2.00
+[#0019] 2026-07-27T19:21:19  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.43
+[#0020] 2026-07-27T19:21:19  LAYER   L1        OK header=0x7E letter=O parity=ok confidence=0.72
+[#0021] 2026-07-27T19:21:19  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.73
+[#0022] 2026-07-27T19:21:19  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.79
+[#0023] 2026-07-27T19:21:19  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.53
+[#0024] 2026-07-27T19:21:23  DECODE  header=~ letter=A layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0025] 2026-07-27T19:21:23  SYNC    coded tilde locked t=3286.78s score=0.97/2.00
+[#0026] 2026-07-27T19:21:23  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.43
+[#0027] 2026-07-27T19:21:23  LAYER   L1        OK header=0x7E letter=O parity=ok confidence=0.72
+[#0028] 2026-07-27T19:21:23  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.73
+[#0029] 2026-07-27T19:21:23  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.80
+[#0030] 2026-07-27T19:21:23  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.53
+[#0031] 2026-07-27T19:21:35  SIGNAL  carrier detected — recording beacon
+[#0032] 2026-07-27T19:22:01  SYNC    coded tilde locked t=3357.83s score=0.83/2.00
+[#0033] 2026-07-27T19:22:29  LAYER   naive-max -- header=0x3E letter=A parity=bad confidence=0.36
+[#0034] 2026-07-27T19:22:29  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.67
+[#0035] 2026-07-27T19:22:29  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.26
+[#0036] 2026-07-27T19:22:29  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=2.05
+[#0037] 2026-07-27T19:22:29  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=1.71
+[#0038] 2026-07-27T19:22:38  DECODE  header=~ letter=A layer=L4 successful=L1,L2,L3,L4
+[#0039] 2026-07-27T19:22:38  SYNC    coded tilde locked t=3357.84s score=0.83/2.00
+[#0040] 2026-07-27T19:22:38  LAYER   naive-max -- header=0x3E letter=A parity=bad confidence=0.36
+[#0041] 2026-07-27T19:22:38  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.67
+[#0042] 2026-07-27T19:22:38  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.26
+[#0043] 2026-07-27T19:22:38  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=2.04
+[#0044] 2026-07-27T19:22:38  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=1.72
+[#0045] 2026-07-27T19:22:42  SIGNAL  carrier detected — recording beacon
+[#0046] 2026-07-27T19:23:34  WARN    coded frame rejected — preamble=0.18 successful layers=none
+
+  interrupted — shutting down
+[#0047] 2026-07-27T19:26:28  CAPTURE stopped — saved /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/duty_sweep_11V_20260727_191851.csv

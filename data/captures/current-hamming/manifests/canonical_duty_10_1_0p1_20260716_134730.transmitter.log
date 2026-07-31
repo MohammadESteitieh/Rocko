@@ -1,0 +1,24 @@
+=== DUTY 10% ===
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@10%
+TEST 01/1 START header=~ letter=A duty=10% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=10% duration=56.001s pulses=448 median=6763.4us p95=6777.4us late=0
+DIAGNOSTIC COMPLETE manifest=canonical-A-10-20260716_174730.csv
+REMOTE_MANIFEST=canonical-A-10-20260716_174730.csv
+COIL OFF 15s
+=== DUTY 1% ===
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@1%
+TEST 01/1 START header=~ letter=A duty=1% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=1% duration=56.001s pulses=448 median=762.3us p95=777.4us late=224
+DIAGNOSTIC COMPLETE manifest=canonical-A-1-20260716_174730.csv
+REMOTE_MANIFEST=canonical-A-1-20260716_174730.csv
+COIL OFF 15s
+=== DUTY 0.1% ===
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@0.1%
+TEST 01/1 START header=~ letter=A duty=0.1% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=0.1% duration=56.001s pulses=448 median=760.8us p95=772.4us late=448
+DIAGNOSTIC COMPLETE manifest=canonical-A-0p1-20260716_174730.csv
+REMOTE_MANIFEST=canonical-A-0p1-20260716_174730.csv
+SEQUENCE_COMPLETE_ALL_LOW

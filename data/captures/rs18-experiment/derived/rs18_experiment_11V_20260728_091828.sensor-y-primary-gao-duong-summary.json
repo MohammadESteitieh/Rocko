@@ -1,0 +1,48 @@
+{
+  "fit_samples": 24002,
+  "fit_source": "metadata-declared prelaunch transmitter-off only",
+  "gao_orientation": "sensor_y_primary_sensor_x_reference",
+  "gao_transfer_magnitude": 0.0017711652647330153,
+  "gao_transfer_phase_radians": -0.02953988426263784,
+  "gao_off_coherence": 0.00015107337275597381,
+  "gao_noise_reduction_db": 0.0006561528863674319,
+  "duong_iterations": 2033,
+  "duong_converged_before_limit": true,
+  "duong_training_error": 4.993722518369955e-05,
+  "algorithms": {
+    "gao_y_primary": {
+      "frame_errors": 40,
+      "decoder_failures": 40,
+      "raw_body_bit_errors": 1196,
+      "raw_body_bits": 4050,
+      "by_duty": {
+        "100": 0,
+        "50": 5,
+        "45": 5,
+        "40": 5,
+        "35": 5,
+        "30": 5,
+        "25": 5,
+        "10": 5,
+        "1": 5
+      }
+    },
+    "gao_then_duong": {
+      "frame_errors": 40,
+      "decoder_failures": 40,
+      "raw_body_bit_errors": 1196,
+      "raw_body_bits": 4050,
+      "by_duty": {
+        "100": 0,
+        "50": 5,
+        "45": 5,
+        "40": 5,
+        "35": 5,
+        "30": 5,
+        "25": 5,
+        "10": 5,
+        "1": 5
+      }
+    }
+  }
+}

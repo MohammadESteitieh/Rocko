@@ -1,0 +1,41 @@
+{
+  "frames": 5,
+  "decode_only_accepted": 0,
+  "by_duty": {
+    "100": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 1,
+      "conditional_median_positive_inband_snr_db_pooled": 1.725991941007645,
+      "max_clipped_any_percent": 0.0
+    },
+    "50": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 1,
+      "conditional_median_positive_inband_snr_db_pooled": 1.4626580517597567,
+      "max_clipped_any_percent": 0.0
+    },
+    "25": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 1,
+      "conditional_median_positive_inband_snr_db_pooled": -2.4230190811904726,
+      "max_clipped_any_percent": 0.0
+    },
+    "10": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 0,
+      "conditional_median_positive_inband_snr_db_pooled": null,
+      "max_clipped_any_percent": 0.0
+    },
+    "1": {
+      "frames": 1,
+      "decode_only_accepted": 0,
+      "positive_inband_snr_frames": 1,
+      "conditional_median_positive_inband_snr_db_pooled": -7.648073571343764,
+      "max_clipped_any_percent": 0.0
+    }
+  }
+}

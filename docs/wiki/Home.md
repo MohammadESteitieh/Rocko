@@ -1,34 +1,41 @@
-# Rocko Cave-Beacon Wiki
+# Rocko Magnetic-Link Research Wiki
 
-Rocko is a low-frequency magnetic cave-beacon link. A QNX Raspberry Pi drives
-an L298N/coil transmitter; a Pico streams two 12-bit magnetic-sensor channels
-to a Mac receiver at 200 Hz.
+Rocko is a low-frequency magnetic communication research platform. A QNX
+Raspberry Pi drives an L298N/coil transmitter; a Pico streams two magnetic
+sensor channels to a macOS receiver at approximately 200 Hz.
 
-## Current protocol
+This wiki documents the research pipeline only. The original hackathon audio,
+emergency-intent, photo/CNN, and demo layers are not part of the research
+branch.
 
-- Message: MSB-first `~` (`0x7E`) plus one uppercase ASCII letter.
-- Error correction: four standard even-parity Hamming(7,4) groups.
-- Frame: 28 coded bits, 56 seconds.
-- Modulation: 8 Hz OOK Manchester, one second per half-symbol.
-- Gap: 15 seconds with the transmitter disabled.
+## Current research protocols
+
+- Carrier: 8 Hz polarity-switched magnetic field.
+- Modulation: OOK Manchester.
+- Primary experimental rate: two coded bits/s.
+- Synchronization: `0111111001111110`.
+- Codes: uncoded, Hamming(15,11), RS(5,3), RS(12,6), and RS(18,6) over GF(32).
+- Physical benchmark condition: 11 V, 3 m, measured SNR per frame.
 
 ## Pages
 
 - [Hardware](Hardware.md)
-- [Protocol](Protocol.md)
+- [Protocols](Protocol.md)
 - [Transmitter](Transmitter.md)
 - [Receiver and decoding](Receiver-and-Decoding.md)
 - [Experiments and data](Experiments-and-Data.md)
-- [Latest physical benchmark](Results-2026-07-16.md)
+- [Historical 2026-07-16 benchmark](Results-2026-07-16.md)
 - [Temporal-whitening benchmark](Temporal-Whitening-Benchmark.md)
 - [Operations and troubleshooting](Operations-and-Troubleshooting.md)
-- [Context handoff](Context-Handoff.md)
+- [Current context handoff](Context-Handoff.md)
 
-## Canonical repositories and data
+## Canonical locations
 
-- Persistent worktree: `~/Desktop/CU-hakcing-2026`
-- Persistent artifacts: `~/Desktop/CU-hakcing-captures`
-- Branch: `task/receiver-v2`
-- Remote: `B2707/Rocko-CU-Hacking_2026`
+- Repository: `~/Desktop/CU-hakcing-2026`
+- GitHub origin: `https://github.com/MohammadESteitieh/Rocko.git`
+- Repository capture backup: `data/captures/`
+- Original capture archive: `~/Desktop/CU-hakcing-captures/`
+- Wiki source: `docs/wiki/`
 
-Never use `/tmp` as the primary worktree or the only copy of experimental data.
+The Markdown files in `docs/wiki/` are the canonical wiki source and are backed
+up with the repository. They are not a separate local database.

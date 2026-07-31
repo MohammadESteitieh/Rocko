@@ -1,0 +1,4 @@
+Frame 30/30  ~J@1%  FAIL
+Layered=\x90 layers=none  preamble=0.36/2.00
+Coherent-SLNN=V  full=0x7A/\x06
+Dataset decode monitor complete.

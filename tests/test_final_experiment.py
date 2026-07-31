@@ -13,7 +13,7 @@ sys.path[:0] = [str(ROOT / "transmitter"), str(ROOT / "receiver")]
 import final_experiment as experiment  # noqa: E402
 import final_experiment_protocol as protocol  # noqa: E402
 import run_final_experiment as runner  # noqa: E402
-import transmitter as hw  # noqa: E402
+import hardware as hw  # noqa: E402
 
 
 GOLDEN_FRAMES = {
@@ -122,7 +122,7 @@ class SafetyAndRunnerTests(unittest.TestCase):
         self.assertEqual(
             runner.DEPLOY_NAMES,
             (
-                "transmitter.py", "alphabet_transmitter.py", "duty_pair_test.py",
+                "hardware.py", "alphabet_transmitter.py", "duty_pair_test.py",
                 "final_experiment_protocol.py", "final_experiment.py",
             ),
         )

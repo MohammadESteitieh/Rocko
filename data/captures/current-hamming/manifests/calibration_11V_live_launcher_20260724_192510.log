@@ -1,0 +1,93 @@
+Run: calibration_11V_20260724_192522
+Raw capture: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/calibration_11V_20260724_192522.csv
+Serial: /dev/cu.usbmodem1201
+Voltage: 11 V; distance: 0.35 m
+Calibration running on QNX as PID 6455353
+2026-07-24T23:25:26.863824Z calibration running; capture PID 58140
+2026-07-24T23:25:37.394799Z calibration running; capture PID 58140
+2026-07-24T23:25:47.830541Z calibration running; capture PID 58140
+2026-07-24T23:25:58.238749Z calibration running; capture PID 58140
+2026-07-24T23:26:08.650942Z calibration running; capture PID 58140
+2026-07-24T23:26:19.201836Z calibration running; capture PID 58140
+2026-07-24T23:26:29.699764Z calibration running; capture PID 58140
+2026-07-24T23:26:40.099305Z calibration running; capture PID 58140
+2026-07-24T23:26:50.532861Z calibration running; capture PID 58140
+2026-07-24T23:27:00.965462Z calibration running; capture PID 58140
+2026-07-24T23:27:11.365565Z calibration running; capture PID 58140
+2026-07-24T23:27:21.782098Z calibration running; capture PID 58140
+2026-07-24T23:27:32.281850Z calibration running; capture PID 58140
+2026-07-24T23:27:42.615540Z calibration running; capture PID 58140
+2026-07-24T23:27:52.998312Z calibration running; capture PID 58140
+2026-07-24T23:28:03.382216Z calibration running; capture PID 58140
+2026-07-24T23:28:13.781692Z calibration running; capture PID 58140
+2026-07-24T23:28:24.215291Z calibration running; capture PID 58140
+2026-07-24T23:28:34.631672Z calibration running; capture PID 58140
+2026-07-24T23:28:45.114315Z calibration running; capture PID 58140
+2026-07-24T23:28:55.530625Z calibration running; capture PID 58140
+2026-07-24T23:29:05.896955Z calibration running; capture PID 58140
+2026-07-24T23:29:16.330818Z calibration running; capture PID 58140
+2026-07-24T23:29:26.796924Z calibration running; capture PID 58140
+2026-07-24T23:29:37.197127Z calibration running; capture PID 58140
+2026-07-24T23:29:47.579474Z calibration running; capture PID 58140
+2026-07-24T23:29:58.029996Z calibration running; capture PID 58140
+2026-07-24T23:30:08.480021Z calibration running; capture PID 58140
+2026-07-24T23:30:18.879559Z calibration running; capture PID 58140
+2026-07-24T23:30:29.279148Z calibration running; capture PID 58140
+2026-07-24T23:30:39.679198Z calibration running; capture PID 58140
+2026-07-24T23:30:50.145479Z calibration running; capture PID 58140
+2026-07-24T23:31:00.595908Z calibration running; capture PID 58140
+2026-07-24T23:31:11.061663Z calibration running; capture PID 58140
+2026-07-24T23:31:21.478125Z calibration running; capture PID 58140
+2026-07-24T23:31:32.044677Z calibration running; capture PID 58140
+2026-07-24T23:31:42.495377Z calibration running; capture PID 58140
+2026-07-24T23:31:52.894404Z calibration running; capture PID 58140
+2026-07-24T23:32:03.344516Z calibration running; capture PID 58140
+2026-07-24T23:32:13.910578Z calibration running; capture PID 58140
+2026-07-24T23:32:24.445228Z calibration running; capture PID 58140
+2026-07-24T23:32:34.877709Z calibration running; capture PID 58140
+2026-07-24T23:32:45.260419Z calibration running; capture PID 58140
+2026-07-24T23:32:55.693819Z calibration running; capture PID 58140
+2026-07-24T23:33:06.143597Z calibration running; capture PID 58140
+2026-07-24T23:33:16.576214Z calibration running; capture PID 58140
+2026-07-24T23:33:27.009558Z WARNING transient QNX status failure; retrying
+2026-07-24T23:33:37.426416Z calibration running; capture PID 58140
+2026-07-24T23:33:47.742805Z calibration running; capture PID 58140
+2026-07-24T23:33:58.042438Z WARNING transient QNX status failure; retrying
+2026-07-24T23:34:08.492849Z calibration running; capture PID 58140
+2026-07-24T23:34:19.476333Z calibration running; capture PID 58140
+2026-07-24T23:34:29.826227Z calibration running; capture PID 58140
+2026-07-24T23:34:40.209525Z calibration running; capture PID 58140
+2026-07-24T23:34:50.541250Z calibration running; capture PID 58140
+2026-07-24T23:35:00.908475Z calibration running; capture PID 58140
+2026-07-24T23:35:11.358040Z calibration running; capture PID 58140
+2026-07-24T23:35:21.824379Z calibration running; capture PID 58140
+2026-07-24T23:35:32.274575Z calibration running; capture PID 58140
+2026-07-24T23:35:42.707569Z calibration running; capture PID 58140
+2026-07-24T23:35:53.174191Z calibration running; capture PID 58140
+2026-07-24T23:36:03.573855Z calibration running; capture PID 58140
+2026-07-24T23:36:13.990951Z calibration running; capture PID 58140
+2026-07-24T23:36:24.323999Z calibration running; capture PID 58140
+2026-07-24T23:36:34.856952Z calibration running; capture PID 58140
+2026-07-24T23:36:45.456648Z calibration running; capture PID 58140
+2026-07-24T23:36:55.940316Z calibration running; capture PID 58140
+2026-07-24T23:37:07.240574Z calibration running; capture PID 58140
+2026-07-24T23:37:17.923191Z calibration running; capture PID 58140
+2026-07-24T23:37:28.272947Z calibration running; capture PID 58140
+2026-07-24T23:37:38.789075Z calibration running; capture PID 58140
+2026-07-24T23:37:49.188527Z calibration running; capture PID 58140
+2026-07-24T23:37:59.621891Z calibration running; capture PID 58140
+2026-07-24T23:38:10.039033Z calibration running; capture PID 58140
+2026-07-24T23:38:20.404830Z calibration running; capture PID 58140
+2026-07-24T23:38:30.971763Z calibration running; capture PID 58140
+2026-07-24T23:38:41.404957Z calibration running; capture PID 58140
+2026-07-24T23:38:51.855828Z calibration running; capture PID 58140
+2026-07-24T23:39:02.303993Z calibration running; capture PID 58140
+2026-07-24T23:39:12.787591Z calibration running; capture PID 58140
+2026-07-24T23:39:23.204362Z calibration running; capture PID 58140
+2026-07-24T23:39:33.670961Z calibration running; capture PID 58140
+2026-07-24T23:39:44.070416Z calibration running; capture PID 58140
+2026-07-24T23:39:54.503146Z calibration running; capture PID 58140
+Wrote /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_11V_20260724_192522.calibration.csv
+Wrote /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_11V_20260724_192522.calibration-summary.json
+Calibration complete: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/calibration_11V_20260724_192522.csv
+Analysis complete: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_11V_20260724_192522.calibration.csv

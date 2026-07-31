@@ -1,0 +1,93 @@
+Run: calibration_10V_20260724_195004
+Raw capture: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/calibration_10V_20260724_195004.csv
+Serial: /dev/cu.usbmodem1201
+Voltage: 10 V; distance: 0.35 m
+Calibration running on QNX as PID 9416761
+2026-07-24T23:50:09.373839Z calibration running; capture PID 58625
+2026-07-24T23:50:19.706892Z calibration running; capture PID 58625
+2026-07-24T23:50:30.059952Z calibration running; capture PID 58625
+2026-07-24T23:50:40.490357Z calibration running; capture PID 58625
+2026-07-24T23:50:50.845392Z calibration running; capture PID 58625
+2026-07-24T23:51:01.139782Z WARNING transient QNX status failure; retrying
+2026-07-24T23:51:11.483346Z WARNING transient QNX status failure; retrying
+2026-07-24T23:51:22.490331Z calibration running; capture PID 58625
+2026-07-24T23:51:32.806105Z calibration running; capture PID 58625
+2026-07-24T23:51:43.239451Z calibration running; capture PID 58625
+2026-07-24T23:51:54.122872Z calibration running; capture PID 58625
+2026-07-24T23:52:05.006054Z calibration running; capture PID 58625
+2026-07-24T23:52:15.556116Z calibration running; capture PID 58625
+2026-07-24T23:52:25.922611Z calibration running; capture PID 58625
+2026-07-24T23:52:36.239229Z calibration running; capture PID 58625
+2026-07-24T23:52:46.741819Z calibration running; capture PID 58625
+2026-07-24T23:52:57.172432Z calibration running; capture PID 58625
+2026-07-24T23:53:07.622040Z calibration running; capture PID 58625
+2026-07-24T23:53:18.055454Z calibration running; capture PID 58625
+2026-07-24T23:53:28.555632Z calibration running; capture PID 58625
+2026-07-24T23:53:38.956001Z calibration running; capture PID 58625
+2026-07-24T23:53:49.372000Z calibration running; capture PID 58625
+2026-07-24T23:53:59.721994Z calibration running; capture PID 58625
+2026-07-24T23:54:10.055323Z calibration running; capture PID 58625
+2026-07-24T23:54:20.455000Z calibration running; capture PID 58625
+2026-07-24T23:54:30.872174Z calibration running; capture PID 58625
+2026-07-24T23:54:41.305270Z calibration running; capture PID 58625
+2026-07-24T23:54:51.768297Z calibration running; capture PID 58625
+2026-07-24T23:55:02.304925Z calibration running; capture PID 58625
+2026-07-24T23:55:12.738679Z calibration running; capture PID 58625
+2026-07-24T23:55:23.204653Z calibration running; capture PID 58625
+2026-07-24T23:55:33.588660Z calibration running; capture PID 58625
+2026-07-24T23:55:43.966219Z calibration running; capture PID 58625
+2026-07-24T23:55:54.321656Z calibration running; capture PID 58625
+2026-07-24T23:56:04.787495Z calibration running; capture PID 58625
+2026-07-24T23:56:15.170938Z calibration running; capture PID 58625
+2026-07-24T23:56:25.504297Z calibration running; capture PID 58625
+2026-07-24T23:56:37.042626Z calibration running; capture PID 58625
+2026-07-24T23:56:47.470494Z calibration running; capture PID 58625
+2026-07-24T23:56:57.921174Z calibration running; capture PID 58625
+2026-07-24T23:57:08.353839Z calibration running; capture PID 58625
+2026-07-24T23:57:18.687256Z calibration running; capture PID 58625
+2026-07-24T23:57:29.053426Z calibration running; capture PID 58625
+2026-07-24T23:57:39.470225Z calibration running; capture PID 58625
+2026-07-24T23:57:49.769766Z WARNING transient QNX status failure; retrying
+2026-07-24T23:58:00.271437Z calibration running; capture PID 58625
+2026-07-24T23:58:10.769781Z calibration running; capture PID 58625
+2026-07-24T23:58:21.169810Z calibration running; capture PID 58625
+2026-07-24T23:58:31.602876Z calibration running; capture PID 58625
+2026-07-24T23:58:42.019220Z WARNING transient QNX status failure; retrying
+2026-07-24T23:58:52.419996Z calibration running; capture PID 58625
+2026-07-24T23:59:03.020609Z calibration running; capture PID 58625
+2026-07-24T23:59:13.385775Z calibration running; capture PID 58625
+2026-07-24T23:59:23.769430Z calibration running; capture PID 58625
+2026-07-24T23:59:34.202424Z calibration running; capture PID 58625
+2026-07-24T23:59:44.620176Z calibration running; capture PID 58625
+2026-07-24T23:59:55.102579Z calibration running; capture PID 58625
+2026-07-25T00:00:05.452229Z WARNING transient QNX status failure; retrying
+2026-07-25T00:00:15.903521Z calibration running; capture PID 58625
+2026-07-25T00:00:26.385778Z calibration running; capture PID 58625
+2026-07-25T00:00:36.702634Z calibration running; capture PID 58625
+2026-07-25T00:00:47.069115Z calibration running; capture PID 58625
+2026-07-25T00:00:57.652720Z calibration running; capture PID 58625
+2026-07-25T00:01:08.102884Z calibration running; capture PID 58625
+2026-07-25T00:01:18.585247Z calibration running; capture PID 58625
+2026-07-25T00:01:28.935221Z calibration running; capture PID 58625
+2026-07-25T00:01:39.210284Z WARNING transient QNX status failure; retrying
+2026-07-25T00:01:49.651463Z calibration running; capture PID 58625
+2026-07-25T00:02:00.084508Z calibration running; capture PID 58625
+2026-07-25T00:02:10.391586Z calibration running; capture PID 58625
+2026-07-25T00:02:20.734392Z calibration running; capture PID 58625
+2026-07-25T00:02:31.017714Z WARNING transient QNX status failure; retrying
+2026-07-25T00:02:41.394136Z calibration running; capture PID 58625
+2026-07-25T00:02:51.851808Z calibration running; capture PID 58625
+2026-07-25T00:03:02.334345Z calibration running; capture PID 58625
+2026-07-25T00:03:12.651052Z calibration running; capture PID 58625
+2026-07-25T00:03:22.984877Z calibration running; capture PID 58625
+2026-07-25T00:03:33.318246Z calibration running; capture PID 58625
+2026-07-25T00:03:43.733707Z calibration running; capture PID 58625
+2026-07-25T00:03:54.095185Z calibration running; capture PID 58625
+2026-07-25T00:04:04.427386Z calibration running; capture PID 58625
+2026-07-25T00:04:14.796811Z calibration running; capture PID 58625
+2026-07-25T00:04:25.133409Z calibration running; capture PID 58625
+2026-07-25T00:04:35.567289Z calibration running; capture PID 58625
+Wrote /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_10V_20260724_195004.calibration.csv
+Wrote /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_10V_20260724_195004.calibration-summary.json
+Calibration complete: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/calibration_10V_20260724_195004.csv
+Analysis complete: /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/derived/calibration_10V_20260724_195004.calibration.csv

@@ -1,0 +1,26 @@
+
+  ____   ___   ____ _  _____
+ |  _ \ / _ \ / ___| |/ / _ \    cave explorer safety beacon
+ | |_) | | | | |   | ' / | | |   surface receiver
+ |  _ <| |_| | |___| . \ |_| |   silence is the alarm
+ |_| \_\\___/ \____|_|\_\___/
+
+[#0001] 2026-07-16T14:17:57  CAPTURE listening on /dev/cu.usbmodem1201 -> /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/descending_dataset_20260716_141755.csv
+[#0002] 2026-07-16T14:17:57  READY   layered Hamming(7,4) decode after 5s silence (28 bits at 0.5 bit/s, 8 Hz bandpass, 15s gap)
+[#0003] 2026-07-16T14:17:58  SIGNAL  carrier detected — recording beacon
+[#0004] 2026-07-16T14:19:08  SYNC    coded tilde locked t=865.73s score=1.02/2.00
+[#0005] 2026-07-16T14:19:36  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.48
+[#0006] 2026-07-16T14:19:36  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.97
+[#0007] 2026-07-16T14:19:36  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.61
+[#0008] 2026-07-16T14:19:36  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.80
+[#0009] 2026-07-16T14:19:36  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.35
+[#0010] 2026-07-16T14:19:40  DECODE  header=~ letter=A layer=L4 successful=naive-max,L1,L2,L3,L4
+[#0011] 2026-07-16T14:19:41  SYNC    coded tilde locked t=865.74s score=1.02/2.00
+[#0012] 2026-07-16T14:19:41  LAYER   naive-max OK header=0x7E letter=A parity=ok confidence=0.48
+[#0013] 2026-07-16T14:19:41  LAYER   L1        OK header=0x7E letter=A parity=ok confidence=0.96
+[#0014] 2026-07-16T14:19:41  LAYER   L2        OK header=0x7E letter=A parity=ok confidence=1.61
+[#0015] 2026-07-16T14:19:41  LAYER   L3        OK header=0x7E letter=A parity=ok confidence=1.81
+[#0016] 2026-07-16T14:19:41  LAYER   L4        OK header=0x7E letter=A parity=ok confidence=2.34
+[#0017] 2026-07-16T14:19:47  SIGNAL  carrier detected — recording beacon
+[#0018] 2026-07-16T14:20:19  SYNC    coded tilde locked t=936.76s score=1.09/2.00
+[#0019] 2026-07-16T14:20:56  CAPTURE stopped — saved /Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/descending_dataset_20260716_141755.csv

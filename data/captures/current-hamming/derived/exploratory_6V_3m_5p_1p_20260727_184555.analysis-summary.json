@@ -1,0 +1,55 @@
+{
+  "run": "exploratory_6V_3m_5p_1p_20260727_184555",
+  "analysis_scope": "exploratory curiosity; invalid for condition selection",
+  "analysis_valid": false,
+  "invalidation_reasons": [
+    "severe nonstationary motion/environmental interference during both active frames",
+    "1% frame clipped both ADC channels",
+    "in-band result was nonmonotonic with commanded duty",
+    "live receiver acquired no valid tilde preamble for either frame",
+    "commanded 1% pulse timing was unreliable"
+  ],
+  "sample_rate_hz": 199.99999999563443,
+  "frames": [
+    {
+      "duty_percent": 5.0,
+      "boundary_source": "transmitter_utc_second_resolution_no_signal_search",
+      "start_offset_s": 18.61731505393982,
+      "live_acquisition": "NO_VALID_TILDE_PREAMBLE",
+      "broadband_snr_db_x": -3.476321360469923,
+      "broadband_snr_db_y": 10.731176736141581,
+      "broadband_snr_db_pooled": 10.347867194979504,
+      "inband_snr_db_x": null,
+      "inband_snr_db_y": -5.767986463854131,
+      "inband_snr_db_pooled": -9.537188778740752,
+      "clipped_x_percent": 0.0,
+      "clipped_y_percent": 0.0,
+      "clipped_any_percent": 0.0,
+      "target_pulse_us": 3125.0,
+      "pulse_count": 448,
+      "late_starts": 0,
+      "pulse_median_us": 3760.083,
+      "pulse_p95_us": 3771.675
+    },
+    {
+      "duty_percent": 1.0,
+      "boundary_source": "transmitter_utc_second_resolution_no_signal_search",
+      "start_offset_s": 90.61731505393982,
+      "live_acquisition": "NO_VALID_TILDE_PREAMBLE",
+      "broadband_snr_db_x": 10.608354154804296,
+      "broadband_snr_db_y": 0.44711637716743224,
+      "broadband_snr_db_pooled": 2.0552572876449964,
+      "inband_snr_db_x": 30.33421009693205,
+      "inband_snr_db_y": 23.776292495676866,
+      "inband_snr_db_pooled": 25.681511908546405,
+      "clipped_x_percent": 0.625,
+      "clipped_y_percent": 0.7410714285714286,
+      "clipped_any_percent": 0.7410714285714286,
+      "target_pulse_us": 625.0,
+      "pulse_count": 448,
+      "late_starts": 224,
+      "pulse_median_us": 756.407,
+      "pulse_p95_us": 774.104
+    }
+  ]
+}

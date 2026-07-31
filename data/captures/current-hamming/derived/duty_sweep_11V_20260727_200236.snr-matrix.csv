@@ -1,0 +1,6 @@
+duty_percent,rate_coded_bits_per_s,pooled_inband_snr_db,preamble_score,decoded_header,decoded_letter,restricted_letter,full_frame_accepted,clipped_any_percent,target_pulse_us,pulse_count,late_starts,pulse_median_us
+100,2,12.723305,0.557555,0x9E,A,A,0,0.000000,62500.000,0,0,
+50,2,8.776795,0.588369,0x7E,A,A,1,0.000000,31250.000,112,0,31757.260
+25,2,3.505887,0.471533,0x7E,A,A,1,0.000000,15625.000,112,0,15755.231
+10,2,-6.307159,0.139569,0xEE,e,U,0,0.000000,6250.000,112,0,6759.732
+1,2,-3.868730,0.322698,0x9C,0x86,F,0,0.000000,625.000,112,56,753.278

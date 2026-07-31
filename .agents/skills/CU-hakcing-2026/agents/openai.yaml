@@ -1,6 +1,0 @@
-interface:
-  display_name: "CU Hakcing 2026"
-  short_description: "Repo-specific patterns and workflows for CU-hakcing-2026"
-  default_prompt: "Use the CU-hakcing-2026 repo skill to follow existing architecture, testing, and workflow conventions."
-policy:
-  allow_implicit_invocation: true

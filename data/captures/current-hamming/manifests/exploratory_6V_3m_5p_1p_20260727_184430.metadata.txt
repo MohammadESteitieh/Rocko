@@ -1,0 +1,16 @@
+run=exploratory_6V_3m_5p_1p_20260727_184430
+voltage_v=6
+distance_m=3
+duties_percent=5,1
+frame_protocol=legacy_hamming_~A
+coded_bit_rate_bps=0.5
+analysis_scope=exploratory_curiosity_not_matrix;commanded_1_percent_timing_unreliable
+planned_utc=2026-07-27T22:45:27.531089Z
+raw_path=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/exploratory_6V_3m_5p_1p_20260727_184430.csv
+capture_owner=rocko-live-decoder
+capture_started_utc=2026-07-27T22:45:29.223116Z
+capture_pid=66036
+transmitter_requested_utc=2026-07-27T22:45:32.454001Z
+outcome=AUTHENTICATION_FAILED
+safe_shutdown_outcome=NOT_ATTEMPTED_NO_TRANSMITTER_LAUNCH
+finished_utc=2026-07-27T22:45:55.739401Z

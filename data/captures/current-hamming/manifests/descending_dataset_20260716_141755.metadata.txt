@@ -1,0 +1,14 @@
+run=descending_dataset_20260716_141755
+raw=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/raw/descending_dataset_20260716_141755.csv
+receiver_log=/Users/msteitieh/Desktop/CU-hakcing-captures/current-hamming/manifests/descending_dataset_20260716_141755.receiver.log
+receiver_pid=7939
+receiver_started_utc=2026-07-16T18:17:55Z
+pi_ip=172.17.235.186
+git_commit=e1c1b17
+schedule=100,50,25,10,1; train=A-E each; test=F,G,H,I,J
+transmitter_started_utc=2026-07-16T18:18:39Z
+remote_pid=9076796
+remote_manifest=descending_dataset_20260716_141755.transmitter.csv
+remote_log=descending_dataset_20260716_141755.transmitter.log
+dataset_outcome=ABORTED_RECEIVER_SLEEP
+aborted_utc=2026-07-16T18:22:50Z

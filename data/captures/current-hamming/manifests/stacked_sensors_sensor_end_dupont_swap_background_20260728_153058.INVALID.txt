@@ -1,0 +1,7 @@
+INVALIDATED HARDWARE DIAGNOSTIC
+
+The operator confirmed that the sensor-end Dupont wiring was incorrect during
+this capture. The observed ADC rail hits and coherence are not representative
+of either sensor or channel. Preserve the raw capture only as invalidated
+provenance. Use `stacked_sensors_corrected_wiring_background_20260728_153610`
+as the corrected follow-up.

@@ -1,0 +1,2 @@
+sequence,round,position,phase,letter,duty_percent,voltage_v,distance_m,hardware_note,coded_bits,started_utc,finished_utc,duration_s,gap_after_s,target_pulse_us,pulse_count,late_starts,pulse_min_us,pulse_median_us,pulse_p95_us,pulse_max_us
+1,1,1,calibration,A,100.0,11,3,l298n-current-bench-configuration-documentation-pending,0001111001011010011001101001,2026-07-27T23:43:09.444975Z,2026-07-27T23:43:37.445773Z,28.000692,15,62500.000,0,0,nan,nan,nan,nan

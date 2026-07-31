@@ -1,0 +1,11 @@
+INVALIDATED ANALYSIS
+
+The files `duty_sweep_11V_20260727_200236.snr-0-10hz.csv` and
+`duty_sweep_11V_20260727_200236.snr-0-10hz.md` treated all active-minus-off
+power from zero to 10 Hz as signal. That definition incorrectly classified
+out-of-band active-window drift or movement as signal and produced the
+misleading positive commanded-1% value.
+
+Use `duty_sweep_11V_20260727_200236.snr-carrier-vs-0-10hz-noise.csv` instead.
+The corrected signal numerator contains only power-subtracted carrier-band
+power; the denominator contains all transmitter-off noise from zero to 10 Hz.

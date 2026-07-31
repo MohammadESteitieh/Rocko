@@ -376,7 +376,7 @@ def main() -> int:
         checked_run(ssh + [f"mkdir -p {shlex.quote(args.remote_dir)}; {SAFE_GPIO_COMMAND}"],
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         deploy = [
-            transmitter_dir / "transmitter.py",
+            transmitter_dir / "hardware.py",
             transmitter_dir / "alphabet_transmitter.py",
             transmitter_dir / "duty_pair_test.py",
             transmitter_dir / "calibration_sweep.py",

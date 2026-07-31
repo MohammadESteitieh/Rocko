@@ -1,0 +1,7 @@
+INITIAL OFF 15s
+100 PERCENT START
+Diagnostic schedule: 1 frames, 15s gaps, estimated 0.93 minutes
+~A@100%
+TEST 01/1 START header=~ letter=A duty=100% coded=0001111001011010011001101001
+TEST 01 DONE letter=A duty=100% duration=56.001s pulses=0 median=nanus p95=nanus late=0
+DIAGNOSTIC COMPLETE manifest=pilot_11V_3m_100p_20260727_190519.100.csv

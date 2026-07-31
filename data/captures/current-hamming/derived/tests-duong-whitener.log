@@ -1,0 +1,23 @@
+................................................................................................tx start: one-shot injured (0001) bits=011111100001
+tx done: one-shot injured (0001)
+.2026-07-17 00:27:57,227 INFO tx start: one-shot injured (0001) bits=011111100001
+2026-07-17 00:27:58,731 INFO tx done: one-shot injured (0001)
+.unknown class(es): ['banana']
+unknown class(es): ['stop']
+..refusing off-contract knob(s) ['--bit-seconds'] without --sim: the frame contract is frozen (docs/equipment-codes.md). No GPIO was touched.
+refusing off-contract knob(s) ['--carrier'] without --sim: the frame contract is frozen (docs/equipment-codes.md). No GPIO was touched.
+refusing off-contract knob(s) ['--heartbeat-interval'] without --sim: the frame contract is frozen (docs/equipment-codes.md). No GPIO was touched.
+refusing off-contract knob(s) ['--gpio-dev'] without --sim: the frame contract is frozen (docs/equipment-codes.md). No GPIO was touched.
+2026-07-17 00:27:58,740 INFO tx start: one-shot injured (0001) bits=011111100001
+2026-07-17 00:28:00,245 INFO tx done: one-shot injured (0001)
+...2026-07-17 00:28:00,253 INFO tx start: one-shot injured (0001) bits=011111100001
+2026-07-17 00:28:01,758 INFO tx done: one-shot injured (0001)
+..2026-07-17 00:28:01,807 INFO tx start: one-shot injured (0001) bits=011111100001
+2026-07-17 00:28:01,807 ERROR unexpected error during coil-off cleanup: boom
+....2026-07-17 00:28:01,808 WARNING spool: skipping unknown trigger tokens ['\x00��', 'garbage', 'token']
+..2026-07-17 00:28:01,809 WARNING spool: skipping unknown trigger tokens ['zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz']
+............................
+----------------------------------------------------------------------
+Ran 139 tests in 11.394s
+
+OK
