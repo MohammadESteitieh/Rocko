@@ -24,6 +24,7 @@ INITIAL_WAIT_SECONDS = 15.0
 INTERFRAME_SECONDS = FRAME_SECONDS + protocol.INTERFRAME_GAP_SECONDS
 FIRST_SEARCH_RADIUS_SECONDS = 10.0
 FOLLOWING_SEARCH_RADIUS_SECONDS = 3.0
+MANIFEST_CLOCK_SEARCH_RADIUS_SECONDS = 1.25
 ADC_MIN = 0
 ADC_12BIT_MAX = 4095
 ADC_16BIT_MAX = 65535
@@ -39,6 +40,23 @@ EXPECTED_SCHEDULE = tuple(
     )
     for position, duty in enumerate(duties, 1)
 )
+
+
+def parse_duty_sequence(value: str) -> tuple[float, ...]:
+    """Parse the runner's explicit one-frame-per-duty schedule."""
+    try:
+        duties = tuple(float(item.strip()) for item in value.split(","))
+    except ValueError as exc:
+        raise ValueError("duty sequence must be comma-separated numbers") from exc
+    if not duties or any(not 0 < duty <= 100 for duty in duties):
+        raise ValueError("every duty in the sequence must be in (0, 100]")
+    if len(set(duties)) != len(duties):
+        raise ValueError("duty sequence must not contain duplicates")
+    return duties
+
+
+def schedule_for_duties(duties: tuple[float, ...]) -> tuple[tuple[int, int, float], ...]:
+    return tuple((1, position, duty) for position, duty in enumerate(duties, 1))
 
 
 def metadata(path: Path) -> dict[str, str]:
@@ -91,18 +109,21 @@ def load_capture(path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
 
 
 def validate_manifest(
-    rows: list[dict[str, str]], *, require_complete: bool = True
+    rows: list[dict[str, str]],
+    *,
+    require_complete: bool = True,
+    expected_schedule: tuple[tuple[int, int, float], ...] = EXPECTED_SCHEDULE,
 ) -> None:
     if not rows:
         raise ValueError("transmitter manifest is empty")
-    if require_complete and len(rows) != len(EXPECTED_SCHEDULE):
+    if require_complete and len(rows) != len(expected_schedule):
         raise ValueError(
-            f"calibration manifest must contain exactly {len(EXPECTED_SCHEDULE)} frames"
+            f"calibration manifest must contain exactly {len(expected_schedule)} frames"
         )
-    if len(rows) > len(EXPECTED_SCHEDULE):
+    if len(rows) > len(expected_schedule):
         raise ValueError("calibration manifest contains too many frames")
     expected_bits = "".join(map(str, protocol.encode_message("A")))
-    for index, (row, expected) in enumerate(zip(rows, EXPECTED_SCHEDULE), 1):
+    for index, (row, expected) in enumerate(zip(rows, expected_schedule), 1):
         required = {
             "sequence", "round", "position", "letter", "duty_percent",
             "voltage_v", "coded_bits",
@@ -120,11 +141,18 @@ def validate_manifest(
 
 
 def load_manifest(
-    path: Path, *, require_complete: bool = True
+    path: Path,
+    *,
+    require_complete: bool = True,
+    expected_schedule: tuple[tuple[int, int, float], ...] = EXPECTED_SCHEDULE,
 ) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as source:
         rows = list(csv.DictReader(source))
-    validate_manifest(rows, require_complete=require_complete)
+    validate_manifest(
+        rows,
+        require_complete=require_complete,
+        expected_schedule=expected_schedule,
+    )
     return rows
 
 
@@ -140,17 +168,30 @@ def analyze(
     metadata_path: Path,
     *,
     require_complete_manifest: bool = True,
+    expected_schedule: tuple[tuple[int, int, float], ...] = EXPECTED_SCHEDULE,
+    bit_seconds: float = protocol.BIT_SECONDS,
+    use_manifest_boundaries: bool = False,
 ) -> list[dict[str, object]]:
     t, x, y = load_capture(capture_path)
     fs = layered_decoder.sample_rate(t)
-    rows = load_manifest(manifest_path, require_complete=require_complete_manifest)
+    rows = load_manifest(
+        manifest_path,
+        require_complete=require_complete_manifest,
+        expected_schedule=expected_schedule,
+    )
+    if bit_seconds <= 0:
+        raise ValueError("bit_seconds must be positive")
+    frame_seconds = protocol.CODED_BITS * bit_seconds
+    half_symbol_seconds = bit_seconds / 2
+    interframe_seconds = frame_seconds + protocol.INTERFRAME_GAP_SECONDS
+    central_gap_offset_seconds = frame_seconds + 2.5
     info = metadata(metadata_path)
     capture_start = utc_seconds(info["capture_started_utc"])
     transmitter_ack = utc_seconds(info["transmitter_pid_ack_utc"])
     filtered = (bandpass(x, fs), bandpass(y, fs))
     analytic = tuple(signal.hilbert(channel) for channel in filtered)
-    half = round(fs * protocol.HALF_SYMBOL_SECONDS)
-    frame_samples = round(FRAME_SECONDS * fs)
+    half = round(fs * half_symbol_seconds)
+    frame_samples = round(frame_seconds * fs)
     gap_samples = round(CENTRAL_GAP_SECONDS * fs)
     template = protocol.complex_template(protocol.ENCODED_HEADER, half, fs)
     correlations = [
@@ -162,28 +203,52 @@ def analyze(
     first_prediction = round(
         (transmitter_ack - capture_start + INITIAL_WAIT_SECONDS) * fs
     )
-    first_start = None
-    for index, row in enumerate(rows):
-        predicted = (
-            first_prediction
-            if first_start is None
-            else first_start + round(index * INTERFRAME_SECONDS * fs)
-        )
-        radius_seconds = (
-            FIRST_SEARCH_RADIUS_SECONDS if first_start is None
-            else FOLLOWING_SEARCH_RADIUS_SECONDS
-        )
-        radius = round(radius_seconds * fs)
-        lo = max(0, predicted - radius)
-        hi = min(len(combined_correlation), predicted + radius + 1)
+    manifest_predictions: list[int] | None = None
+    manifest_clock_correction = 0
+    if use_manifest_boundaries:
+        try:
+            manifest_predictions = [
+                round((utc_seconds(row["started_utc"]) - capture_start) * fs)
+                for row in rows
+            ]
+        except (KeyError, ValueError) as exc:
+            raise ValueError(
+                "manifest-boundary analysis requires a valid started_utc per frame"
+            ) from exc
+        radius = round(MANIFEST_CLOCK_SEARCH_RADIUS_SECONDS * fs)
+        lo = max(0, manifest_predictions[0] - radius)
+        hi = min(len(combined_correlation), manifest_predictions[0] + radius + 1)
         if hi <= lo:
-            raise ValueError(f"frame {row['sequence']} predicted outside capture")
-        start = lo + int(np.argmax(combined_correlation[lo:hi]))
-        if first_start is None:
-            first_start = start
+            raise ValueError("first manifest frame predicted outside capture")
+        first_start = lo + int(np.argmax(combined_correlation[lo:hi]))
+        manifest_clock_correction = first_start - manifest_predictions[0]
+    else:
+        first_start = None
+
+    for index, row in enumerate(rows):
+        if manifest_predictions is not None:
+            start = manifest_predictions[index] + manifest_clock_correction
+        else:
+            predicted = (
+                first_prediction
+                if first_start is None
+                else first_start + round(index * interframe_seconds * fs)
+            )
+            radius_seconds = (
+                FIRST_SEARCH_RADIUS_SECONDS if first_start is None
+                else FOLLOWING_SEARCH_RADIUS_SECONDS
+            )
+            radius = round(radius_seconds * fs)
+            lo = max(0, predicted - radius)
+            hi = min(len(combined_correlation), predicted + radius + 1)
+            if hi <= lo:
+                raise ValueError(f"frame {row['sequence']} predicted outside capture")
+            start = lo + int(np.argmax(combined_correlation[lo:hi]))
+            if first_start is None:
+                first_start = start
         if located and start <= located[-1][1]:
             raise ValueError("localized frame starts are not strictly increasing")
-        gap_start = start + round(CENTRAL_GAP_OFFSET_SECONDS * fs)
+        gap_start = start + round(central_gap_offset_seconds * fs)
         if start + frame_samples > len(x) or gap_start + gap_samples > len(x):
             raise ValueError(f"frame {row['sequence']} or central gap is incomplete")
         located.append((row, start, gap_start))
@@ -212,7 +277,12 @@ def analyze(
         clipped_x = (frame_x <= ADC_MIN) | (frame_x >= adc_max)
         clipped_y = (frame_y <= ADC_MIN) | (frame_y >= adc_max)
         clipped_any = clipped_x | clipped_y
-        coherent = slnn_decoder.coherent_llrs(analytic, start, fs)
+        coherent = slnn_decoder.coherent_llrs(
+            analytic,
+            start,
+            fs,
+            half_symbol_seconds=half_symbol_seconds,
+        )
         restricted = slnn_decoder.decode_alphabet(coherent.llrs, expected_letter="A")
         full = slnn_decoder.decode_full(
             coherent.llrs,
@@ -226,6 +296,14 @@ def analyze(
             "voltage_v": float(row["voltage_v"]),
             "duty_percent": float(row["duty_percent"]),
             "start_offset_s": start / fs,
+            "boundary_source": (
+                "manifest_timestamps" if manifest_predictions is not None
+                else "correlation_schedule"
+            ),
+            "manifest_clock_correction_s": (
+                manifest_clock_correction / fs
+                if manifest_predictions is not None else None
+            ),
             "preamble_score": float(combined_correlation[start]),
             "decoded_header": f"0x{full.header:02X}",
             "decoded_letter": full.letter,
@@ -312,12 +390,36 @@ def parse_args():
     parser.add_argument("metadata", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--summary", type=Path, required=True)
+    parser.add_argument(
+        "--duty-sequence",
+        help="comma-separated one-frame-per-duty schedule used by the runner",
+    )
+    parser.add_argument(
+        "--bit-seconds", type=float, default=protocol.BIT_SECONDS,
+        help="coded-bit duration used for this capture",
+    )
+    parser.add_argument(
+        "--manifest-boundaries", action="store_true",
+        help="use per-frame manifest timestamps after first-frame clock alignment",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    rows = analyze(args.capture, args.manifest, args.metadata)
+    expected = (
+        schedule_for_duties(parse_duty_sequence(args.duty_sequence))
+        if args.duty_sequence is not None
+        else EXPECTED_SCHEDULE
+    )
+    rows = analyze(
+        args.capture,
+        args.manifest,
+        args.metadata,
+        expected_schedule=expected,
+        bit_seconds=args.bit_seconds,
+        use_manifest_boundaries=args.manifest_boundaries,
+    )
     write_csv(args.output, rows)
     args.summary.parent.mkdir(parents=True, exist_ok=True)
     args.summary.write_text(json.dumps(summary(rows), indent=2) + "\n", encoding="utf-8")

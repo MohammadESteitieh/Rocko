@@ -86,7 +86,11 @@ def soft_symbols(r0: Sequence[float], r1: Sequence[float]) -> np.ndarray:
 
 
 def coherent_soft_symbols(
-    channels: Sequence[np.ndarray], start: int, fs: float
+    channels: Sequence[np.ndarray],
+    start: int,
+    fs: float,
+    *,
+    half_symbol_seconds: float | None = None,
 ) -> CoherentSoftResult:
     """Preamble-trained coherent combining of two already-filtered sensors.
 
@@ -98,7 +102,11 @@ def coherent_soft_symbols(
     """
     if len(channels) != 2:
         raise ValueError("coherent combining requires exactly two sensors")
-    half = round(fs * protocol.HALF_SYMBOL_SECONDS)
+    half_seconds = (
+        protocol.HALF_SYMBOL_SECONDS
+        if half_symbol_seconds is None else float(half_symbol_seconds)
+    )
+    half = round(fs * half_seconds)
     halves = 2 * protocol.CODED_BITS
     stop = start + halves * half
     values = [np.asarray(channel) for channel in channels]
@@ -157,7 +165,11 @@ def coherent_soft_symbols(
 
 
 def coherent_llrs(
-    channels: Sequence[np.ndarray], start: int, fs: float
+    channels: Sequence[np.ndarray],
+    start: int,
+    fs: float,
+    *,
+    half_symbol_seconds: float | None = None,
 ) -> CoherentLLRResult:
     """Return coherent-AWGN LLRs for the 28 Manchester-coded bits.
 
@@ -173,7 +185,11 @@ def coherent_llrs(
     """
     if len(channels) != 2:
         raise ValueError("coherent LLRs require exactly two sensors")
-    half = round(fs * protocol.HALF_SYMBOL_SECONDS)
+    half_seconds = (
+        protocol.HALF_SYMBOL_SECONDS
+        if half_symbol_seconds is None else float(half_symbol_seconds)
+    )
+    half = round(fs * half_seconds)
     halves = 2 * protocol.CODED_BITS
     stop = start + halves * half
     values = [np.asarray(channel) for channel in channels]

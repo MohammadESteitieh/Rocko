@@ -45,6 +45,32 @@ class CalibrationScheduleTests(unittest.TestCase):
     def test_duration_includes_initial_every_gap_and_final_wait(self):
         self.assertEqual(calibration.estimated_seconds(), 872.0)
 
+    def test_explicit_duty_sequence_is_one_declared_round(self):
+        duties = calibration.parse_duty_sequence("100,50,25,10,5,1")
+        schedule = calibration.exploratory_schedule(duties)
+        self.assertEqual(
+            schedule,
+            (
+                (1, 1, 100.0, "A"), (1, 2, 50.0, "A"),
+                (1, 3, 25.0, "A"), (1, 4, 10.0, "A"),
+                (1, 5, 5.0, "A"), (1, 6, 1.0, "A"),
+            ),
+        )
+        self.assertEqual(calibration.estimated_seconds(schedule=schedule), 446.0)
+        self.assertEqual(
+            calibration.estimated_seconds(schedule=schedule[:1], bit_seconds=1.0),
+            63.0,
+        )
+        self.assertEqual(
+            calibration.estimated_seconds(schedule=schedule[:1], bit_seconds=0.5),
+            49.0,
+        )
+
+    def test_invalid_explicit_duty_sequences_are_rejected(self):
+        for value in ("", "100,0", "101", "5,5", "five"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                calibration.parse_duty_sequence(value)
+
     def test_negative_timing_is_rejected(self):
         for kwargs in (
             {"initial_wait": -1}, {"gap": -1}, {"final_wait": -1}

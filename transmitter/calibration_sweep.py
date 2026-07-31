@@ -53,6 +53,26 @@ def calibration_schedule() -> tuple[tuple[int, int, float, str], ...]:
     )
 
 
+def parse_duty_sequence(value: str) -> tuple[float, ...]:
+    """Parse an explicit one-frame-per-duty exploratory schedule."""
+    try:
+        duties = tuple(float(item.strip()) for item in value.split(","))
+    except ValueError as exc:
+        raise ValueError("duty sequence must be comma-separated numbers") from exc
+    if not duties or any(not 0 < duty <= 100 for duty in duties):
+        raise ValueError("every duty in the sequence must be in (0, 100]")
+    if len(set(duties)) != len(duties):
+        raise ValueError("duty sequence must not contain duplicates")
+    return duties
+
+
+def exploratory_schedule(
+    duties: tuple[float, ...],
+) -> tuple[tuple[int, int, float, str], ...]:
+    """Return a single declared round without changing the frozen default."""
+    return tuple((1, position, duty, LETTER) for position, duty in enumerate(duties, 1))
+
+
 def validate_voltage(voltage: float, allow_six_volts: bool = False) -> float:
     """Validate the manually measured supply setting against the safety policy."""
     value = float(voltage)
@@ -73,6 +93,8 @@ def estimated_seconds(
     initial_wait: float = INITIAL_WAIT_SECONDS,
     gap: float = GAP_SECONDS,
     final_wait: float = FINAL_WAIT_SECONDS,
+    schedule: tuple[tuple[int, int, float, str], ...] | None = None,
+    bit_seconds: float = duty_tx.BIT_SECONDS,
 ) -> float:
     """Return total session duration, including a gap after the final frame."""
     for name, value in (
@@ -80,8 +102,11 @@ def estimated_seconds(
     ):
         if value < 0:
             raise ValueError(f"{name} must be non-negative")
-    frame_seconds = duty_tx.FRAME_BITS * duty_tx.BIT_SECONDS
-    return initial_wait + len(calibration_schedule()) * (frame_seconds + gap) + final_wait
+    if bit_seconds <= 0:
+        raise ValueError("bit duration must be positive")
+    frame_seconds = duty_tx.FRAME_BITS * bit_seconds
+    selected = calibration_schedule() if schedule is None else schedule
+    return initial_wait + len(selected) * (frame_seconds + gap) + final_wait
 
 
 def safe_all_off(backend, config: hw.Config) -> bool:
@@ -123,6 +148,14 @@ def parse_args():
     parser.add_argument("--initial-wait", type=float, default=INITIAL_WAIT_SECONDS)
     parser.add_argument("--gap", type=float, default=GAP_SECONDS)
     parser.add_argument("--final-wait", type=float, default=FINAL_WAIT_SECONDS)
+    parser.add_argument(
+        "--duty-sequence",
+        help="exploratory comma-separated duties, one ~A frame each; default stays frozen",
+    )
+    parser.add_argument(
+        "--bit-seconds", type=float, choices=(0.5, 1.0, 2.0), default=duty_tx.BIT_SECONDS,
+        help="coded-bit duration; 2.0 is frozen, 1.0/0.5 are pilot-only",
+    )
     parser.add_argument("--sim", action="store_true", help="record GPIO calls without hardware")
     parser.add_argument("--dry-run", action="store_true", help="validate and print schedule only")
     return parser.parse_args()
@@ -132,8 +165,17 @@ def main(sleep: Callable[[float], None] = time.sleep) -> int:
     args = parse_args()
     try:
         voltage = validate_voltage(args.voltage, args.allow_six_volts)
+        schedule = (
+            exploratory_schedule(parse_duty_sequence(args.duty_sequence))
+            if args.duty_sequence is not None
+            else calibration_schedule()
+        )
         duration = estimated_seconds(
-            initial_wait=args.initial_wait, gap=args.gap, final_wait=args.final_wait
+            initial_wait=args.initial_wait,
+            gap=args.gap,
+            final_wait=args.final_wait,
+            schedule=schedule,
+            bit_seconds=args.bit_seconds,
         )
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
@@ -145,7 +187,6 @@ def main(sleep: Callable[[float], None] = time.sleep) -> int:
         print("--hardware-note must not be blank", file=sys.stderr)
         return 2
 
-    schedule = calibration_schedule()
     print(
         f"Calibration: {voltage:g} V, distance={args.distance_m:g} m, "
         f"{len(schedule)} frames, estimated {duration / 60:.2f} minutes",
@@ -159,7 +200,7 @@ def main(sleep: Callable[[float], None] = time.sleep) -> int:
     manifest_path = args.manifest or time.strftime(
         f"calibration_{voltage:g}V_%Y%m%d_%H%M%S.csv"
     )
-    config = replace(hw.Config(pidfile_path=PIDFILE), bit_seconds=duty_tx.BIT_SECONDS)
+    config = replace(hw.Config(pidfile_path=PIDFILE), bit_seconds=args.bit_seconds)
     safety_pins = (
         config.enb_gpio, LEGACY_PWM_GPIO, config.in3_gpio, config.in4_gpio
     )

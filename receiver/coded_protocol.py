@@ -34,6 +34,16 @@ GROUP_DATA = GROUP_CODEBOOK[:, [2, 4, 5, 6]]
 HAMMING_CHECKS = ((0, 2, 4, 6), (1, 2, 5, 6), (3, 4, 5, 6))
 
 
+def configure_bit_seconds(value: float) -> None:
+    """Set process-local receiver timing while preserving the 2 s default."""
+    seconds = float(value)
+    if seconds <= 0 or CARRIER_HZ * seconds / 2 != round(CARRIER_HZ * seconds / 2):
+        raise ValueError("bit duration must be positive and contain whole carrier cycles")
+    global BIT_SECONDS, HALF_SYMBOL_SECONDS
+    BIT_SECONDS = seconds
+    HALF_SYMBOL_SECONDS = seconds / 2
+
+
 def byte_bits(value: int) -> tuple[int, ...]:
     if not 0 <= value <= 255:
         raise ValueError("byte must be in range 0..255")

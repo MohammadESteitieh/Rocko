@@ -23,6 +23,27 @@ class CalibrationRunnerTests(unittest.TestCase):
             runner.run_name(7.5, when), "calibration_7p5V_20260725_123456"
         )
 
+    def test_custom_duty_sequence_has_safe_name_and_duration(self):
+        duties = runner.parse_duty_sequence("100,50,25,10,5,1")
+        self.assertEqual(duties, (100.0, 50.0, 25.0, 10.0, 5.0, 1.0))
+        self.assertEqual(runner.expected_session_seconds(duties), 446.0)
+        self.assertEqual(
+            runner.expected_session_seconds((100.0,), bit_seconds=1.0),
+            63.0,
+        )
+        self.assertEqual(
+            runner.expected_session_seconds((100.0,), bit_seconds=0.5),
+            49.0,
+        )
+        when = datetime(2026, 7, 25, 12, 34, 56)
+        self.assertEqual(
+            runner.run_name(11, when, prefix="duty_sweep"),
+            "duty_sweep_11V_20260725_123456",
+        )
+        for value in ("", "0", "101", "5,5", "bad"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                runner.parse_duty_sequence(value)
+
     def test_hardware_note_must_be_nonempty_single_line(self):
         self.assertEqual(runner.validate_note(" bench-v1 "), "bench-v1")
         for note in ("", "  ", "line1\nline2", "line1\rline2"):
@@ -66,6 +87,40 @@ class CalibrationRunnerTests(unittest.TestCase):
         self.assertIn("nohup", command)
         self.assertNotIn("SSHPASS", command)
         self.assertNotIn("sshpass", command)
+
+    def test_remote_command_can_request_existing_custom_sweep_mode(self):
+        command = runner.transmitter_command(
+            remote_dir="/remote",
+            manifest_name="manifest.csv",
+            log_name="run.log",
+            voltage=11,
+            distance_m=3,
+            hardware_note="bench",
+            allow_six_volts=False,
+            duty_sequence=(100.0, 50.0, 25.0, 10.0, 5.0, 1.0),
+        )
+        self.assertIn("--duty-sequence 100,50,25,10,5,1", command)
+        self.assertIn(runner.SAFE_GPIO_COMMAND, command)
+
+    def test_one_bit_per_second_is_passed_to_transmitter_and_dashboard(self):
+        command = runner.transmitter_command(
+            remote_dir="/remote",
+            manifest_name="manifest.csv",
+            log_name="run.log",
+            voltage=11,
+            distance_m=3,
+            hardware_note="bench",
+            allow_six_volts=False,
+            duty_sequence=(100.0,),
+            bit_seconds=1.0,
+        )
+        self.assertIn("--bit-seconds 1", command)
+        dashboard = runner.capture_command(
+            Path("/repo"), "/venv/python", "/dev/port", 115200,
+            Path("/data/run.csv"), live_dashboard=True, bit_seconds=1.0,
+        )
+        self.assertIn("--bit-seconds", dashboard)
+        self.assertIn("1", dashboard)
 
     def test_six_volt_remote_command_includes_explicit_opt_in(self):
         command = runner.transmitter_command(

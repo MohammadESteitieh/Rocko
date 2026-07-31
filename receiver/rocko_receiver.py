@@ -20,6 +20,7 @@ import sys
 
 from eventlog import EventLog
 from live_receiver import MIN_PREAMBLE_CONFIDENCE, LiveReceiver
+import coded_protocol as protocol
 from coded_protocol import BANDWIDTH_HZ, CARRIER_HZ, DEFAULT_SAMPLE_RATE_HZ
 from serial_source import autodetect_port, list_candidate_ports
 
@@ -44,6 +45,10 @@ def parse_args():
     parser.add_argument("--sample-rate", type=float, default=DEFAULT_SAMPLE_RATE_HZ)
     parser.add_argument("--carrier", type=float, default=CARRIER_HZ)
     parser.add_argument("--bandwidth", type=float, default=BANDWIDTH_HZ)
+    parser.add_argument(
+        "--bit-seconds", type=float, default=protocol.BIT_SECONDS,
+        help="coded-bit duration (default: 2.0 s)",
+    )
     parser.add_argument("--silence", type=float, default=5.0,
                         help="seconds of silence that end a beacon and trigger decode")
     parser.add_argument("--tone-confirm", type=float, default=0.3)
@@ -78,6 +83,11 @@ def resolve_port(args) -> bool:
 
 def main() -> int:
     args = parse_args()
+    try:
+        protocol.configure_bit_seconds(args.bit_seconds)
+    except ValueError as exc:
+        print(f"  invalid timing: {exc}", file=sys.stderr)
+        return 2
     print(BANNER)
     if not resolve_port(args):
         return 2

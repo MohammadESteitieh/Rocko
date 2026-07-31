@@ -85,6 +85,24 @@ class CalibrationAnalysisTests(unittest.TestCase):
             analysis.validate_manifest([row])
         analysis.validate_manifest([row], require_complete=False)
 
+    def test_custom_manifest_matches_declared_duty_sequence(self):
+        bits = "".join(map(str, protocol.encode_message("A")))
+        duties = analysis.parse_duty_sequence("100,50,25,10,5,1")
+        expected = analysis.schedule_for_duties(duties)
+        rows = [
+            {
+                "sequence": str(sequence), "round": "1",
+                "position": str(sequence), "letter": "A",
+                "duty_percent": str(duty), "voltage_v": "11",
+                "coded_bits": bits,
+            }
+            for sequence, duty in enumerate(duties, 1)
+        ]
+        analysis.validate_manifest(rows, expected_schedule=expected)
+        rows[-1]["duty_percent"] = "2"
+        with self.assertRaisesRegex(ValueError, "frozen schedule"):
+            analysis.validate_manifest(rows, expected_schedule=expected)
+
     def test_complete_manifest_must_match_every_frozen_schedule_entry(self):
         bits = "".join(map(str, protocol.encode_message("A")))
         rows = [
@@ -102,6 +120,52 @@ class CalibrationAnalysisTests(unittest.TestCase):
         rows[7]["duty_percent"] = "25"
         with self.assertRaisesRegex(ValueError, "frozen schedule"):
             analysis.validate_manifest(rows)
+
+    def test_one_bit_per_second_synthetic_frame_is_decoded(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            try:
+                protocol.configure_bit_seconds(1.0)
+                t, x, y = layered_decoder.synthesize_capture(
+                    "A", lead=15.0, tail=15.0, noise_std=0.03
+                )
+            finally:
+                protocol.configure_bit_seconds(2.0)
+            capture = root / "capture.csv"
+            np.savetxt(
+                capture, np.column_stack((t, x, y)), delimiter=",",
+                header="t,x,y", comments="",
+            )
+            manifest = root / "manifest.csv"
+            with manifest.open("w", newline="", encoding="utf-8") as output:
+                writer = csv.DictWriter(output, fieldnames=[
+                    "sequence", "round", "position", "letter", "voltage_v",
+                    "duty_percent", "coded_bits", "started_utc",
+                ])
+                writer.writeheader()
+                writer.writerow({
+                    "sequence": 1, "round": 1, "position": 1, "letter": "A",
+                    "voltage_v": 11, "duty_percent": 100,
+                    "coded_bits": "".join(map(str, protocol.encode_message("A"))),
+                    "started_utc": "2026-01-01T00:00:15Z",
+                })
+            metadata = root / "metadata.txt"
+            metadata.write_text(
+                "capture_started_utc=2026-01-01T00:00:00Z\n"
+                "transmitter_pid_ack_utc=2026-01-01T00:00:00Z\n",
+                encoding="utf-8",
+            )
+            row = analysis.analyze(
+                capture,
+                manifest,
+                metadata,
+                require_complete_manifest=False,
+                bit_seconds=1.0,
+                use_manifest_boundaries=True,
+            )[0]
+            self.assertEqual(row["boundary_source"], "manifest_timestamps")
+            self.assertEqual(row["decoded_header"], "0x7E")
+            self.assertEqual(row["decoded_letter"], "A")
 
     def test_synthetic_complete_frame_is_located_measured_and_decoded(self):
         with tempfile.TemporaryDirectory() as directory:

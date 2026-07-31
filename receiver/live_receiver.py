@@ -322,7 +322,7 @@ class LiveReceiver:
                 if boundary is None and self.t:
                     boundary = float(self.t[0])
                 available = float(times[-1] - boundary) if boundary is not None else 0.0
-                frame_seconds = FRAME_BITS * 2 * HALF_SYMBOL_SECONDS
+                frame_seconds = FRAME_BITS * protocol.BIT_SECONDS
                 if available < frame_seconds:
                     self.status_line = (
                         f"Signal ended — buffering full frame "
@@ -679,7 +679,8 @@ class LiveReceiver:
         self.log.emit(
             "READY",
             f"layered Hamming(7,4) decode after {self.args.silence:g}s silence "
-            f"(28 bits at 0.5 bit/s, 8 Hz bandpass, {REPEAT_GAP_SECONDS:g}s gap)",
+            f"(28 bits at {1 / protocol.BIT_SECONDS:g} bit/s, 8 Hz bandpass, "
+            f"{REPEAT_GAP_SECONDS:g}s gap)",
         )
         self.source.start()
         from matplotlib.animation import FuncAnimation

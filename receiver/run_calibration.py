@@ -28,6 +28,10 @@ import sys
 import time
 
 SESSION_SECONDS = 872.0
+FRAME_SECONDS = 56.0
+INITIAL_WAIT_SECONDS = 15.0
+GAP_SECONDS = 15.0
+FINAL_WAIT_SECONDS = 5.0
 SESSION_GRACE_SECONDS = 120.0
 REMOTE_CONTACT_GRACE_SECONDS = 60.0
 SUBPROCESS_TIMEOUT_SECONDS = 30.0
@@ -51,10 +55,44 @@ def utc_stamp() -> str:
     )
 
 
-def run_name(voltage: float, when: datetime | None = None) -> str:
+def run_name(
+    voltage: float,
+    when: datetime | None = None,
+    *,
+    prefix: str = "calibration",
+) -> str:
     when = when or datetime.now()
     voltage_text = f"{float(voltage):g}".replace(".", "p")
-    return f"calibration_{voltage_text}V_{when.strftime('%Y%m%d_%H%M%S')}"
+    return f"{prefix}_{voltage_text}V_{when.strftime('%Y%m%d_%H%M%S')}"
+
+
+def parse_duty_sequence(value: str) -> tuple[float, ...]:
+    """Parse an explicit one-frame-per-duty schedule for the existing runner."""
+    try:
+        duties = tuple(float(item.strip()) for item in value.split(","))
+    except ValueError as exc:
+        raise ValueError("duty sequence must be comma-separated numbers") from exc
+    if not duties or any(not 0 < duty <= 100 for duty in duties):
+        raise ValueError("every duty in the sequence must be in (0, 100]")
+    if len(set(duties)) != len(duties):
+        raise ValueError("duty sequence must not contain duplicates")
+    return duties
+
+
+def expected_session_seconds(
+    duties: tuple[float, ...] | None = None,
+    *,
+    bit_seconds: float = 2.0,
+) -> float:
+    if bit_seconds <= 0:
+        raise ValueError("bit duration must be positive")
+    frames = 12 if duties is None else len(duties)
+    frame_seconds = 28 * bit_seconds
+    return (
+        INITIAL_WAIT_SECONDS
+        + frames * (frame_seconds + GAP_SECONDS)
+        + FINAL_WAIT_SECONDS
+    )
 
 
 def validate_note(value: str) -> str:
@@ -121,6 +159,8 @@ def transmitter_command(
     distance_m: float,
     hardware_note: str,
     allow_six_volts: bool,
+    duty_sequence: tuple[float, ...] | None = None,
+    bit_seconds: float = 2.0,
 ) -> str:
     args = [
         "./calibration_sweep.py",
@@ -131,6 +171,10 @@ def transmitter_command(
     ]
     if allow_six_volts:
         args.append("--allow-six-volts")
+    if duty_sequence is not None:
+        args.extend(("--duty-sequence", ",".join(f"{duty:g}" for duty in duty_sequence)))
+    if bit_seconds != 2.0:
+        args.extend(("--bit-seconds", f"{bit_seconds:g}"))
     invocation = " ".join(shlex.quote(item) for item in args)
     return (
         f"cd {shlex.quote(remote_dir)} || exit 1; "
@@ -157,12 +201,13 @@ def capture_command(
     raw_path: Path,
     *,
     live_dashboard: bool,
+    bit_seconds: float = 2.0,
 ) -> list[str]:
     if live_dashboard:
         return [
             python, str(repo / "receiver" / "rocko_receiver.py"),
             "--port", port, "--baud", str(baud), "--output", str(raw_path),
-            "--plot-seconds", "90",
+            "--plot-seconds", "90", "--bit-seconds", f"{bit_seconds:g}",
         ]
     return [
         python, str(repo / "receiver" / "capture.py"),
@@ -202,6 +247,14 @@ def parse_args():
     parser.add_argument("--data-root", type=Path, default=DEFAULT_DATA_ROOT)
     parser.add_argument("--poll", type=float, default=POLL_SECONDS)
     parser.add_argument(
+        "--duty-sequence",
+        help="exploratory comma-separated duties, one ~A frame each; default stays frozen",
+    )
+    parser.add_argument(
+        "--bit-seconds", type=float, choices=(0.5, 1.0, 2.0), default=2.0,
+        help="coded-bit duration; 2.0 is frozen, 1.0/0.5 are pilot-only",
+    )
+    parser.add_argument(
         "--live-dashboard", action="store_true",
         help="use the visible Rocko live decoder as the sole serial/capture owner",
     )
@@ -217,6 +270,11 @@ def main() -> int:
         note = validate_note(args.hardware_note)
         port = select_serial_port(args.port)
         args.remote_dir = validate_remote_dir(args.remote_dir)
+        duty_sequence = (
+            parse_duty_sequence(args.duty_sequence)
+            if args.duty_sequence is not None
+            else None
+        )
         if args.distance_m <= 0:
             raise ValueError("distance must be positive")
         if args.voltage == 6 and not args.allow_six_volts:
@@ -229,7 +287,14 @@ def main() -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
-    name = run_name(args.voltage)
+    session_seconds = expected_session_seconds(
+        duty_sequence,
+        bit_seconds=args.bit_seconds,
+    )
+    name = run_name(
+        args.voltage,
+        prefix="duty_sweep" if duty_sequence is not None else "calibration",
+    )
     root = args.data_root.expanduser().resolve()
     raw_dir = root / "raw"
     manifests_dir = root / "manifests"
@@ -259,6 +324,10 @@ def main() -> int:
     print(f"Raw capture: {raw_path}")
     print(f"Serial: {port}")
     print(f"Voltage: {args.voltage:g} V; distance: {args.distance_m:g} m")
+    if duty_sequence is not None:
+        print("Duty sequence: " + ", ".join(f"{duty:g}%" for duty in duty_sequence))
+    print(f"Coded-bit duration: {args.bit_seconds:g} seconds")
+    print(f"Expected transmitter session: {session_seconds / 60:.2f} minutes")
     if args.dry_run:
         print("Dry run: no serial, SSH, or GPIO activity.")
         return 0
@@ -291,9 +360,14 @@ def main() -> int:
         hardware_note=note,
         serial_port=port,
         baud=args.baud,
+        bit_seconds=f"{args.bit_seconds:g}",
         host=args.host,
         remote_dir=args.remote_dir,
-        expected_session_s=SESSION_SECONDS,
+        expected_session_s=session_seconds,
+        duty_sequence=(
+            ",".join(f"{duty:g}" for duty in duty_sequence)
+            if duty_sequence is not None else "frozen-default"
+        ),
         raw_path=raw_path,
         capture_owner="rocko-live-decoder" if args.live_dashboard else "capture.py",
     )
@@ -322,6 +396,7 @@ def main() -> int:
             capture_command(
                 repo, sys.executable, port, args.baud, raw_path,
                 live_dashboard=args.live_dashboard,
+                bit_seconds=args.bit_seconds,
             ),
             cwd=repo,
             stdout=capture_output,
@@ -341,6 +416,8 @@ def main() -> int:
             distance_m=args.distance_m,
             hardware_note=note,
             allow_six_volts=args.allow_six_volts,
+            duty_sequence=duty_sequence,
+            bit_seconds=args.bit_seconds,
         )
         started = checked_run(
             ssh + [remote_command], stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -359,7 +436,7 @@ def main() -> int:
         )
         print(f"Calibration running on QNX as PID {remote_pid}", flush=True)
 
-        deadline = remote_started_monotonic + SESSION_SECONDS + SESSION_GRACE_SECONDS
+        deadline = remote_started_monotonic + session_seconds + SESSION_GRACE_SECONDS
         last_remote_contact = remote_started_monotonic
         while True:
             if time.monotonic() > deadline:
@@ -464,13 +541,22 @@ def main() -> int:
         if (outcome == "COMPLETE" and transfer_outcome == "COMPLETE"
                 and raw_path.exists() and local_manifest.exists()):
             try:
+                analysis_command = [
+                    sys.executable, str(repo / "receiver" / "analyze_calibration.py"),
+                    str(raw_path), str(local_manifest), str(metadata_path),
+                    "--output", str(analysis_csv),
+                    "--summary", str(analysis_json),
+                ]
+                if duty_sequence is not None:
+                    analysis_command.extend((
+                        "--duty-sequence",
+                        ",".join(f"{duty:g}" for duty in duty_sequence),
+                    ))
+                analysis_command.extend(("--bit-seconds", f"{args.bit_seconds:g}"))
+                if args.bit_seconds != 2.0:
+                    analysis_command.append("--manifest-boundaries")
                 checked_run(
-                    [
-                        sys.executable, str(repo / "receiver" / "analyze_calibration.py"),
-                        str(raw_path), str(local_manifest), str(metadata_path),
-                        "--output", str(analysis_csv),
-                        "--summary", str(analysis_json),
-                    ],
+                    analysis_command,
                     stdout=sys.stdout,
                     stderr=sys.stderr,
                     timeout=600,

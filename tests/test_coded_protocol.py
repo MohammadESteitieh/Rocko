@@ -32,6 +32,17 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(protocol.BIT_SECONDS, 2.0)
         self.assertEqual(protocol.HALF_SYMBOL_SECONDS, 1.0)
 
+    def test_process_local_pilot_timing(self):
+        try:
+            protocol.configure_bit_seconds(1.0)
+            self.assertEqual(protocol.BIT_SECONDS, 1.0)
+            self.assertEqual(protocol.HALF_SYMBOL_SECONDS, 0.5)
+            protocol.configure_bit_seconds(0.5)
+            self.assertEqual(protocol.BIT_SECONDS, 0.5)
+            self.assertEqual(protocol.HALF_SYMBOL_SECONDS, 0.25)
+        finally:
+            protocol.configure_bit_seconds(2.0)
+
     def test_tilde_and_letter_are_msb_first_and_28_bits(self):
         coded = alphabet_transmitter.build_message("A")
         self.assertEqual(len(coded), 28)
