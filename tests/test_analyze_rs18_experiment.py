@@ -8,7 +8,11 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).parents[1]
-sys.path[:0] = [str(ROOT / "receiver"), str(ROOT / "transmitter")]
+sys.path[:0] = [
+    str(ROOT / "receiver" / "legacy_decoder"),
+    str(ROOT / "receiver"),
+    str(ROOT / "transmitter"),
+]
 import analyze_rs18_experiment as analysis  # noqa: E402
 import final_experiment_protocol as gf  # noqa: E402
 import plot_rs18_results as plotting  # noqa: E402

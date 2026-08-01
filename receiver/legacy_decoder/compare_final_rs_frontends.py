@@ -23,7 +23,7 @@ from typing import Sequence
 import numpy as np
 from scipy import signal
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 TRANSMITTER_DIR = ROOT / "transmitter"
 if str(TRANSMITTER_DIR) not in sys.path:
     sys.path.insert(0, str(TRANSMITTER_DIR))

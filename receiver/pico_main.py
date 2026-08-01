@@ -13,7 +13,7 @@
 #   sensor 1 out -> GP26 (ADC0)        sensor 2 out -> GP27 (ADC1)
 #   sensor ground -> GND               Pico -> laptop over USB
 #
-# The laptop side (receiver/rocko_receiver.py) reads this over USB serial at
+# The legacy live receiver reads this over USB serial at
 # 115200 baud, ~200 Hz. A one-channel front-end can tie GP27 to GND; the
 # receiver still decodes from the combined amplitude.
 from machine import ADC

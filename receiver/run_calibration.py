@@ -205,7 +205,7 @@ def capture_command(
 ) -> list[str]:
     if live_dashboard:
         return [
-            python, str(repo / "receiver" / "rocko_receiver.py"),
+            python, str(repo / "receiver" / "legacy_decoder" / "rocko_receiver.py"),
             "--port", port, "--baud", str(baud), "--output", str(raw_path),
             "--plot-seconds", "90", "--bit-seconds", f"{bit_seconds:g}",
         ]
@@ -542,7 +542,8 @@ def main() -> int:
                 and raw_path.exists() and local_manifest.exists()):
             try:
                 analysis_command = [
-                    sys.executable, str(repo / "receiver" / "analyze_calibration.py"),
+                    sys.executable,
+                    str(repo / "receiver" / "legacy_decoder" / "analyze_calibration.py"),
                     str(raw_path), str(local_manifest), str(metadata_path),
                     "--output", str(analysis_csv),
                     "--summary", str(analysis_json),

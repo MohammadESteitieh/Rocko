@@ -24,8 +24,13 @@ from collections import deque
 from datetime import datetime
 from pathlib import Path
 import queue
+import sys
 import textwrap
 import threading
+
+RECEIVER_DIR = Path(__file__).resolve().parents[1]
+if str(RECEIVER_DIR) not in sys.path:
+    sys.path.insert(0, str(RECEIVER_DIR))
 
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec

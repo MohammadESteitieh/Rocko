@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "receiver"))
+sys.path.insert(0, str(ROOT / "receiver" / "legacy_decoder"))
 import analyze_final_experiment as base  # noqa: E402
 
 

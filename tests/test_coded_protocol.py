@@ -7,8 +7,11 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).parents[1]
-sys.path.insert(0, str(ROOT / "receiver"))
-sys.path.insert(0, str(ROOT / "transmitter"))
+sys.path[:0] = [
+    str(ROOT / "receiver" / "legacy_decoder"),
+    str(ROOT / "receiver"),
+    str(ROOT / "transmitter"),
+]
 
 import coded_protocol as protocol  # noqa: E402
 import layered_decoder  # noqa: E402

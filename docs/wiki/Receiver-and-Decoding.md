@@ -1,5 +1,13 @@
 # Receiver and Decoding
 
+## Architecture status
+
+The complete decoder, frontend, live receiver, and experiment analyzer used for
+the recorded results is preserved under `receiver/legacy_decoder/`. It was
+moved intact because the accumulated scripts were difficult to audit and
+explain, not because a specific defect was established. New receiver work will
+be implemented separately and compared stage by stage against this reference.
+
 ## Acquisition
 
 The Pico streams `t,x,y` rows at approximately 200 Hz. `receiver/capture.py` is

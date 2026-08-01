@@ -6,7 +6,9 @@ sensor channels to a macOS receiver at approximately 200 Hz.
 
 This wiki documents the research pipeline only. The original hackathon audio,
 emergency-intent, photo/CNN, and demo layers are not part of the research
-branch.
+branch. The recorded-results decoder is preserved under
+`receiver/legacy_decoder/` while a smaller, stage-by-stage explainable receiver
+is rebuilt.
 
 ## Current research protocols
 

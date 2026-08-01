@@ -98,6 +98,15 @@ payload-truth timing oracle left 14–18 erroneous RS symbols per frame, far abo
 the six-symbol hard-correction capability. The quick screen is a diagnostic,
 not evidence about decoder improvements.
 
+## Receiver rewrite status
+
+The historical protocol decoders, experimental frontends, live integration,
+and analyzers have been moved intact to `receiver/legacy_decoder/`. This is an
+organizational checkpoint, not a finding that the code is defective. The goal
+is to build a replacement receiver whose synchronization, channel estimate,
+bit evidence, symbol errors, correction attempt, and failure reason can each be
+inspected and explained independently.
+
 ## Current offline research opportunities
 
 - Sync-trained time-domain and harmonic waveform extraction.
@@ -114,7 +123,9 @@ All additional work on inspected data must remain labelled exploratory.
 
 1. Keep the research branch, wiki, code, and capture archive committed and
    pushed to the MohammadESteitieh origin.
-2. Consolidate duplicated calibration/final/RS18 runner machinery.
-3. Replace mutable protocol globals and `sys.path` imports with a package.
-4. Add strict timestamp/gap validation to capture loading.
-5. Document the exact L298N revision and logic-power arrangement.
+2. Implement the new explainable receiver outside `legacy_decoder/` and retain
+   stage-by-stage regression comparisons.
+3. Consolidate duplicated calibration/final/RS18 runner machinery.
+4. Replace mutable protocol globals and `sys.path` imports with a package.
+5. Add strict timestamp/gap validation to capture loading.
+6. Document the exact L298N revision and logic-power arrangement.

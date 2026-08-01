@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Rocko receiver — one command to launch the whole surface station.
 
-    python3 receiver/rocko_receiver.py                 # auto-detect the Pico
-    python3 receiver/rocko_receiver.py -p /dev/cu.usbmodem1201
-    python3 receiver/rocko_receiver.py --replay captures/trial.csv   # no hardware
+    python3 receiver/legacy_decoder/rocko_receiver.py
+    python3 receiver/legacy_decoder/rocko_receiver.py -p /dev/cu.usbmodem1201
+    python3 receiver/legacy_decoder/rocko_receiver.py --replay captures/trial.csv
 
 It finds the USB serial port, opens the live dashboard (raw / bandpass /
 carrier-amplitude panes), logs every numbered event to file and on screen, and
@@ -17,6 +17,10 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 import sys
+
+RECEIVER_DIR = Path(__file__).resolve().parents[1]
+if str(RECEIVER_DIR) not in sys.path:
+    sys.path.insert(0, str(RECEIVER_DIR))
 
 from eventlog import EventLog
 from live_receiver import MIN_PREAMBLE_CONFIDENCE, LiveReceiver

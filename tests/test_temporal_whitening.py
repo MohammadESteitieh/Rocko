@@ -7,7 +7,7 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).parents[1]
-sys.path.insert(0, str(ROOT / "receiver"))
+sys.path.insert(0, str(ROOT / "receiver" / "legacy_decoder"))
 
 import temporal_whitening as tw  # noqa: E402
 

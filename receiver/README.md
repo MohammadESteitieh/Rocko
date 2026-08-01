@@ -1,7 +1,47 @@
-# Receiver research pipeline
+# Receiver research workspace
 
-The receiver acquires two magnetic-sensor channels from a Pico over USB serial,
-records immutable CSV captures, and performs live or offline decoding.
+The receiver directory is now deliberately divided into two parts:
+
+1. acquisition/orchestration code that remains at `receiver/`;
+2. the complete historical decoding and analysis pipeline under
+   [`receiver/legacy_decoder/`](legacy_decoder/README.md).
+
+The legacy move does not assert that the previous code is defective. It creates
+a stable reference while a smaller, explainable receiver is developed.
+
+## Acquisition and orchestration
+
+- `pico_main.py` — MicroPython dual-ADC streamer.
+- `serial_source.py` — serial and replay source abstraction.
+- `capture.py` — authoritative serial capture owner.
+- `watch_capture.py` — read-only capture watcher.
+- `run_calibration.py` — calibration capture and QNX orchestration.
+- `run_final_experiment.py` — final-comparison orchestration.
+- `run_rs18_experiment.py` — accepted RS18 orchestration.
+- `run_rs18_quick_screen.py` — five-frame exploratory orchestration.
+
+Plot-only and table-generation scripts remain at the receiver root because they
+consume frozen analysis outputs rather than decide protocol bits.
+
+## Legacy decoding pipeline
+
+`legacy_decoder/` contains the previous:
+
+- Hamming protocols and layered/SLNN/hybrid decoders;
+- hard and GMD Reed–Solomon decoders;
+- coherent combining and covariance processing;
+- Gao and Duong frontends;
+- temporal whitening models;
+- calibration, final-experiment, and RS18 analyzers;
+- live decoder and direct raw-capture visualization.
+
+Historical reproduction command paths now include `legacy_decoder`, for
+example:
+
+```bash
+receiver/.venv/bin/python receiver/legacy_decoder/analyze_rs18_experiment.py --help
+receiver/.venv/bin/python receiver/legacy_decoder/rocko_receiver.py --help
+```
 
 ## Data contract
 
@@ -14,58 +54,30 @@ t,x,y
 - `x` and `y` are the two ADC channels.
 - Expected rate is approximately 200 Hz at 115200 baud.
 - Existing datasets contain both 12-bit-range and `read_u16`-range captures;
-  analyzers record the inferred full scale and report clipping explicitly.
+  analysis must state the assumed full scale and clipping behavior explicitly.
 
-Install dependencies:
+## Rewrite objective
 
-```bash
-python3 -m venv receiver/.venv
-receiver/.venv/bin/pip install -r receiver/requirements.txt
-```
+The replacement receiver should expose one inspectable pipeline with explicit
+intermediate artifacts for:
 
-## Acquisition
+- input validation and sample continuity;
+- carrier presence per sensor;
+- synchronization evidence;
+- channel estimation;
+- per-bit likelihoods and hard decisions;
+- symbol likelihoods and error locations;
+- decoder syndrome, correction, failure, and candidate rationale;
+- final payload acceptance.
 
-- `pico_main.py` — MicroPython dual-ADC streamer.
-- `capture.py` — authoritative serial capture owner.
-- `serial_source.py` — serial and replay source abstraction.
-- `watch_capture.py` / `monitor_dataset.py` — read-only monitoring.
-- `live_receiver.py` / `rocko_receiver.py` — Hamming-protocol live display.
-
-## Protocol and decoding
-
-- `coded_protocol.py` — Hamming(7,4) alphabet protocol used by calibration.
-- `layered_decoder.py` / `hybrid_decoder.py` / `slnn_decoder.py` — Hamming
-  matched-filter and codebook decoders.
-- `analyze_final_experiment.py` — uncoded, Hamming(15,11), RS(5,3), and
-  RS(12,6) analysis.
-- `analyze_rs18_experiment.py` — accepted RS(18,6) analysis.
-- `compare_final_rs_frontends.py` — hard/GMD, no-whitening, Gao, and Duong
-  exploratory comparisons.
-
-## Noise and frontend research
-
-- `duong_whitener.py` — instantaneous gain-modulated IQ whitening.
-- `temporal_whitening.py` — VAR, Kalman, GRU, and TCN prediction-error models.
-- `benchmark_temporal_whitening.py` — historical physical benchmark.
-
-Frontend parameters must be fitted only on declared transmitter-off data and
-frozen during active frames. Do not fit boundaries or decoders using payload
-truth.
-
-## Physical runners
-
-- `run_calibration.py`
-- `run_final_experiment.py`
-- `run_rs18_experiment.py`
-- `run_rs18_quick_screen.py`
-
-These scripts own capture, remote launch, manifest transfer, validation,
-checksums, and independent GPIO-low cleanup. They require a separate hidden
-password prompt or an ephemeral `SSHPASS` environment variable; never store a
-password in the repository.
+A failed frame must produce an explanation of which stage failed and why—not
+only a generic decoder exception or wrong payload.
 
 ## Tests
 
 ```bash
 receiver/.venv/bin/python -m unittest discover -s tests -q
 ```
+
+Legacy tests remain active so the preserved implementation can serve as a
+regression reference during the rewrite.

@@ -9,7 +9,9 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).parents[1]
-sys.path.insert(0, str(ROOT / "receiver"))
+sys.path[:0] = [
+    str(ROOT / "receiver" / "legacy_decoder"), str(ROOT / "receiver")
+]
 
 import analyze_calibration as analysis  # noqa: E402
 import coded_protocol as protocol  # noqa: E402

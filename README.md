@@ -22,8 +22,9 @@ available through Git.
 
 - [`transmitter/`](transmitter/README.md) — QNX GPIO/coil control, calibration
   sweeps, frozen experimental protocols, and physical schedules.
-- [`receiver/`](receiver/README.md) — Pico acquisition, live monitoring, DSP,
-  decoding, offline analysis, and plots.
+- [`receiver/`](receiver/README.md) — Pico acquisition and experiment
+  orchestration, plus the preserved historical pipeline under
+  `receiver/legacy_decoder/` while an explainable receiver is rebuilt.
 - [`tests/`](tests/) — deterministic protocol, decoder, safety, runner, and
   analysis tests.
 - [`docs/wiki/`](docs/wiki/Home.md) — canonical research wiki.

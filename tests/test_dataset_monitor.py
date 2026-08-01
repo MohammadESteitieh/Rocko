@@ -6,7 +6,9 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).parents[1]
-sys.path.insert(0, str(ROOT / "receiver"))
+sys.path[:0] = [
+    str(ROOT / "receiver" / "legacy_decoder"), str(ROOT / "receiver")
+]
 
 import monitor_dataset  # noqa: E402
 import watch_capture  # noqa: E402

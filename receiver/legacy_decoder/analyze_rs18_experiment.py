@@ -21,7 +21,7 @@ from typing import Sequence
 import numpy as np
 from scipy import signal
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 TRANSMITTER_DIR = ROOT / "transmitter"
 sys.path[:0] = [str(TRANSMITTER_DIR), str(ROOT / "receiver")]
 import analyze_final_experiment as base  # noqa: E402
