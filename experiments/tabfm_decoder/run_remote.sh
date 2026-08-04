@@ -43,18 +43,17 @@ git -C "$REPO" reset --hard "$PINNED_COMMIT"
 uv venv --python 3.11 "$VENV"
 uv pip install --python "$VENV/bin/python" 'tabfm[jax,cuda]==1.0.1'
 
-CUDA_LIBS=$(find "$VENV/lib" -type d -path '*/site-packages/nvidia/*/lib' \
-  | paste -sd: -)
-export LD_LIBRARY_PATH="${CUDA_LIBS}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-
 rm -rf "$RESULTS"
 mkdir -p "$RESULTS"
 cd "$REPO"
 
-CUDA_VISIBLE_DEVICES=0 JAX_PLATFORMS=cuda \
+# Each 16 GiB RTX 4080 exhausted memory while restoring the pinned model.
+# TabFM replicates rather than parameter-shards across GPUs, so use the host's
+# 94 GiB RAM. This is slower but preserves the frozen model and experiment.
+CUDA_VISIBLE_DEVICES="" JAX_PLATFORMS=cpu \
 "$VENV/bin/python" -c 'import jax; print("JAX devices:", jax.devices())'
 
-CUDA_VISIBLE_DEVICES=0 JAX_PLATFORMS=cuda \
+CUDA_VISIBLE_DEVICES="" JAX_PLATFORMS=cpu \
 XLA_PYTHON_CLIENT_PREALLOCATE=false \
 "$VENV/bin/python" experiments/tabfm_decoder/run_batch.py \
   --output-dir "$RESULTS"

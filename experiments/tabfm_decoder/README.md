@@ -54,15 +54,17 @@ A practical machine needs more than 8 GB of memory. The JAX classification
 checkpoint alone occupies approximately 5.7 GB on disk; model restoration and
 inference require additional memory.
 
-## Remote GPU quick start
+## Remote high-memory quick start
 
-On a Linux GPU server, the repository-provided bootstrap installs an isolated
+On the Linux compute server, the repository-provided bootstrap installs an isolated
 Python environment and runs the frozen Sensor-Y hybrid batch. It includes the
 exploratory sequence 24 control and confirmatory sequences 2, 10, 28, and 45,
 spanning 50%, 45%, 25%, and 10% duty and payload repetitions 1, 2, 4, and 5.
 Their legacy outcomes are known, but their TabFM outputs have not been inspected.
 The confidence gate is frozen at 0.75 and the TabFM checkpoint at revision
-`d5e74033fcf257699fab013e2cdd7edf424ff904` before those new results are run:
+`d5e74033fcf257699fab013e2cdd7edf424ff904` before those new results are run.
+Each 16 GiB RTX 4080 failed while restoring the model, and TabFM does not
+parameter-shard it across GPUs, so the bootstrap uses the host's 94 GiB CPU RAM:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/MohammadESteitieh/Rocko/research-main/experiments/tabfm_decoder/run_remote.sh \
