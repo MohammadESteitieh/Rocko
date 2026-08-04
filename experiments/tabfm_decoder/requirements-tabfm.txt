@@ -1,0 +1,3 @@
+# Google TabFM source is Apache-2.0; pretrained weights use its separate
+# non-commercial, non-production license.
+tabfm[jax]==1.0.1

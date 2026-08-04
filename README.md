@@ -25,6 +25,8 @@ available through Git.
 - [`receiver/`](receiver/README.md) — Pico acquisition and experiment
   orchestration, plus the preserved historical pipeline under
   `receiver/legacy_decoder/` while an explainable receiver is rebuilt.
+- [`experiments/tabfm_decoder/`](experiments/tabfm_decoder/README.md) —
+  leakage-controlled TabFM bit-frontend feasibility pilot.
 - [`tests/`](tests/) — deterministic protocol, decoder, safety, runner, and
   analysis tests.
 - [`docs/wiki/`](docs/wiki/Home.md) — canonical research wiki.
