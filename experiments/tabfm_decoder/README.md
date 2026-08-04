@@ -54,7 +54,18 @@ A practical machine needs more than 8 GB of memory. The JAX classification
 checkpoint alone occupies approximately 5.7 GB on disk; model restoration and
 inference require additional memory.
 
-## Run the pretrained model
+## Remote GPU quick start
+
+On a Linux GPU server, the repository-provided bootstrap installs an isolated
+Python environment and runs the sequence-24 pilot:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/MohammadESteitieh/Rocko/research-main/experiments/tabfm_decoder/run_remote.sh \
+  -o "$HOME/run-rocko-tabfm.sh"
+nohup bash "$HOME/run-rocko-tabfm.sh" > "$HOME/rocko-tabfm.log" 2>&1 &
+```
+
+## Run the pretrained model manually
 
 ```bash
 XLA_PYTHON_CLIENT_PREALLOCATE=false .venv/bin/python \
