@@ -3,6 +3,10 @@ set -Eeuo pipefail
 
 RUN="$HOME/rocko-tabfm-run"
 REPO="$RUN/Rocko"
+PINNED_COMMIT="2f95468b2c9662571909535514a91568a385dea1"
+export ROCKO_REMOTE_BOOTSTRAP_SHA256=$(
+  sha256sum "$0" | awk '{print $1}'
+)
 VENV="$RUN/.venv"
 RESULTS="$RUN/results"
 mkdir -p "$RUN"
@@ -29,31 +33,30 @@ uv python install 3.11
 
 if [ -d "$REPO/.git" ]; then
   git -C "$REPO" fetch origin research-main
-  git -C "$REPO" checkout research-main
-  git -C "$REPO" reset --hard origin/research-main
 else
   rm -rf "$REPO"
-  git clone --branch research-main --single-branch \
-    https://github.com/MohammadESteitieh/Rocko.git "$REPO"
+  git clone https://github.com/MohammadESteitieh/Rocko.git "$REPO"
 fi
+git -C "$REPO" checkout --detach "$PINNED_COMMIT"
+git -C "$REPO" reset --hard "$PINNED_COMMIT"
 
 uv venv --python 3.11 "$VENV"
 uv pip install --python "$VENV/bin/python" 'tabfm[jax,cuda]==1.0.1'
+
+CUDA_LIBS=$(find "$VENV/lib" -type d -path '*/site-packages/nvidia/*/lib' \
+  | paste -sd: -)
+export LD_LIBRARY_PATH="${CUDA_LIBS}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 rm -rf "$RESULTS"
 mkdir -p "$RESULTS"
 cd "$REPO"
 
-"$VENV/bin/python" experiments/tabfm_decoder/export_rs18_table.py \
-  --query-sequence 24 --output-dir "$RESULTS"
+CUDA_VISIBLE_DEVICES=0 JAX_PLATFORMS=cuda \
+"$VENV/bin/python" -c 'import jax; print("JAX devices:", jax.devices())'
 
-CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_PREALLOCATE=false \
-"$VENV/bin/python" experiments/tabfm_decoder/run_tabfm.py \
-  "$RESULTS/rs18-sequence-24.context-query.csv" \
-  "$RESULTS/rs18-sequence-24.truth.csv" \
-  "$RESULTS/rs18-sequence-24.metadata.json" \
-  --backend jax \
-  --output "$RESULTS/rs18-sequence-24.predictions.csv" \
-  --summary "$RESULTS/rs18-sequence-24.summary.json"
+CUDA_VISIBLE_DEVICES=0 JAX_PLATFORMS=cuda \
+XLA_PYTHON_CLIENT_PREALLOCATE=false \
+"$VENV/bin/python" experiments/tabfm_decoder/run_batch.py \
+  --output-dir "$RESULTS"
 
-cat "$RESULTS/rs18-sequence-24.summary.json"
+cat "$RESULTS/batch-summary.json"
