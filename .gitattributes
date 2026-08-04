@@ -1,0 +1,2 @@
+# Preserve externally generated evidence byte-for-byte; do not normalize CRLF.
+data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/*.csv binary

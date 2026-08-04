@@ -20,7 +20,7 @@ sys.path[:0] = [
     str(ROOT / "transmitter"),
 ]
 
-from export_rs18_table import FEATURE_COLUMNS  # noqa: E402
+from export_rs18_table import FEATURE_COLUMNS, FEATURE_SETS  # noqa: E402
 import analyze_rs18_experiment as rs18  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 
@@ -47,8 +47,10 @@ def validate_export(table_path: Path, truth_path: Path, metadata_path: Path,
         raise ValueError("context/query table SHA-256 does not match metadata")
     if sha256_file(truth_path) != metadata.get("truth_sha256"):
         raise ValueError("truth SHA-256 does not match metadata")
-    if metadata.get("feature_columns") != FEATURE_COLUMNS:
-        raise ValueError("metadata feature contract does not match this runner")
+    feature_set = metadata.get("feature_set", "aligned")
+    if (feature_set not in FEATURE_SETS
+            or metadata.get("feature_columns") != FEATURE_SETS[feature_set]):
+        raise ValueError("metadata feature set and columns do not match this runner")
     source = metadata.get("source")
     required_source = {
         "capture_path", "capture_sha256", "manifest_path", "manifest_sha256",
@@ -135,9 +137,12 @@ def _validate_query_truth(query_rows: list[dict[str, str]],
 
 
 def evaluate(probability_one: np.ndarray, query_rows: list[dict[str, str]],
-             truth_rows: list[dict[str, str]]) -> dict[str, object]:
+             truth_rows: list[dict[str, str]], confidence_threshold: float = 0.75
+             ) -> dict[str, object]:
     if len(probability_one) != len(query_rows) or len(query_rows) != len(truth_rows):
         raise ValueError("prediction, query, and truth row counts must match")
+    if not 0.5 < confidence_threshold < 1.0:
+        raise ValueError("confidence threshold must be strictly between 0.5 and 1")
     truth_by_index = _validate_query_truth(query_rows, truth_rows)
     indexed_query = sorted(
         enumerate(query_rows), key=lambda item: int(item[1]["body_bit_index"])
@@ -148,62 +153,69 @@ def evaluate(probability_one: np.ndarray, query_rows: list[dict[str, str]],
     )
     ordered_truth = [truth_by_index[int(row["body_bit_index"])] for row in ordered_query]
     target = np.asarray([int(row["target_bit"]) for row in ordered_truth], dtype=int)
-    baseline = np.asarray([int(row["baseline_bit"]) for row in ordered_truth], dtype=int)
     baseline_llrs = np.asarray(
         [float(row["baseline_llr"]) for row in ordered_truth], dtype=float
     )
-    predicted = (ordered_probabilities >= 0.5).astype(int)
+    sensor_y_llrs = np.asarray(
+        [float(row["sensor_y_llr"]) for row in ordered_truth], dtype=float
+    )
     epsilon = 1e-9
-    predicted_llrs = np.log(np.clip(ordered_probabilities, epsilon, 1.0)) - np.log(
+    tabfm_llrs = np.log(np.clip(ordered_probabilities, epsilon, 1.0)) - np.log(
         np.clip(1.0 - ordered_probabilities, epsilon, 1.0)
     )
-    baseline_decoded = rs18.hard_rs18_decode(baseline_llrs)
-    tabfm_decoded = rs18.hard_rs18_decode(predicted_llrs)
+    confident = ((ordered_probabilities >= confidence_threshold)
+                 | (ordered_probabilities <= 1.0 - confidence_threshold))
+    gated_llrs = np.where(confident, tabfm_llrs, sensor_y_llrs)
     payload = tuple(int(bit) for bit in ordered_truth[0]["payload_bits"])
 
-    def payload_errors(decoded: dict[str, object]):
-        if decoded["failure"]:
-            return None
-        return sum(left != right for left, right in zip(decoded["payload"], payload))
+    def metrics(prefix: str, llrs: np.ndarray) -> dict[str, object]:
+        bits = llrs > 0
+        decoded = rs18.hard_rs18_decode(llrs)
+        payload_errors = None if decoded["failure"] else sum(
+            left != right for left, right in zip(decoded["payload"], payload)
+        )
+        frame_error = int(bool(decoded["failure"] or payload_errors))
+        miscorrection = int(not decoded["failure"] and bool(payload_errors))
+        return {
+            f"{prefix}_bit_errors": int(np.count_nonzero(bits != target)),
+            f"{prefix}_symbol_errors": int(sum(
+                np.any(bits[index:index + 5] != target[index:index + 5])
+                for index in range(0, len(target), 5)
+            )),
+            f"{prefix}_decoder_failure": int(decoded["failure"]),
+            f"{prefix}_frame_error": frame_error,
+            f"{prefix}_wrong_codeword_miscorrection": miscorrection,
+            f"{prefix}_corrected_symbol_count": int(
+                decoded["corrected_symbol_count"]
+            ),
+            f"{prefix}_payload_bit_errors_conditional_on_decode": payload_errors,
+        }
 
-    field_bits = 5
-    return {
+    result: dict[str, object] = {
         "query_bits": len(target),
-        "baseline_bit_errors": int(np.count_nonzero(baseline != target)),
-        "tabfm_bit_errors": int(np.count_nonzero(predicted != target)),
-        "baseline_symbol_errors": int(sum(
-            np.any(baseline[index:index + field_bits] != target[index:index + field_bits])
-            for index in range(0, len(target), field_bits)
+        "confidence_threshold": confidence_threshold,
+        "confidence_gate_applied_bits": int(np.count_nonzero(confident)),
+        "confidence_gate_changed_sensor_y_bits": int(np.count_nonzero(
+            confident & ((tabfm_llrs > 0) != (sensor_y_llrs > 0))
         )),
-        "tabfm_symbol_errors": int(sum(
-            np.any(predicted[index:index + field_bits] != target[index:index + field_bits])
-            for index in range(0, len(target), field_bits)
-        )),
-        "baseline_decoder_failure": int(baseline_decoded["failure"]),
-        "baseline_corrected_symbol_count": int(
-            baseline_decoded["corrected_symbol_count"]
-        ),
-        "baseline_payload_bit_errors_conditional_on_decode": payload_errors(
-            baseline_decoded
-        ),
-        "tabfm_decoder_failure": int(tabfm_decoded["failure"]),
-        "tabfm_corrected_symbol_count": int(
-            tabfm_decoded["corrected_symbol_count"]
-        ),
-        "tabfm_payload_bit_errors_conditional_on_decode": payload_errors(
-            tabfm_decoded
-        ),
     }
+    result.update(metrics("baseline", baseline_llrs))
+    result.update(metrics("sensor_y", sensor_y_llrs))
+    result.update(metrics("tabfm", tabfm_llrs))
+    result.update(metrics("sensor_y_tabfm_gated", gated_llrs))
+    return result
 
 
 def write_predictions(path: Path, query_rows: list[dict[str, str]],
                       truth_rows: list[dict[str, str]],
-                      probability_one: np.ndarray) -> None:
+                      probability_one: np.ndarray,
+                      confidence_threshold: float = 0.75) -> None:
     truth = {int(row["body_bit_index"]): row for row in truth_rows}
     fields = [
         "sequence", "body_bit_index", "symbol_index", "bit_in_symbol",
-        "target_bit", "baseline_bit", "baseline_llr", "tabfm_probability_one",
-        "tabfm_bit",
+        "target_bit", "baseline_bit", "baseline_llr", "sensor_y_bit",
+        "sensor_y_llr", "tabfm_probability_one", "tabfm_bit",
+        "confidence_gate_applied", "sensor_y_tabfm_gated_bit",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as destination:
@@ -211,6 +223,10 @@ def write_predictions(path: Path, query_rows: list[dict[str, str]],
         writer.writeheader()
         for row, probability in zip(query_rows, probability_one):
             actual = truth[int(row["body_bit_index"])]
+            confident = (probability >= confidence_threshold
+                         or probability <= 1.0 - confidence_threshold)
+            tabfm_bit = int(probability >= 0.5)
+            sensor_y_bit = int(actual["sensor_y_bit"])
             writer.writerow({
                 "sequence": row["sequence"],
                 "body_bit_index": row["body_bit_index"],
@@ -219,9 +235,66 @@ def write_predictions(path: Path, query_rows: list[dict[str, str]],
                 "target_bit": actual["target_bit"],
                 "baseline_bit": actual["baseline_bit"],
                 "baseline_llr": actual["baseline_llr"],
+                "sensor_y_bit": sensor_y_bit,
+                "sensor_y_llr": actual["sensor_y_llr"],
                 "tabfm_probability_one": f"{float(probability):.12g}",
-                "tabfm_bit": int(probability >= 0.5),
+                "tabfm_bit": tabfm_bit,
+                "confidence_gate_applied": int(confident),
+                "sensor_y_tabfm_gated_bit": tabfm_bit if confident else sensor_y_bit,
             })
+
+
+def load_model(backend: str, checkpoint_path: Path | None = None):
+    import tabfm
+    if backend == "jax":
+        return tabfm.tabfm_v1_0_0_jax.load(
+            model_type="classification",
+            checkpoint_path=None if checkpoint_path is None else str(checkpoint_path),
+        )
+    if backend == "pytorch":
+        return tabfm.tabfm_v1_0_0_pytorch.load(
+            model_type="classification",
+            checkpoint_path=None if checkpoint_path is None else str(checkpoint_path),
+        )
+    raise ValueError(f"unsupported backend {backend!r}")
+
+
+def predict_probabilities(model, rows: list[dict[str, str]],
+                          feature_columns: list[str]) -> np.ndarray:
+    import pandas as pd
+    import tabfm
+    context_rows = [row for row in rows if row["role"] != "query"]
+    query_rows = [row for row in rows if row["role"] == "query"]
+
+    def dataframe(selected: list[dict[str, str]]):
+        frame = pd.DataFrame([
+            {name: row[name] for name in feature_columns} for row in selected
+        ])
+        categorical = ("position", "symbol_index", "bit_in_symbol")
+        numeric = [name for name in feature_columns if name not in categorical]
+        frame[numeric] = frame[numeric].astype(float)
+        for name in categorical:
+            if name in feature_columns:
+                frame[name] = frame[name].astype(str)
+        return frame
+
+    classifier = tabfm.TabFMClassifier(
+        model=model,
+        n_estimators=1,
+        norm_methods="none",
+        class_shift=False,
+        max_num_rows=None,
+        random_state=2026,
+    )
+    classifier.fit(
+        dataframe(context_rows),
+        np.asarray([int(row["target_bit"]) for row in context_rows]),
+    )
+    probabilities = classifier.predict_proba(dataframe(query_rows))
+    class_to_column = {
+        int(value): index for index, value in enumerate(classifier.classes_)
+    }
+    return probabilities[:, class_to_column[1]]
 
 
 def main() -> int:
@@ -230,13 +303,14 @@ def main() -> int:
     parser.add_argument("truth", type=Path)
     parser.add_argument("metadata", type=Path)
     parser.add_argument("--backend", choices=("jax", "pytorch"), default="jax")
+    parser.add_argument("--confidence-threshold", type=float, default=0.75)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--summary", type=Path, required=True)
     args = parser.parse_args()
 
     try:
-        import pandas as pd
-        import tabfm
+        import pandas  # noqa: F401
+        import tabfm  # noqa: F401
     except ImportError as error:
         raise SystemExit(
             "TabFM environment is missing; install requirements-tabfm.txt"
@@ -256,49 +330,29 @@ def main() -> int:
     if any(row["target_bit"] for row in query_rows):
         raise ValueError("query targets must remain blank")
 
-    def dataframe(selected: list[dict[str, str]]):
-        frame = pd.DataFrame([{name: row[name] for name in FEATURE_COLUMNS}
-                              for row in selected])
-        numeric = [name for name in FEATURE_COLUMNS
-                   if name not in ("position", "symbol_index", "bit_in_symbol")]
-        frame[numeric] = frame[numeric].astype(float)
-        for name in ("position", "symbol_index", "bit_in_symbol"):
-            frame[name] = frame[name].astype(str)
-        return frame
+    feature_columns = list(export_metadata["feature_columns"])
+    model = load_model(args.backend)
+    probability_one = predict_probabilities(model, rows, feature_columns)
 
-    if args.backend == "jax":
-        model = tabfm.tabfm_v1_0_0_jax.load(model_type="classification")
-    else:
-        model = tabfm.tabfm_v1_0_0_pytorch.load(model_type="classification")
-    classifier = tabfm.TabFMClassifier(
-        model=model,
-        n_estimators=1,
-        norm_methods="none",
-        class_shift=False,
-        max_num_rows=None,
-        random_state=2026,
+    summary = evaluate(
+        probability_one, query_rows, truth_rows, args.confidence_threshold
     )
-    classifier.fit(
-        dataframe(context_rows),
-        np.asarray([int(row["target_bit"]) for row in context_rows]),
-    )
-    probabilities = classifier.predict_proba(dataframe(query_rows))
-    class_to_column = {int(value): index for index, value in enumerate(classifier.classes_)}
-    probability_one = probabilities[:, class_to_column[1]]
-
-    summary = evaluate(probability_one, query_rows, truth_rows)
     summary.update({
         "backend": args.backend,
         "n_estimators": 1,
         "context_rows": len(context_rows),
-        "feature_count": len(FEATURE_COLUMNS),
+        "feature_set": export_metadata.get("feature_set", "aligned"),
+        "feature_count": len(feature_columns),
         "model": "google/tabfm-1.0.0",
         "table_sha256": export_metadata["table_sha256"],
         "truth_sha256": export_metadata["truth_sha256"],
         "export_metadata_sha256": sha256_file(args.metadata),
         "source": export_metadata["source"],
     })
-    write_predictions(args.output, query_rows, truth_rows, probability_one)
+    write_predictions(
+        args.output, query_rows, truth_rows, probability_one,
+        args.confidence_threshold,
+    )
     summary["predictions_sha256"] = sha256_file(args.output)
     args.summary.parent.mkdir(parents=True, exist_ok=True)
     args.summary.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

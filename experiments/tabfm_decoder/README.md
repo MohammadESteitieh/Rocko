@@ -57,7 +57,12 @@ inference require additional memory.
 ## Remote GPU quick start
 
 On a Linux GPU server, the repository-provided bootstrap installs an isolated
-Python environment and runs the sequence-24 pilot:
+Python environment and runs the frozen Sensor-Y hybrid batch. It includes the
+exploratory sequence 24 control and confirmatory sequences 2, 10, 28, and 45,
+spanning 50%, 45%, 25%, and 10% duty and payload repetitions 1, 2, 4, and 5.
+Their legacy outcomes are known, but their TabFM outputs have not been inspected.
+The confidence gate is frozen at 0.75 and the TabFM checkpoint at revision
+`d5e74033fcf257699fab013e2cdd7edf424ff904` before those new results are run:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/MohammadESteitieh/Rocko/research-main/experiments/tabfm_decoder/run_remote.sh \
@@ -81,6 +86,12 @@ XLA_PYTHON_CLIENT_PREALLOCATE=false .venv/bin/python \
 The pilot deliberately uses one ensemble member. The official default of 32
 would multiply an already expensive first evaluation and is inappropriate for
 the initial feasibility screen.
+
+The `sensor-y-hybrid` feature set gives TabFM the Sensor-Y coherent LLR and its
+absolute confidence in addition to the aligned phasor features. The gated result
+keeps the Sensor-Y decision unless TabFM assigns at least 0.75 probability to
+one class. Sequence 24 motivated that fixed threshold and is exploratory; the
+four confirmatory frames test it without per-frame adjustment.
 
 ## Validation policy
 

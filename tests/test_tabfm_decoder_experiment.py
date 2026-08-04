@@ -16,6 +16,7 @@ sys.path[:0] = [
 
 import export_rs18_table as exporter  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
+import run_batch  # noqa: E402
 import run_tabfm  # noqa: E402
 
 
@@ -40,6 +41,9 @@ class TabFMTableTests(unittest.TestCase):
                     "bit_in_symbol": body_index % 5 if section == "body" else frame_index,
                     "baseline_llr": 1.0 if character == "1" else -1.0,
                     "baseline_bit": int(character),
+                    "sensor_y_llr": 1.0 if character == "1" else -1.0,
+                    "sensor_y_abs_llr": 1.0,
+                    "sensor_y_bit": int(character),
                 })
         return rows
 
@@ -69,6 +73,60 @@ class TabFMTableTests(unittest.TestCase):
         self.assertEqual(result["tabfm_payload_bit_errors_conditional_on_decode"], 0)
         self.assertEqual(result["baseline_decoder_failure"], 0)
         self.assertEqual(result["baseline_payload_bit_errors_conditional_on_decode"], 0)
+        self.assertEqual(result["sensor_y_decoder_failure"], 0)
+        self.assertEqual(result["sensor_y_tabfm_gated_decoder_failure"], 0)
+
+    def test_confidence_gate_retains_sensor_y_on_uncertain_tabfm_outputs(self):
+        prompt, truth = exporter.make_prompt(self.rows(), 1, context_rows=100)
+        query = [row for row in prompt if row["role"] == "query"]
+        uncertain_wrong = np.asarray([
+            0.51 if int(row["target_bit"]) == 0 else 0.49 for row in truth
+        ])
+        result = run_tabfm.evaluate(
+            uncertain_wrong, query, truth, confidence_threshold=0.75
+        )
+        self.assertEqual(result["tabfm_bit_errors"], protocol.CODE_BITS)
+        self.assertEqual(result["sensor_y_tabfm_gated_bit_errors"], 0)
+        self.assertEqual(result["confidence_gate_applied_bits"], 0)
+
+    def test_confidence_gate_applies_inclusively_at_both_boundaries(self):
+        prompt, truth = exporter.make_prompt(self.rows(), 1, context_rows=100)
+        query = [row for row in prompt if row["role"] == "query"]
+        probabilities = np.asarray([
+            0.5 if int(row["target_bit"]) == 0 else 0.5 for row in truth
+        ])
+        zero_index = next(i for i, row in enumerate(truth) if row["target_bit"] == 0)
+        one_index = next(i for i, row in enumerate(truth) if row["target_bit"] == 1)
+        probabilities[zero_index] = 0.75
+        probabilities[one_index] = 0.25
+        result = run_tabfm.evaluate(
+            probabilities, query, truth, confidence_threshold=0.75
+        )
+        self.assertEqual(result["confidence_gate_applied_bits"], 2)
+        self.assertEqual(result["sensor_y_tabfm_gated_bit_errors"], 2)
+
+    def test_frozen_batch_separates_exploratory_payload_repetition(self):
+        self.assertEqual(run_batch.EXPLORATORY_SEQUENCE, 24)
+        self.assertEqual(run_batch.CONFIRMATORY_SEQUENCES, (2, 10, 28, 45))
+        self.assertEqual(run_batch.FROZEN_CONFIDENCE_THRESHOLD, 0.75)
+        self.assertEqual(
+            run_batch.FROZEN_CHECKPOINT_REVISION,
+            "d5e74033fcf257699fab013e2cdd7edf424ff904",
+        )
+        rows = exporter._manifest(exporter.DEFAULT_MANIFEST)
+        by_sequence = {int(row["sequence"]): row for row in rows}
+        exploratory_repetition = int(by_sequence[24]["repetition"])
+        confirmatory_repetitions = {
+            int(by_sequence[sequence]["repetition"])
+            for sequence in run_batch.CONFIRMATORY_SEQUENCES
+        }
+        self.assertNotIn(exploratory_repetition, confirmatory_repetitions)
+        self.assertEqual(confirmatory_repetitions, {1, 2, 4, 5})
+        self.assertEqual(
+            [float(by_sequence[sequence]["duty_percent"])
+             for sequence in run_batch.CONFIRMATORY_SEQUENCES],
+            [50.0, 45.0, 25.0, 10.0],
+        )
 
     def test_evaluator_rejects_truth_from_another_frame(self):
         prompt, truth = exporter.make_prompt(self.rows(), 1, context_rows=100)
@@ -141,6 +199,11 @@ class TabFMTableTests(unittest.TestCase):
                 if row["sequence"] == 24 and row["section"] == "body"]
         self.assertEqual(len(body), protocol.CODE_BITS)
         self.assertEqual(sum(row["baseline_bit"] != row["target_bit"] for row in body), 8)
+        self.assertEqual(sum(row["sensor_y_bit"] != row["target_bit"] for row in body), 6)
+        sensor_y_decode = run_tabfm.rs18.hard_rs18_decode(
+            [row["sensor_y_llr"] for row in body]
+        )
+        self.assertEqual(sensor_y_decode["failure"], 0)
         self.assertEqual(sum(
             any(row["baseline_bit"] != row["target_bit"]
                 for row in body[start:start + 5])

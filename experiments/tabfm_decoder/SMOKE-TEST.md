@@ -32,9 +32,24 @@ Run date: 2026-08-04 UTC
    categorical/numeric preprocessing, context/query separation, and API
    plumbing only; it is not a model-quality result.
 
+## Remote follow-up
+
+The pretrained JAX classifier subsequently completed on a 94 GiB Linux host.
+CUDA initialization could not locate cuSPARSE, so this first remote inference
+fell back to CPU. On exploratory sequence 24, the coherent baseline produced
+8 bit / 7 symbol errors and TabFM produced 10 bit / 8 symbol errors; both RS
+decodes failed. TabFM corrected four baseline bit errors but introduced six.
+The complete prompt, truth, predictions, summary, and hashes are preserved at
+`data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/`.
+
+A post-hoc confidence-gate inspection of that exploratory result motivated the
+fixed 0.75 threshold for the separate Sensor-Y hybrid experiment. Sequence 24
+cannot validate that threshold.
+
 ## Conclusion
 
 The data representation and software integration pass their smoke tests. The
-released pretrained checkpoint is not practical on this 8 GB machine. A real
-comparison requires a higher-memory host; start with one ensemble member and a
-single held-out frame before expanding to frame-level cross-validation.
+released pretrained checkpoint is not practical on this 8 GB machine, but does
+run on the remote high-memory host. Confirmatory runs must preserve their frozen
+sequence vector, feature set, threshold, software revision, model revision, and
+device provenance.

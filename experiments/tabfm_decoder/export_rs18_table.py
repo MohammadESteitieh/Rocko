@@ -51,12 +51,22 @@ FEATURE_COLUMNS = [
     "y_delta_abs", "y_aligned_i", "y_aligned_q", "y_sync_abs",
     "pooled_aligned_i", "pooled_aligned_q",
 ]
-DIAGNOSTIC_COLUMNS = ["baseline_llr", "baseline_bit"]
+SENSOR_Y_FEATURE_COLUMNS = FEATURE_COLUMNS + [
+    "sensor_y_llr", "sensor_y_abs_llr",
+]
+FEATURE_SETS = {
+    "aligned": FEATURE_COLUMNS,
+    "sensor-y-hybrid": SENSOR_Y_FEATURE_COLUMNS,
+}
+DIAGNOSTIC_COLUMNS = [
+    "baseline_llr", "baseline_bit", "sensor_y_llr", "sensor_y_abs_llr",
+    "sensor_y_bit",
+]
 TABLE_COLUMNS = IDENTITY_COLUMNS + FEATURE_COLUMNS + DIAGNOSTIC_COLUMNS
 TRUTH_COLUMNS = [
     "sequence", "repetition", "duty_percent", "body_bit_index",
     "symbol_index", "bit_in_symbol", "target_bit", "baseline_llr",
-    "baseline_bit", "payload_bits",
+    "baseline_bit", "sensor_y_llr", "sensor_y_bit", "payload_bits",
 ]
 
 
@@ -86,6 +96,15 @@ def _complex_features(prefix: str, first: complex, second: complex,
     }
 
 
+def _verify_sidecar(path: Path, actual: str) -> None:
+    sidecar = path.with_suffix(path.suffix + ".sha256")
+    if not sidecar.exists():
+        raise ValueError(f"missing SHA-256 sidecar for {path.name}")
+    fields = sidecar.read_text(encoding="ascii").strip().split()
+    if len(fields) != 2 or fields[0] != actual or Path(fields[1]).name != path.name:
+        raise ValueError(f"invalid SHA-256 sidecar for {path.name}")
+
+
 def _verify_recorded_hash(path: Path, info: dict[str, str]) -> str:
     key = f"sha256_{path.name}"
     if key not in info:
@@ -93,6 +112,7 @@ def _verify_recorded_hash(path: Path, info: dict[str, str]) -> str:
     actual = base.sha256_file(path)
     if actual != info[key]:
         raise ValueError(f"SHA-256 mismatch for {path.name}")
+    _verify_sidecar(path, actual)
     return actual
 
 
@@ -104,6 +124,8 @@ def extract_rows(capture_path: Path, manifest_path: Path,
     rs18.validate_metadata(info)
     capture_digest = _verify_recorded_hash(capture_path, info)
     manifest_digest = _verify_recorded_hash(manifest_path, info)
+    metadata_digest = base.sha256_file(metadata_path)
+    _verify_sidecar(metadata_path, metadata_digest)
     t, x, y = base.load_capture(capture_path)
     fs = base.sample_rate(t)
     manifest = _manifest(manifest_path)
@@ -151,8 +173,9 @@ def extract_rows(capture_path: Path, manifest_path: Path,
 
         raw_local = tuple(channel[start:gap_stop] for channel in raw)
         baseline_llrs = coherent.coherent_llrs(raw_local, frame_bits, fs)
-        if len(baseline_llrs) != frame_bits:
-            raise ValueError("baseline frontend returned the wrong number of bits")
+        sensor_y_llrs = coherent.coherent_llrs((raw_local[1],), frame_bits, fs)
+        if len(baseline_llrs) != frame_bits or len(sensor_y_llrs) != frame_bits:
+            raise ValueError("coherent frontend returned the wrong number of bits")
 
         for frame_index, target_character in enumerate(frame_text):
             section = "sync" if frame_index < len(protocol.SYNC_TEXT) else "body"
@@ -181,6 +204,9 @@ def extract_rows(capture_path: Path, manifest_path: Path,
                 "bit_in_symbol": bit_in_symbol,
                 "baseline_llr": float(baseline_llrs[frame_index]),
                 "baseline_bit": int(baseline_llrs[frame_index] > 0),
+                "sensor_y_llr": float(sensor_y_llrs[frame_index]),
+                "sensor_y_abs_llr": float(abs(sensor_y_llrs[frame_index])),
+                "sensor_y_bit": int(sensor_y_llrs[frame_index] > 0),
             }
             row.update(_complex_features("x", first[0], second[0], channel_vector[0]))
             row.update(_complex_features("y", first[1], second[1], channel_vector[1]))
@@ -197,7 +223,7 @@ def extract_rows(capture_path: Path, manifest_path: Path,
         "manifest_path": str(manifest_path.resolve()),
         "manifest_sha256": manifest_digest,
         "metadata_path": str(metadata_path.resolve()),
-        "metadata_sha256": base.sha256_file(metadata_path),
+        "metadata_sha256": metadata_digest,
         "sample_rate_hz": fs,
         "manifest_clock_correction_s": clock_correction_s,
         "boundary_sync_score": boundary_sync_score,
@@ -281,6 +307,9 @@ def main() -> int:
     parser.add_argument("--query-sequence", type=int, required=True)
     parser.add_argument("--context-rows", type=int, default=100)
     parser.add_argument("--seed", type=int, default=2026)
+    parser.add_argument(
+        "--feature-set", choices=tuple(FEATURE_SETS), default="aligned"
+    )
     parser.add_argument("--output-dir", type=Path, default=Path("/tmp/rocko-tabfm"))
     args = parser.parse_args()
 
@@ -302,8 +331,10 @@ def main() -> int:
         "query_sequence": args.query_sequence,
         "query_repetition_held_out_from_historical_context": int(truth[0]["repetition"]),
         "context_rows": sum(row["role"] != "query" for row in prompt),
+        "context_seed": args.seed,
         "query_rows": sum(row["role"] == "query" for row in prompt),
-        "feature_columns": FEATURE_COLUMNS,
+        "feature_set": args.feature_set,
+        "feature_columns": FEATURE_SETS[args.feature_set],
         "table": str(table_path),
         "table_sha256": base.sha256_file(table_path),
         "truth": str(truth_path),
