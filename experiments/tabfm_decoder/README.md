@@ -165,9 +165,24 @@ shows real dual-sensor samples, physical Sensor-Y SNR, hard symbol errors, and
 soft-GMD payload outcomes with development and prospective confirmation clearly
 separated. Rebuild it with `plot_meeting_summary.py`.
 
+## Standard pan/zoom signal browser
+
+For a regular Matplotlib window containing the complete dual-sensor capture and
+its built-in navigation toolbar, run:
+
+```bash
+receiver/.venv/bin/python experiments/tabfm_decoder/plot_signal_browser.py
+```
+
+Use the magnifier to drag a zoom box, the hand to pan, Home to return to the
+full approximately 3,211-second capture, and Back/Forward to navigate view history. Both
+sensor axes share the time scale. The default is prelaunch-off RMS normalization;
+pass `--raw-counts` to display original ADC values. Thin vertical lines mark the
+45 frozen frame starts.
+
 ## Interactive run viewer
 
-Launch the standalone Matplotlib widget with:
+The more specialized frame-by-frame widget remains available with:
 
 ```bash
 receiver/.venv/bin/python experiments/tabfm_decoder/interactive_run_viewer.py

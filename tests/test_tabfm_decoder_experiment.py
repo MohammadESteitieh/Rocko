@@ -19,6 +19,7 @@ import decode_capture  # noqa: E402
 import export_rs18_table as exporter  # noqa: E402
 import plot_meeting_summary  # noqa: E402
 import interactive_run_viewer  # noqa: E402
+import plot_signal_browser  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_batch  # noqa: E402
 import run_soft_list_batch  # noqa: E402
@@ -277,6 +278,24 @@ class TabFMTableTests(unittest.TestCase):
         viewer.sequence_slider.set_val(30)
         self.assertIn("Sensor-Y SNR N/A", viewer.figure._suptitle.get_text())
         self.assertIn("not evaluated", viewer.decode_axis.get_title())
+
+    def test_standard_signal_browser_uses_full_shared_time_axis(self):
+        figure = plot_signal_browser.build_plot(
+            capture=exporter.DEFAULT_CAPTURE,
+            metadata=exporter.DEFAULT_METADATA,
+            analysis=plot_signal_browser.DEFAULT_ANALYSIS,
+        )
+        self.addCleanup(plot_signal_browser.plt.close, figure)
+        self.assertEqual(len(figure.axes), 2)
+        self.assertIs(figure.axes[0].get_shared_x_axes().joined(
+            figure.axes[0], figure.axes[1]
+        ), True)
+        low, high = figure.axes[1].get_xlim()
+        self.assertLessEqual(low, 0.0)
+        self.assertGreater(high, 3200.0)
+        for axis in figure.axes:
+            self.assertEqual(len(axis.lines[0].get_xdata()), 642136)
+            self.assertAlmostEqual(axis.lines[0].get_xdata()[-1], 3210.674999)
 
     def test_interactive_viewer_rejects_unbound_artifact(self):
         with tempfile.TemporaryDirectory() as directory:
