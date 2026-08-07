@@ -128,6 +128,43 @@ margin protected against miscorrection, but the exploratory sequence-2 recovery
 did not replicate. Results are preserved under
 `data/captures/rs18-experiment/derived/tabfm/soft-list-confirmatory-v1/`.
 
+## Simple decoding entry point
+
+`decode_capture.py` consolidates extraction, the leakage-controlled 100-row
+TabFM prompt, pinned JAX model inference, and frozen soft-GMD/list RS decoding
+behind one function call:
+
+```python
+from experiments.tabfm_decoder.decode_capture import decode_capture
+
+result = decode_capture(query_sequence=2)
+print(result["accepted"], result["payload_bits"])
+```
+
+Equivalent command:
+
+```bash
+python3 experiments/tabfm_decoder/decode_capture.py --sequence 2
+```
+
+The function returns the payload only after hard RS success or a list-candidate
+margin of at least 20. It also returns the candidate count, score margin,
+erasures, correction count, model revision, and source provenance. The default
+model download is verified against the frozen revision; an injected model or
+local `--checkpoint` override is explicitly reported as unverified rather than
+being attributed to that pin. This remains an offline experiment analysis:
+exact frame boundaries and historical context
+labels come from the accepted manifest. It is not an autonomous live decoder,
+and query truth is not passed to TabFM or the RS decoder.
+
+## Meeting figure
+
+A presentation-ready PNG, editable SVG, PDF, and plotted data are under
+`data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/`. The figure
+shows real dual-sensor samples, physical Sensor-Y SNR, hard symbol errors, and
+soft-GMD payload outcomes with development and prospective confirmation clearly
+separated. Rebuild it with `plot_meeting_summary.py`.
+
 ## Validation policy
 
 A useful follow-up must evaluate complete held-out frames and payload

@@ -1,0 +1,10 @@
+sequence,phase,duty_percent,sensor_y_physical_inband_snr_db,soft_gmd_success,soft_gmd_label,baseline_symbol_errors,baseline_success,sensor_y_symbol_errors,sensor_y_success,tabfm_symbol_errors,tabfm_success,sensor_y_tabfm_gated_symbol_errors,sensor_y_tabfm_gated_success
+24,development,100.0,6.036693732,1,OK,7,0,5,1,4,1,5,1
+2,development,50.0,4.574236827,1,OK,9,0,11,0,9,0,11,0
+10,development,45.0,2.968560243,0,Reject,12,0,11,0,12,0,10,0
+28,development,25.0,3.552653587,0,Reject,17,0,16,0,17,0,16,0
+45,development,10.0,1.189955911,0,Reject,16,0,17,0,18,0,17,0
+3,confirmation,45.0,5.739161025,0,Reject,11,0,11,0,11,0,11,0
+18,confirmation,50.0,4.471742655,0,Reject,13,0,13,0,16,0,13,0
+32,confirmation,50.0,6.288439441,0,Reject,16,0,14,0,16,0,14,0
+39,confirmation,50.0,5.867138018,0,Reject,11,0,13,0,15,0,13,0

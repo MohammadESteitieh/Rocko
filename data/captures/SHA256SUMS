@@ -596,6 +596,16 @@ e33d90792629fd9eb0552e29f459d1d2f18c558a2dd0523bb3bdd428ed9d5a38  data/captures/
 b14a7879d65d703265d7e787dc2d372c923bbfc5817f4da88f0afc20d3318fa2  data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/rs18-sequence-24.summary.json.sha256
 51bf6360dfa277e6c5918225b4395e069a72f39ef7604949c76a0d15a3e486f7  data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/rs18-sequence-24.truth.csv
 48985791e6ae2691bbee10f27bcfea6169c4825a36a540a70f4bfc0ec6ab1913  data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/rs18-sequence-24.truth.csv.sha256
+2b47bb209cf59d788bf7b9c94d9b7e95f33190ac77bd2ac9c0e28584b2faf01f  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/README.md
+8e0920e250e3353f8eb6ab0685a21ae1bc33734d0e1365c39944d7caa0b3211f  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/README.md.sha256
+565f4428da9b61920cd67825ddc4db596d400facf63e4cc21a776c5467f24ba3  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.pdf
+4bae268c259cfcfba7f7e7f4aa511b380175f1ec776ff66c17aa132488831491  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.pdf.sha256
+d30a8e65df9eae4da6daaa22986bb20e972749bc2b5a9eee8f439e0b973d8ac8  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.plot-data.csv
+8224f39f56b8adb0738f314080baeffb021dae5fa2383f3f2ea2f19089602f7f  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.plot-data.csv.sha256
+22949c7b0657bb352ccee7be07268b1b9f3ef971fa42dc546370627ee2580ef8  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.png
+9eb80c8f3ec0f4d17eb50143838ac3c545be86d01d1bc4eb94f242060a071bf5  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.png.sha256
+e07d1c1f631d1400a1d3f49d25688c523bd8adc5c28b85db3122661bda65cf9f  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.svg
+2e7b97983c5d9bb94b10ccfe9e4e645a27d919f3ecc236ac7a5dfe12bb81c46f  data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/tabfm-soft-gmd-meeting.svg.sha256
 b026c05f8f1b395d2911a19b5e46c41fc0a0b4a3bedb6588554a7f52a9a2923b  data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/batch-summary.csv
 541be27444e0ef124a840f61e5b61865416da41645c9f73698e0fcb7dede314e  data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/batch-summary.csv.sha256
 8c3c850438196f287c2b40c5343a4c9509c62f7795dd32272281575f577f9f38  data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/batch-summary.json

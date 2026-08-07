@@ -2,3 +2,5 @@
 data/captures/rs18-experiment/derived/tabfm/initial-aligned-sequence24/*.csv binary
 data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/*.csv binary
 data/captures/rs18-experiment/derived/tabfm/soft-list-confirmatory-v1/*.csv binary
+data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/*.csv binary
+data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/*.svg binary

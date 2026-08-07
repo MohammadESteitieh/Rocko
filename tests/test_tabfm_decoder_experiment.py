@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -14,7 +15,9 @@ sys.path[:0] = [
     str(ROOT / "transmitter"),
 ]
 
+import decode_capture  # noqa: E402
 import export_rs18_table as exporter  # noqa: E402
+import plot_meeting_summary  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_batch  # noqa: E402
 import run_soft_list_batch  # noqa: E402
@@ -162,6 +165,93 @@ class TabFMTableTests(unittest.TestCase):
                 )
             )
             self.assertEqual(actual_errors, payload_errors, sequence)
+
+    def test_simple_decoder_reproduces_development_recovery_without_truth(self):
+        root = (
+            ROOT / "data/captures/rs18-experiment/derived/tabfm"
+            / "sensor-y-hybrid-frozen-v1"
+        )
+        prompt = run_tabfm.read_rows(root / "rs18-sequence-02.context-query.csv")
+        predictions = run_tabfm.read_rows(root / "rs18-sequence-02.predictions.csv")
+        probabilities = np.asarray([
+            float(row["tabfm_probability_one"]) for row in predictions
+        ])
+        result = decode_capture.decode_prompt(
+            None, prompt,
+            predictor=lambda _model, _rows, _features: probabilities,
+        )
+        truth = run_tabfm.read_rows(root / "rs18-sequence-02.truth.csv")
+        self.assertTrue(result["accepted"])
+        self.assertEqual(result["mode"], "list")
+        self.assertEqual(result["payload_bits"], truth[0]["payload_bits"])
+        self.assertAlmostEqual(result["score_margin"], 53.31597703494161)
+
+    def test_simple_decoder_does_not_attest_an_injected_model_as_pinned(self):
+        decoded = {
+            "accepted": False,
+            "payload_bits": None,
+            "tabfm_probability_one": [0.5] * protocol.CODE_BITS,
+        }
+        with (
+            mock.patch.object(
+                decode_capture.exporter, "extract_rows",
+                return_value=([], {"capture_sha256": "example"}),
+            ),
+            mock.patch.object(
+                decode_capture.exporter, "make_prompt",
+                return_value=([{"role": "placeholder"}], []),
+            ),
+            mock.patch.object(
+                decode_capture, "decode_prompt", return_value=decoded,
+            ),
+        ):
+            result = decode_capture.decode_capture(2, model=object())
+        self.assertFalse(result["pinned_checkpoint_verified"])
+        self.assertIsNone(result["checkpoint_revision"])
+        self.assertEqual(result["model"], "injected model object")
+
+    def test_simple_decoder_rejects_unconfirmed_candidate(self):
+        root = (
+            ROOT / "data/captures/rs18-experiment/derived/tabfm"
+            / "soft-list-confirmatory-v1"
+        )
+        prompt = run_tabfm.read_rows(root / "rs18-sequence-03.context-query.csv")
+        predictions = run_tabfm.read_rows(root / "rs18-sequence-03.predictions.csv")
+        probabilities = np.asarray([
+            float(row["tabfm_probability_one"]) for row in predictions
+        ])
+        result = decode_capture.decode_prompt(
+            None, prompt,
+            predictor=lambda _model, _rows, _features: probabilities,
+        )
+        self.assertFalse(result["accepted"])
+        self.assertIsNone(result["payload_bits"])
+        self.assertEqual(result["mode"], "list-rejected")
+
+    def test_meeting_plot_data_matches_frozen_results(self):
+        rows = plot_meeting_summary.build_plot_rows(
+            plot_meeting_summary.DEFAULT_ANALYSIS,
+            plot_meeting_summary.DEFAULT_DEVELOPMENT,
+            plot_meeting_summary.DEFAULT_CONFIRMATION,
+        )
+        self.assertEqual(
+            [row["sequence"] for row in rows],
+            list(plot_meeting_summary.SEQUENCES),
+        )
+        self.assertEqual(
+            [row["sequence"] for row in rows if row["soft_gmd_success"]],
+            [24, 2],
+        )
+        self.assertFalse(any(
+            row["soft_gmd_success"]
+            for row in rows if row["phase"] == "confirmation"
+        ))
+        self.assertAlmostEqual(
+            next(row for row in rows if row["sequence"] == 2)[
+                "sensor_y_physical_inband_snr_db"
+            ],
+            4.574236827,
+        )
 
     def test_soft_list_confirmation_uses_new_frame_outputs(self):
         self.assertEqual(
