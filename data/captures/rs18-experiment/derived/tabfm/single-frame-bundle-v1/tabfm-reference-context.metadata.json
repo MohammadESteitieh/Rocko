@@ -1,0 +1,89 @@
+{
+  "artifact": "rocko-tabfm-fixed-reference-context-v1",
+  "feature_set": "sensor-y-hybrid",
+  "feature_columns": [
+    "position",
+    "symbol_index",
+    "bit_in_symbol",
+    "x_first_i",
+    "x_first_q",
+    "x_second_i",
+    "x_second_q",
+    "x_first_abs",
+    "x_second_abs",
+    "x_delta_i",
+    "x_delta_q",
+    "x_delta_abs",
+    "x_aligned_i",
+    "x_aligned_q",
+    "x_sync_abs",
+    "y_first_i",
+    "y_first_q",
+    "y_second_i",
+    "y_second_q",
+    "y_first_abs",
+    "y_second_abs",
+    "y_delta_i",
+    "y_delta_q",
+    "y_delta_abs",
+    "y_aligned_i",
+    "y_aligned_q",
+    "y_sync_abs",
+    "pooled_aligned_i",
+    "pooled_aligned_q",
+    "sensor_y_llr",
+    "sensor_y_abs_llr"
+  ],
+  "context_rows": 84,
+  "class_rows": {
+    "0": 42,
+    "1": 42
+  },
+  "context_seed": 2026,
+  "reference_sequences": [
+    1,
+    17,
+    24
+  ],
+  "reference_repetitions": [
+    1,
+    2,
+    3
+  ],
+  "held_out_repetitions": [
+    4,
+    5
+  ],
+  "context_sha256": "16c82f1cca7cfb23c2170f694bafc69977266ff3a6a6fcc386aa438cadefe8cd",
+  "extraction": {
+    "frame_boundary": "first CSV sample; no autonomous synchronization",
+    "message_seconds": 53.0,
+    "post_frame_lead_seconds": 2.5,
+    "post_frame_noise_seconds": 10.0,
+    "analytic_padding_seconds": 5.0,
+    "sample_rate_hz": 200.0,
+    "sample_interval_tolerance_seconds": 5e-06,
+    "capture_duration_tolerance_seconds": 5e-05,
+    "exact_samples_from_frame_start": 13100,
+    "normalization": "per-file declared trailing off-noise mean and RMS"
+  },
+  "source": {
+    "capture_sha256": "ee730cb3ef0998d6ab7399a3a99580380fd3afe8e16c80ba59c9f162294b8fba",
+    "metadata_sha256": "7ef3c9546d41781cf5a1650423bdd327a8a51aaaaaed38e8698f298710c9b4dc",
+    "analysis_sha256": "54dbc36e9ab23d3de0537445c2bc4dba3ca5bb8bd1f3e075b59687ead291ef53",
+    "manifest_sha256": "f8fdd0f207af12104058b59275edc68bca348d11d7f1e78a8ed604b5ea61765e"
+  },
+  "software": {
+    "single_frame_pipeline_sha256": "2bcffa75be1ef7fd648d93cdeaa884d84f863ec2b85fcb248ceea2e80cc2cacb",
+    "analyze_final_experiment_sha256": "901c50108bf82c24147eb5e32a38d2cc71af83f316454e85c4a3644eb770aaac",
+    "coherent_frontend_sha256": "2cf423493daad2497c2b63d24172c471d0f2dafcbc58df86f18b4afc616ef9ee",
+    "export_rs18_table_sha256": "af263e1dc15437e503212323d9a903b6c0a9dfe5bea8ca5c1ff4e13d329f7f1e",
+    "final_experiment_protocol_sha256": "05d703f4a0eb85a306e7bf85066c9199ab75c50d9cd3949c84bb1de7ad8fda84",
+    "rs18_experiment_protocol_sha256": "8513422c7bba7c39899a3489c8d641e3dd4e2eb402f428feb6dab0e66d52d9ad",
+    "numpy_version": "2.5.1",
+    "scipy_version": "1.18.0"
+  },
+  "preparation": {
+    "prepare_script_sha256": "939cae1f78e340cfd4467458a97d141207ea3d3f603f3b0ecdf99aaa1cc5e2e5"
+  }
+}

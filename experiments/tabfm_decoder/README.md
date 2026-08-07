@@ -165,6 +165,62 @@ shows real dual-sensor samples, physical Sensor-Y SNR, hard symbol errors, and
 soft-GMD payload outcomes with development and prospective confirmation clearly
 separated. Rebuild it with `plot_meeting_summary.py`.
 
+## One-message CSV decoder
+
+`decode_single_csv.py` is the team-facing interface for the intermediate
+manifest-free contract. Prepare a pinned local environment once with:
+
+```bash
+bash experiments/tabfm_decoder/install_single_frame_decoder.sh
+```
+
+Then decode with:
+
+```bash
+CUDA_VISIBLE_DEVICES="" JAX_PLATFORMS=cpu XLA_PYTHON_CLIENT_PREALLOCATE=false \
+.venv/bin/python experiments/tabfm_decoder/decode_single_csv.py message.csv \
+  --output decoded.json
+```
+
+Each input contains exactly one 53-second RS18 message. Its first sample is the
+start of the sync field, and it must retain a 2.5-second guard plus a 10-second
+transmitter-off tail so the coherent frontend can estimate noise: 13,100 samples
+at the frozen 200 Hz rate. Per-sample timing and total duration are validated.
+Timestamp
+origin is ignored: zero-based and preserved absolute timestamps produce
+bit-identical extracted features. A known nonzero boundary can be supplied with
+`--frame-start-seconds`; discovering it autonomously remains future work.
+
+The installed fixed context contains 84 balanced labelled body rows from the
+100%-duty frames for payload repetitions 1–3. Sixteen known sync rows from the
+incoming message complete TabFM's 100-row context. Query body truth is absent.
+The payload-reference-held-out retrospective set contains both timestamp
+variants of all 18 frames for repetitions 4–5 under
+`data/captures/rs18-experiment/derived/tabfm/single-frame-bundle-v1/`.
+Evaluator-only truth and signal hashes are in `expected-results.csv`.
+
+Rebuild the bundle with:
+
+```bash
+receiver/.venv/bin/python \
+  experiments/tabfm_decoder/prepare_single_frame_bundle.py --force
+```
+
+Run the pinned model once across the 18 logical held-out frames with:
+
+```bash
+.venv/bin/python experiments/tabfm_decoder/validate_single_frame_bundle.py \
+  --output /tmp/single-frame-validation.json
+```
+
+The validator confirms absolute/relative feature identity before inference and
+consults expected payloads only in its evaluator layer after the decoder returns.
+Payloads for repetitions 4–5 are absent from the reference context, but several
+of these physical frames informed earlier soft-list development. This is therefore
+retrospective pipeline validation, not a new method-level confirmation. The new
+fixed-context/local-normalization result must be reported separately from the
+earlier query-specific TabFM experiment.
+
 ## Standard pan/zoom signal browser
 
 For a regular Matplotlib window containing the complete dual-sensor capture and

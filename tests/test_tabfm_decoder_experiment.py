@@ -16,15 +16,19 @@ sys.path[:0] = [
 ]
 
 import decode_capture  # noqa: E402
+import decode_single_csv  # noqa: E402
 import export_rs18_table as exporter  # noqa: E402
 import plot_meeting_summary  # noqa: E402
+import prepare_single_frame_bundle  # noqa: E402
 import interactive_run_viewer  # noqa: E402
 import plot_signal_browser  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_batch  # noqa: E402
 import run_soft_list_batch  # noqa: E402
 import run_tabfm  # noqa: E402
+import single_frame_pipeline  # noqa: E402
 import soft_list_decoder  # noqa: E402
+import validate_single_frame_bundle  # noqa: E402
 
 
 class TabFMTableTests(unittest.TestCase):
@@ -305,6 +309,138 @@ class TabFMTableTests(unittest.TestCase):
                 interactive_run_viewer.verify_frozen_file(
                     path, interactive_run_viewer.FROZEN_SHA256["capture"]
                 )
+
+    def test_single_frame_bundle_has_payload_held_out_reference_split(self):
+        root = decode_single_csv.DEFAULT_BUNDLE
+        context, metadata = single_frame_pipeline.load_reference_context(
+            root / "tabfm-reference-context.csv",
+            root / "tabfm-reference-context.metadata.json",
+        )
+        self.assertEqual(len(context), 84)
+        self.assertEqual(metadata["reference_repetitions"], [1, 2, 3])
+        self.assertEqual(metadata["held_out_repetitions"], [4, 5])
+        self.assertEqual(
+            {int(row["repetition"]) for row in context}, {1, 2, 3}
+        )
+        expected = run_tabfm.read_rows(root / "expected-results.csv")
+        self.assertEqual(len(expected), 36)
+        self.assertEqual({int(row["repetition"]) for row in expected}, {4, 5})
+
+    def test_single_frame_timestamp_origins_extract_identical_features(self):
+        root = decode_single_csv.DEFAULT_BUNDLE / "frames"
+        for sequence in range(28, 46):
+            relative = single_frame_pipeline.extract_rows(
+                root / f"relative/rs18-sequence-{sequence:02d}.csv"
+            )
+            absolute = single_frame_pipeline.extract_rows(
+                root / f"absolute/rs18-sequence-{sequence:02d}.csv"
+            )
+            self.assertEqual(
+                decode_single_csv._feature_digest(relative),
+                decode_single_csv._feature_digest(absolute),
+                sequence,
+            )
+            self.assertTrue(all(row["target_bit"] == "" for row in relative))
+
+    def test_single_frame_bundle_validator_authenticates_full_scope(self):
+        by_sequence, hashes = validate_single_frame_bundle.validate_bundle_contract(
+            decode_single_csv.DEFAULT_BUNDLE
+        )
+        self.assertEqual(tuple(sorted(by_sequence)), tuple(range(28, 46)))
+        self.assertEqual(set(hashes), {
+            "bundle_metadata_sha256", "expected_results_sha256",
+            "reference_context_sha256", "reference_context_metadata_sha256",
+        })
+
+    def test_single_frame_bundle_validator_rejects_tampered_truth_file(self):
+        source = decode_single_csv.DEFAULT_BUNDLE
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            for name in (
+                "bundle-metadata.json", "bundle-metadata.json.sha256",
+                "expected-results.csv", "expected-results.csv.sha256",
+                "tabfm-reference-context.csv", "tabfm-reference-context.csv.sha256",
+                "tabfm-reference-context.metadata.json",
+                "tabfm-reference-context.metadata.json.sha256",
+            ):
+                (target / name).write_bytes((source / name).read_bytes())
+            (target / "expected-results.csv").write_text(
+                (target / "expected-results.csv").read_text(encoding="utf-8")
+                + "tampered\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "invalid SHA-256 sidecar"):
+                validate_single_frame_bundle.validate_bundle_contract(target)
+
+    def test_single_frame_decoder_uses_fixed_context_without_query_truth(self):
+        root = decode_single_csv.DEFAULT_BUNDLE
+        expected = next(
+            row for row in run_tabfm.read_rows(root / "expected-results.csv")
+            if row["sequence"] == "31" and row["time_origin"] == "relative"
+        )
+        probabilities = np.asarray([
+            0.99 if bit == "1" else 0.01 for bit in expected["coded_body_bits"]
+        ])
+        with mock.patch.object(
+            decode_single_csv.run_tabfm, "predict_probabilities",
+            return_value=probabilities,
+        ):
+            result = decode_single_csv.decode_single_csv(
+                root / expected["filename"], model=object()
+            )
+        self.assertTrue(result["accepted"])
+        self.assertEqual(result["mode"], "hard")
+        self.assertEqual(result["payload_bits"], expected["payload_bits"])
+        self.assertFalse(result["pinned_checkpoint_verified"])
+
+    def test_single_frame_rejects_irregular_200_hz_timestamps(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "irregular.csv"
+            timestamp = 0.0
+            lines = ["t,x,y\n"]
+            for index in range(20):
+                lines.append(f"{timestamp:.9f},1,2\n")
+                timestamp += 0.004 if index % 2 == 0 else 0.006
+            path.write_text("".join(lines), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "uniformly sampled"):
+                single_frame_pipeline.load_signal_csv(path)
+
+    def test_single_frame_rejects_incompatible_sample_rate(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "wrong-rate.csv"
+            path.write_text(
+                "t,x,y\n" + "".join(
+                    f"{index / 150:.9f},1,2\n" for index in range(10)
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "200 Hz"):
+                single_frame_pipeline.load_signal_csv(path)
+
+    def test_bundle_force_refuses_unrelated_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "important"
+            path.mkdir()
+            (path / "keep.txt").write_text("do not delete", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "previously generated"):
+                prepare_single_frame_bundle.prepare_output_directory(
+                    path, force=True
+                )
+            self.assertTrue((path / "keep.txt").exists())
+
+    def test_single_frame_requires_message_and_off_noise_tail(self):
+        source = (
+            decode_single_csv.DEFAULT_BUNDLE
+            / "frames/relative/rs18-sequence-31.csv"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            truncated = Path(directory) / "truncated.csv"
+            truncated.write_text(
+                "".join(source.read_text(encoding="utf-8").splitlines(True)[:1000]),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "12.5-second off-noise tail"):
+                single_frame_pipeline.load_signal_csv(truncated)
 
     def test_soft_list_confirmation_uses_new_frame_outputs(self):
         self.assertEqual(

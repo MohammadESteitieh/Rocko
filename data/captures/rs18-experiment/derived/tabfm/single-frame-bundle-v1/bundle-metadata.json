@@ -1,0 +1,20 @@
+{
+  "artifact": "rocko-single-frame-validation-bundle-v1",
+  "scope": "retrospective pipeline validation; payload absent from reference context, not method-level confirmation",
+  "held_out_logical_frames": 18,
+  "timestamp_variants_per_frame": 2,
+  "signal_csv_files": 36,
+  "expected_results_sha256": "8f55928e022bca0739c51e1507e32c687b23991f507a77cdfdee18baf430082a",
+  "reference_context_sha256": "16c82f1cca7cfb23c2170f694bafc69977266ff3a6a6fcc386aa438cadefe8cd",
+  "reference_context_metadata_sha256": "d838fea7fa54f0f5312dc0d3dd178b167f05127f2fb511b2a2dcb897ee784e42",
+  "readme_sha256": "59176c6dc96ca8bf93b3634d14cbdf57aeb56f487a048c1c7a553b86c8f67f63",
+  "contract": {
+    "first_sample_is_sync_start": true,
+    "timestamp_origin_is_semantically_ignored": true,
+    "message_seconds": 53.0,
+    "required_off_tail_seconds": 12.5,
+    "sample_rate_hz": 200.0,
+    "exact_samples_from_frame_start": 13100,
+    "autonomous_synchronization": false
+  }
+}

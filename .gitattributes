@@ -4,3 +4,5 @@ data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/*.csv bina
 data/captures/rs18-experiment/derived/tabfm/soft-list-confirmatory-v1/*.csv binary
 data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/*.csv binary
 data/captures/rs18-experiment/derived/tabfm/meeting-summary-v1/*.svg binary
+data/captures/rs18-experiment/derived/tabfm/single-frame-bundle-v1/*.csv binary
+data/captures/rs18-experiment/derived/tabfm/single-frame-bundle-v1/frames/**/*.csv binary
