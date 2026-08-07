@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 RUN="$HOME/rocko-tabfm-run"
 REPO="$RUN/Rocko"
-PINNED_COMMIT="2f95468b2c9662571909535514a91568a385dea1"
+PINNED_COMMIT="1d8008ca801722072c6870ed2aa16c4a1bd4e3f8"
 export ROCKO_REMOTE_BOOTSTRAP_SHA256=$(
   sha256sum "$0" | awk '{print $1}'
 )
@@ -55,7 +55,7 @@ CUDA_VISIBLE_DEVICES="" JAX_PLATFORMS=cpu \
 
 CUDA_VISIBLE_DEVICES="" JAX_PLATFORMS=cpu \
 XLA_PYTHON_CLIENT_PREALLOCATE=false \
-"$VENV/bin/python" experiments/tabfm_decoder/run_batch.py \
+"$VENV/bin/python" experiments/tabfm_decoder/run_soft_list_batch.py \
   --output-dir "$RESULTS"
 
-cat "$RESULTS/batch-summary.json"
+cat "$RESULTS/soft-list-batch-summary.json"
