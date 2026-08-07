@@ -17,7 +17,9 @@ sys.path[:0] = [
 import export_rs18_table as exporter  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_batch  # noqa: E402
+import run_soft_list_batch  # noqa: E402
 import run_tabfm  # noqa: E402
+import soft_list_decoder  # noqa: E402
 
 
 class TabFMTableTests(unittest.TestCase):
@@ -126,6 +128,63 @@ class TabFMTableTests(unittest.TestCase):
             [float(by_sequence[sequence]["duty_percent"])
              for sequence in run_batch.CONFIRMATORY_SEQUENCES],
             [50.0, 45.0, 25.0, 10.0],
+        )
+
+    def test_soft_list_frozen_development_outcomes(self):
+        root = (
+            ROOT / "data/captures/rs18-experiment/derived/tabfm"
+            / "sensor-y-hybrid-frozen-v1"
+        )
+        expected = {
+            24: (0, 0, "hard"),
+            2: (0, 0, "list"),
+            10: (1, None, "list-rejected"),
+            28: (1, None, "list-rejected"),
+            45: (1, None, "list-rejected"),
+        }
+        for sequence, (failure, payload_errors, mode) in expected.items():
+            predictions = run_tabfm.read_rows(
+                root / f"rs18-sequence-{sequence:02d}.predictions.csv"
+            )
+            truth = run_tabfm.read_rows(
+                root / f"rs18-sequence-{sequence:02d}.truth.csv"
+            )
+            llrs = soft_list_decoder.probability_llrs([
+                float(row["tabfm_probability_one"]) for row in predictions
+            ])
+            decoded = soft_list_decoder.decode(llrs)
+            self.assertEqual(decoded["failure"], failure, sequence)
+            self.assertEqual(decoded["mode"], mode, sequence)
+            actual_errors = None if decoded["failure"] else sum(
+                left != right
+                for left, right in zip(
+                    decoded["payload"], map(int, truth[0]["payload_bits"])
+                )
+            )
+            self.assertEqual(actual_errors, payload_errors, sequence)
+
+    def test_soft_list_confirmation_uses_new_frame_outputs(self):
+        self.assertEqual(
+            run_soft_list_batch.CONFIRMATORY_SEQUENCES, (3, 18, 32, 39)
+        )
+        self.assertEqual(soft_list_decoder.FROZEN_POOL_SIZE, 12)
+        self.assertEqual(soft_list_decoder.FROZEN_ACCEPTANCE_MARGIN, 20.0)
+        self.assertTrue(
+            set(run_soft_list_batch.CONFIRMATORY_SEQUENCES).isdisjoint(
+                run_soft_list_batch.METHOD_DEVELOPMENT_SEQUENCES
+            )
+        )
+        rows = exporter._manifest(exporter.DEFAULT_MANIFEST)
+        by_sequence = {int(row["sequence"]): row for row in rows}
+        self.assertEqual(
+            {int(by_sequence[sequence]["repetition"])
+             for sequence in run_soft_list_batch.CONFIRMATORY_SEQUENCES},
+            {1, 2, 4, 5},
+        )
+        self.assertEqual(
+            [float(by_sequence[sequence]["duty_percent"])
+             for sequence in run_soft_list_batch.CONFIRMATORY_SEQUENCES],
+            [45.0, 50.0, 50.0, 50.0],
         )
 
     def test_evaluator_rejects_truth_from_another_frame(self):

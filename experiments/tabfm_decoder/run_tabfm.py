@@ -23,6 +23,7 @@ sys.path[:0] = [
 from export_rs18_table import FEATURE_COLUMNS, FEATURE_SETS  # noqa: E402
 import analyze_rs18_experiment as rs18  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
+import soft_list_decoder  # noqa: E402
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -203,6 +204,33 @@ def evaluate(probability_one: np.ndarray, query_rows: list[dict[str, str]],
     result.update(metrics("sensor_y", sensor_y_llrs))
     result.update(metrics("tabfm", tabfm_llrs))
     result.update(metrics("sensor_y_tabfm_gated", gated_llrs))
+
+    list_result = soft_list_decoder.decode(tabfm_llrs)
+    list_payload_errors = None if list_result["failure"] else sum(
+        left != right for left, right in zip(list_result["payload"], payload)
+    )
+    result.update({
+        "tabfm_soft_list_decoder_failure": int(list_result["failure"]),
+        "tabfm_soft_list_frame_error": int(
+            bool(list_result["failure"] or list_payload_errors)
+        ),
+        "tabfm_soft_list_wrong_codeword_miscorrection": int(
+            not list_result["failure"] and bool(list_payload_errors)
+        ),
+        "tabfm_soft_list_payload_bit_errors_conditional_on_decode": (
+            list_payload_errors
+        ),
+        "tabfm_soft_list_mode": list_result["mode"],
+        "tabfm_soft_list_candidate_count": list_result["candidate_count"],
+        "tabfm_soft_list_margin": list_result["margin"],
+        "tabfm_soft_list_selected_erasures": list(
+            list_result["selected_erasures"]
+        ),
+        "tabfm_soft_list_corrected_symbol_count": list_result[
+            "corrected_symbol_count"
+        ],
+        "tabfm_soft_list_attempt_count": list_result["attempt_count"],
+    })
     return result
 
 

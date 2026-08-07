@@ -105,6 +105,22 @@ Y had 97 bit / 55 symbol errors, TabFM alone had 103 / 56, and the fixed gate
 had 98 / 54. The gate changed three decisions—one repair and two new errors—so
 it did not add a decodable payload.
 
+## Soft-list follow-up
+
+A post-hoc development pass on sequences 24, 2, 10, 28, and 45 enumerated all
+erasure subsets among the 12 least-reliable TabFM symbols. A candidate is
+accepted only when its soft-score margin over the runner-up is at least 20.
+This recovered sequence 2, which every hard-decision frontend had failed, while
+rejecting the wrong candidates on sequences 10, 28, and 45. Because the pool
+size and margin were selected after those outputs were inspected, that recovery
+is exploratory.
+
+The frozen confirmation uses previously uninspected TabFM outputs for sequences
+3, 18, 32, and 39: payload repetitions 1, 2, 4, and 5 at 45%, 50%, 50%, and 50%
+duty. The model revision, 100-row context, feature set, 12-symbol list pool, and
+margin 20 are fixed before execution. A score margin is not an error-detection
+code; any accepted wrong payload remains a critical miscorrection.
+
 ## Validation policy
 
 A useful follow-up must evaluate complete held-out frames and payload
