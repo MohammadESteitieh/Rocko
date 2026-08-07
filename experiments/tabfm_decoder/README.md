@@ -165,6 +165,21 @@ shows real dual-sensor samples, physical Sensor-Y SNR, hard symbol errors, and
 soft-GMD payload outcomes with development and prospective confirmation clearly
 separated. Rebuild it with `plot_meeting_summary.py`.
 
+## Interactive run viewer
+
+Launch the standalone Matplotlib widget with:
+
+```bash
+receiver/.venv/bin/python experiments/tabfm_decoder/interactive_run_viewer.py
+```
+
+The sequence slider and left/right arrow keys navigate all 45 physical frames.
+The range slider selects any portion of the 53-second frame, radio buttons choose
+the displayed sensor, and the checkbox switches between raw ADC counts and
+prelaunch-off RMS normalization. Click a point in the SNR scatter plot to select
+that frame. The decoder panel shows full TabFM comparisons for the nine evaluated
+frames and `N/A` for untested TabFM methods on the other 36 frames.
+
 ## Validation policy
 
 A useful follow-up must evaluate complete held-out frames and payload

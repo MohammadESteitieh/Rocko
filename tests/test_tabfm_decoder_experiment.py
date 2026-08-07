@@ -18,6 +18,7 @@ sys.path[:0] = [
 import decode_capture  # noqa: E402
 import export_rs18_table as exporter  # noqa: E402
 import plot_meeting_summary  # noqa: E402
+import interactive_run_viewer  # noqa: E402
 import rs18_experiment_protocol as protocol  # noqa: E402
 import run_batch  # noqa: E402
 import run_soft_list_batch  # noqa: E402
@@ -252,6 +253,39 @@ class TabFMTableTests(unittest.TestCase):
             ],
             4.574236827,
         )
+
+    def test_interactive_viewer_switches_frames_and_waveform_modes(self):
+        viewer = interactive_run_viewer.RunViewer(
+            capture=exporter.DEFAULT_CAPTURE,
+            metadata=exporter.DEFAULT_METADATA,
+            analysis=interactive_run_viewer.DEFAULT_ANALYSIS,
+            tabfm=interactive_run_viewer.DEFAULT_TABFM,
+            initial_sequence=2,
+        )
+        self.addCleanup(interactive_run_viewer.plt.close, viewer.figure)
+        self.assertEqual(viewer.sequence, 2)
+        self.assertIn("OK (development)", viewer.decode_axis.get_title())
+        viewer.sequence_slider.set_val(3)
+        self.assertEqual(viewer.sequence, 3)
+        self.assertIn("Reject (confirmation)", viewer.decode_axis.get_title())
+        viewer.channel_buttons.set_active(1)
+        self.assertTrue(viewer.wave_x_line.get_visible())
+        self.assertFalse(viewer.wave_y_line.get_visible())
+        viewer.options.set_active(0)
+        self.assertFalse(viewer.normalized)
+        self.assertEqual(viewer.wave_axis.get_ylabel(), "raw ADC counts")
+        viewer.sequence_slider.set_val(30)
+        self.assertIn("Sensor-Y SNR N/A", viewer.figure._suptitle.get_text())
+        self.assertIn("not evaluated", viewer.decode_axis.get_title())
+
+    def test_interactive_viewer_rejects_unbound_artifact(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "capture.csv"
+            path.write_text("t,x,y\n0,1,2\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "not the frozen"):
+                interactive_run_viewer.verify_frozen_file(
+                    path, interactive_run_viewer.FROZEN_SHA256["capture"]
+                )
 
     def test_soft_list_confirmation_uses_new_frame_outputs(self):
         self.assertEqual(
