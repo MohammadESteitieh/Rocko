@@ -121,6 +121,13 @@ duty. The model revision, 100-row context, feature set, 12-symbol list pool, and
 margin 20 are fixed before execution. A score margin is not an error-detection
 code; any accepted wrong payload remains a critical miscorrection.
 
+The confirmation recovered **0/4** payloads: all four candidate margins were
+below 20 and were rejected. Post-result truth diagnostics found all four top
+candidates wrong and the true codeword absent from every enumerated list. The
+margin protected against miscorrection, but the exploratory sequence-2 recovery
+did not replicate. Results are preserved under
+`data/captures/rs18-experiment/derived/tabfm/soft-list-confirmatory-v1/`.
+
 ## Validation policy
 
 A useful follow-up must evaluate complete held-out frames and payload

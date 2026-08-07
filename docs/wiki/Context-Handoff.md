@@ -120,13 +120,20 @@ representation and gate, not a universal conclusion about tabular models.
 Artifacts and full provenance are under
 `data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/`.
 
+A subsequent 12-symbol exhaustive erasure-list decoder recovered sequence 2
+post hoc, but that result failed prospective confirmation. On new sequences 3,
+18, 32, and 39 it accepted 0/4 frames; all top candidates were correctly
+rejected by the frozen margin, and truth diagnostics found the transmitted
+codeword absent from every candidate list. Preserve this second negative result
+under `data/captures/rs18-experiment/derived/tabfm/soft-list-confirmatory-v1/`.
+
 ## Current offline research opportunities
 
 - Sync-trained time-domain and harmonic waveform extraction.
 - Frequency-selective, transmitter-off-fitted reference cancellation.
 - Constrained sensor-y-primary combining with shrinkage.
 - Lag-aware temporal processing with untouched-session validation.
-- True soft symbol-likelihood or Chase/list RS decoding.
+- Calibrated soft symbol likelihoods with independent payload validation.
 - Strict capture continuity validation and reusable experiment schemas.
 
 These methods cannot create information absent from the quick-screen capture.
