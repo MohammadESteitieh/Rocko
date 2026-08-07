@@ -107,6 +107,19 @@ is to build a replacement receiver whose synchronization, channel estimate,
 bit evidence, symbol errors, correction attempt, and failure reason can each be
 inspected and explained independently.
 
+## TabFM frontend result
+
+A pinned TabFM 1.0.0 experiment tested aligned phasors plus Sensor-Y coherent
+soft evidence. Sequence 24 was exploratory and already decodable without
+TabFM. Confirmatory sequences 2, 10, 28, and 45 covered distinct payload
+repetitions at 50%, 45%, 25%, and 10% duty. Neither TabFM alone nor a frozen
+0.75-confidence Sensor-Y/TabFM gate decoded any new frame. Across the four
+confirmatory frames, Sensor Y had 97 bit / 55 symbol errors, TabFM had 103 / 56,
+and the gate had 98 / 54. Preserve this as a negative result for that exact
+representation and gate, not a universal conclusion about tabular models.
+Artifacts and full provenance are under
+`data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/`.
+
 ## Current offline research opportunities
 
 - Sync-trained time-domain and harmonic waveform extraction.

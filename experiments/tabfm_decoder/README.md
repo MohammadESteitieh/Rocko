@@ -95,6 +95,16 @@ keeps the Sensor-Y decision unless TabFM assigns at least 0.75 probability to
 one class. Sequence 24 motivated that fixed threshold and is exploratory; the
 four confirmatory frames test it without per-frame adjustment.
 
+## Frozen batch result
+
+The completed batch is preserved under
+`data/captures/rs18-experiment/derived/tabfm/sensor-y-hybrid-frozen-v1/`.
+Sequence 24 decoded with every Sensor-Y-based variant, as it already did before
+TabFM. None of the four confirmatory frames decoded. Across those frames, Sensor
+Y had 97 bit / 55 symbol errors, TabFM alone had 103 / 56, and the fixed gate
+had 98 / 54. The gate changed three decisions—one repair and two new errors—so
+it did not add a decodable payload.
+
 ## Validation policy
 
 A useful follow-up must evaluate complete held-out frames and payload
